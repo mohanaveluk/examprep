@@ -1,0 +1,15 @@
+.spacer {
+    flex: 1 1 auto;
+  }
+
+  .app-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #f5f6fa;
+  }
+
+  .main-content {
+    flex: 1 0 auto;
+    padding: 1rem;
+  }

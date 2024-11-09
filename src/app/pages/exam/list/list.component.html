@@ -1,0 +1,28 @@
+<!-- <mat-card *ngFor="let exam of exams">
+    <mat-card-title>{{ exam.name }}</mat-card-title>
+    <mat-card-content>{{ exam.description }}</mat-card-content>
+    <button mat-raised-button color="primary" [routerLink]="['/take', exam.id]">Start Exam</button>
+</mat-card> -->
+
+<div class="exam-list-container">
+    <h2>Available Tests</h2>
+
+    <div class="exam-grid">
+        <mat-card *ngFor="let exam of exams">
+            <mat-card-header>
+                <mat-card-title>{{exam.title}}</mat-card-title>
+                <mat-card-subtitle>Duration: {{exam.duration}} minutes</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <p>{{exam.description}}</p>
+                <p>Total Questions: {{exam.totalQuestions}}</p>
+                <p>Passing Score: {{exam.passingScore}}%</p>
+            </mat-card-content>
+            <mat-card-actions>
+                <button mat-raised-button color="primary" [routerLink]="['/exam/take', exam.id]">
+                    Start Test
+                </button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+</div>

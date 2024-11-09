@@ -1,0 +1,66 @@
+.payment-container {
+    padding: 24px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 32px;
+  }
+  
+  .header h1 {
+    margin: 0 0 0 16px;
+    font-size: 2em;
+    color: #333;
+  }
+  
+  .content {
+    display: grid;
+    gap: 24px;
+  }
+  
+  .summary-card {
+    margin-bottom: 24px;
+  }
+  
+  .summary-item {
+    display: flex;
+    justify-content: space-between;
+    margin: 16px 0;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .summary-item.total {
+    border-bottom: none;
+    font-weight: bold;
+    font-size: 1.2em;
+  }
+  
+  .payment-form-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  
+  mat-form-field {
+    width: 100%;
+  }
+  
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 24px;
+  }
+  
+  .form-actions button {
+    min-width: 200px;
+  }

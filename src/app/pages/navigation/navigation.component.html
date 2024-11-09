@@ -1,0 +1,71 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="!(isHandset$ | async)">
+    <!-- <mat-nav-list>
+      <a mat-list-item routerLink="/home">Home</a>
+      <a mat-list-item routerLink="/about">About</a>
+      <a mat-list-item routerLink="/contact">Contact</a>
+      <a mat-list-item routerLink="/exam/upcoming">Upcoming Exams</a>
+      <a mat-list-item routerLink="/exam/past">Past Exams</a>
+      <a mat-list-item routerLink="/exam/results">Results</a>
+      <a mat-list-item routerLink="/history/exams">Exam History</a>
+      <a mat-list-item routerLink="/history/payments">Payment History</a>
+      <a mat-list-item routerLink="/payment/make">Make a Payment</a>
+      <a mat-list-item routerLink="/payment/history">Payment History</a>
+      <a mat-list-item routerLink="/pricing">Pricing</a>
+      <ng-container *ngIf="isLoggedIn">
+        <a mat-list-item routerLink="/profile">Profile</a>
+        <a mat-list-item routerLink="/account">Account</a>
+        <a mat-list-item routerLink="/messages">Messages</a>
+        <a mat-list-item routerLink="/help-support">Help & Support</a>
+        <a mat-list-item routerLink="/my-activity">My Activity</a>
+        <a mat-list-item (click)="logout()">Logout</a>
+      </ng-container>
+    </mat-nav-list> -->
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button mat-icon-button (click)="drawer.toggle()" *ngIf="isHandset$ | async">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span class="logo">
+        <img src="assets/c-logo.png" alt="Logo" class="logo-img">
+        <span class="title">Entrance Exam</span>
+      </span>
+      <span class="spacer"></span>
+      <nav *ngIf="!(isHandset$ | async)">
+        <a mat-button routerLink="/home">Home</a>
+        <a mat-button routerLink="/about">About</a>
+        <a mat-button routerLink="/contact">Contact</a>
+        <button mat-button [matMenuTriggerFor]="examMenu">
+          <div class="menu-item">
+            <span>Exam</span> <mat-icon>arrow_drop_down</mat-icon>
+          </div>
+        </button>
+        <mat-menu #examMenu="matMenu">
+          <button mat-menu-item routerLink="/exam/list">Exams</button>
+          <button mat-menu-item routerLink="/inquiry/list">Inquiry</button>
+          <button mat-menu-item routerLink="/test/history">History</button>
+        </mat-menu>
+        <a mat-button routerLink="/pricing/plans">Pricing</a>
+      </nav>
+      <span class="spacer"></span>
+      <ng-container *ngIf="isLoggedIn; else login">
+        <button mat-button [matMenuTriggerFor]="userMenu">
+          <span class="user-icon">{{ userInitials }}</span>
+        </button>
+        <mat-menu #userMenu="matMenu">
+          <button mat-menu-item routerLink="/profile">Profile</button>
+          <button mat-menu-item routerLink="/account">Account</button>
+          <button mat-menu-item routerLink="/messages">Messages</button>
+          <button mat-menu-item routerLink="/help-support">Help & Support</button>
+          <button mat-menu-item routerLink="/my-activity">My Activity</button>
+          <button mat-menu-item (click)="logout()">Logout</button>
+        </mat-menu>
+      </ng-container>
+      <ng-template #login>
+        <button mat-button routerLink="/login">Login</button>
+      </ng-template>
+    </mat-toolbar>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,0 +1,66 @@
+.account-container {
+    padding: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .header {
+    margin-bottom: 32px;
+  }
+  
+  .header h1 {
+    margin: 0;
+    font-size: 2em;
+    color: #333;
+  }
+  
+  .status-card {
+    margin-bottom: 32px;
+  }
+  
+  .status-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  
+  .status-header h2 {
+    margin: 0;
+    color: #333;
+  }
+  
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 24px;
+  }
+  
+  .info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .label {
+    color: #666;
+    font-size: 0.9em;
+  }
+  
+  .value {
+    font-size: 1.2em;
+    font-weight: 500;
+    color: #333;
+  }
+  
+  .action-buttons {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  
+  .action-buttons button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }

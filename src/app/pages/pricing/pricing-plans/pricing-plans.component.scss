@@ -1,0 +1,91 @@
+.plans-container {
+    padding: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  
+  .header h1 {
+    font-size: 2.5em;
+    color: #333;
+    margin-bottom: 16px;
+  }
+  
+  .header p {
+    color: #666;
+    font-size: 1.2em;
+  }
+  
+  .plans-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+  }
+  
+  .plan-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .price {
+    text-align: center;
+    margin: 24px 0;
+  }
+  
+  .amount {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .period {
+    color: #666;
+    margin-left: 8px;
+  }
+  
+  .features {
+    margin: 24px 0;
+  }
+  
+  .features h3 {
+    color: #333;
+    margin-bottom: 16px;
+  }
+  
+  .features ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .features li {
+    display: flex;
+    align-items: center;
+    margin: 8px 0;
+    color: #444;
+  }
+  
+  .features mat-icon {
+    color: #4CAF50;
+    margin-right: 8px;
+    font-size: 20px;
+  }
+  
+  .exam-types {
+    margin: 24px 0;
+  }
+  
+  .exam-types h3 {
+    color: #333;
+    margin-bottom: 16px;
+  }
+  
+  mat-card-actions {
+    margin-top: auto;
+    padding: 16px;
+    text-align: center;
+  }

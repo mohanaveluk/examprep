@@ -1,0 +1,64 @@
+<div class="detail-container" *ngIf="question">
+    <div class="header">
+      <button mat-icon-button (click)="backToList()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1>{{question.subject}}</h1>
+    </div>
+  
+    <mat-card class="question-card">
+      <mat-card-content>
+        <p class="question-content">{{question.content}}</p>
+        <div class="metadata">
+          <mat-chip-set>
+            <mat-chip [color]="question.status === 'answered' ? 'primary' : 'warn'" selected>
+              {{question.status}}
+            </mat-chip>
+          </mat-chip-set>
+          <span class="date">Asked on {{formatDate(question.createdAt)}}</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  
+    <div class="responses" *ngIf="question.responses?.length">
+      <h2>Responses</h2>
+      <mat-card *ngFor="let response of question.responses" class="response-card">
+        <mat-card-content>
+          <p>{{response.content}}</p>
+          <small>Responded on {{formatDate(response.createdAt)}}</small>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  
+    <mat-card class="add-response">
+      <mat-card-header>
+        <mat-card-title>Add Follow-up Question</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="responseForm" (ngSubmit)="onSubmitResponse()">
+          <mat-form-field appearance="fill">
+            <mat-label>Your question</mat-label>
+            <textarea
+              matInput
+              formControlName="content"
+              rows="4"
+              placeholder="Type your follow-up question here">
+            </textarea>
+            <mat-error *ngIf="responseForm.get('content')?.hasError('required')">
+              Question is required
+            </mat-error>
+            <mat-error *ngIf="responseForm.get('content')?.hasError('minlength')">
+              Question must be at least 10 characters
+            </mat-error>
+          </mat-form-field>
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="!responseForm.valid">
+            Submit Question
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>

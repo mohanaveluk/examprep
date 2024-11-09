@@ -1,0 +1,5 @@
+<mat-card>
+    <mat-card-title>{{ exam.name }}</mat-card-title>
+    <mat-card-content>{{ exam.description }}</mat-card-content>
+    <button mat-raised-button color="primary" [routerLink]="['/question', exam.id]">Start</button>
+</mat-card>

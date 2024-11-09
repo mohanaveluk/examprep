@@ -1,0 +1,80 @@
+<div class="dashboard-container">
+    <div class="header">
+      <h1>My Inquiries</h1>
+      <button mat-raised-button color="primary" (click)="showAskQuestion = true">
+        <mat-icon>add</mat-icon>
+        New Question
+      </button>
+    </div>
+
+  
+    <div class="stats-grid" *ngIf="stats">
+      <div (click)="applyFilter('today')" class="clickable-card">
+        <app-stat-card
+            title="Today's Questions"
+            [count]="stats.today"
+            icon="today"
+            color="primary">
+        </app-stat-card>
+      </div>
+  
+        <div (click)="applyFilter('thisMonth')" class="clickable-card">
+        <app-stat-card
+            title="This Month"
+            [count]="stats.thisMonth"
+            icon="date_range"
+            color="accent">
+        </app-stat-card>
+        </div>
+
+        <div (click)="applyFilter('lastMonth')" class="clickable-card">
+        <app-stat-card
+            title="Last Month"
+            [count]="stats.lastMonth"
+            icon="history"
+            color="primary">
+        </app-stat-card>
+        </div> 
+        
+        <div (click)="applyFilter('all')" class="clickable-card">
+        <app-stat-card
+            title="Total Questions"
+            [count]="stats.total"
+            icon="question_answer"
+            color="accent">
+        </app-stat-card>
+        </div>
+
+        <div (click)="applyFilter('answered')" class="clickable-card">
+        <app-stat-card
+            title="Answered"
+            [count]="stats.answered"
+            icon="check_circle"
+            color="primary">
+        </app-stat-card>
+        </div>
+
+        <div (click)="applyFilter('pending')" class="clickable-card">
+        <app-stat-card
+            title="Pending"
+            [count]="stats.pending"
+            icon="pending"
+            color="warn">
+        </app-stat-card>
+        </div>  
+    </div>
+  
+    <mat-card *ngIf="showAskQuestion">
+      <mat-card-content>
+        <app-ask-question
+          (questionSubmitted)="onQuestionSubmitted()"
+          (cancelled)="showAskQuestion = false">
+        </app-ask-question>
+      </mat-card-content>
+    </mat-card>
+  
+    <app-question-list
+      [questions]="filteredQuestions"
+      (questionSelected)="loadQuestions()">
+    </app-question-list>
+  </div>

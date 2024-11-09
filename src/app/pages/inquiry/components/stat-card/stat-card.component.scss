@@ -1,0 +1,49 @@
+.stat-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  
+  .stat-info {
+    flex: 1;
+  }
+  
+  .stat-info h3 {
+    font-size: 24px;
+    margin: 0;
+    line-height: 1.2;
+  }
+  
+  .stat-info p {
+    margin: 4px 0 0;
+    color: rgba(255, 255, 255, 0.95);
+  }
+  
+  mat-icon {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+  }
+  
+  mat-card {
+    padding: 16px;
+  }
+  
+  mat-card.primary {
+    background: linear-gradient(135deg, #4CAF50, #2E7D32);
+    color: white;
+  }
+  
+  mat-card.accent {
+    background: linear-gradient(135deg, #2196F3, #1976D2);
+    color: white;
+  }
+  
+  mat-card.warn {
+    background: linear-gradient(135deg, #FF5722, #E64A19);
+    color: white;
+  }
+  
+  :host ::ng-deep .mat-mdc-card-content {
+    padding: 0;
+  }

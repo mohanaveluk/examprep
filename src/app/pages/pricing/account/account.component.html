@@ -1,0 +1,56 @@
+<div class="account-container">
+    <div class="header">
+      <h1>My Account</h1>
+    </div>
+  
+    <div class="content" *ngIf="accountInfo">
+      <mat-card class="status-card">
+        <mat-card-content>
+          <div class="status-header">
+            <h2>Subscription Status</h2>
+            <mat-chip [color]="getStatusColor(accountInfo.subscriptionStatus)" selected>
+              {{accountInfo.subscriptionStatus}}
+            </mat-chip>
+          </div>
+  
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="label">Current Plan</span>
+              <span class="value">{{accountInfo.currentPlan?.name || 'No active plan'}}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Valid Until</span>
+              <span class="value">{{formatDate(accountInfo.validUntil)}}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Days Remaining</span>
+              <span class="value">{{getRemainingDays(accountInfo.validUntil)}} days</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Exam Credits</span>
+              <span class="value">{{accountInfo.examCredits}}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Total Exams Taken</span>
+              <span class="value">{{accountInfo.totalExamsTaken}}</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+  
+      <div class="action-buttons">
+        <button mat-raised-button color="primary" routerLink="/pricing/plans">
+          <mat-icon>shopping_cart</mat-icon>
+          Upgrade Plan
+        </button>
+        <button mat-raised-button color="accent" routerLink="/pricing/payment-history">
+          <mat-icon>history</mat-icon>
+          Payment History
+        </button>
+        <button mat-raised-button color="primary" routerLink="/test/history">
+          <mat-icon>assignment</mat-icon>
+          Test History
+        </button>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,40 @@
+<div class="history-container">
+    <div class="header">
+      <h1>Test History</h1>
+    </div>
+  
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+      <ng-container matColumnDef="takenAt">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+        <td mat-cell *matCellDef="let result" class="date-cell">
+          {{formatDate(result.takenAt)}}
+        </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="examTitle">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Test Name</th>
+        <td mat-cell *matCellDef="let result">{{result.examTitle}}</td>
+      </ng-container>
+  
+      <ng-container matColumnDef="score">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Score</th>
+        <td mat-cell *matCellDef="let result" class="score-cell">
+          {{result.score}}%
+        </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+        <td mat-cell *matCellDef="let result">
+          <mat-chip [color]="getStatusColor(result.status)" selected>
+            {{result.status}}
+          </mat-chip>
+        </td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"
+          (click)="openTestDetail(row)">
+      </tr>
+    </table>
+  </div>

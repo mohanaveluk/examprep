@@ -1,0 +1,47 @@
+<div class="plans-container">
+    <div class="header">
+      <h1>Choose Your Plan</h1>
+      <p>Select the plan that best fits your preparation needs</p>
+    </div>
+  
+    <div class="plans-grid">
+      <mat-card *ngFor="let plan of plans" class="plan-card">
+        <mat-card-header>
+          <mat-card-title>{{plan.name}}</mat-card-title>
+          <mat-card-subtitle>{{plan.duration}} months validity</mat-card-subtitle>
+        </mat-card-header>
+  
+        <mat-card-content>
+          <div class="price">
+            <span class="amount">${{plan.price}}</span>
+            <span class="period">/{{plan.duration}} months</span>
+          </div>
+  
+          <div class="features">
+            <h3>Features:</h3>
+            <ul>
+              <li *ngFor="let feature of plan.features">
+                <mat-icon>check_circle</mat-icon>
+                {{feature}}
+              </li>
+            </ul>
+          </div>
+  
+          <div class="exam-types">
+            <h3>Available Exams:</h3>
+            <mat-chip-set>
+              <mat-chip *ngFor="let type of plan.examTypes">
+                {{type}}
+              </mat-chip>
+            </mat-chip-set>
+          </div>
+        </mat-card-content>
+  
+        <mat-card-actions>
+          <button mat-raised-button color="primary" (click)="selectPlan(plan.id)">
+            Select Plan
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>

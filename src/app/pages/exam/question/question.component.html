@@ -1,0 +1,58 @@
+<div class="exam-container">
+    <div class="exam-header" *ngIf="exam">
+        <h1 class="exam-title">{{ exam.title }}</h1>
+        <div class="exam-info">
+            <span>Duration: {{ exam.duration }} minutes</span>
+            <span>Total Questions: {{ exam.totalQuestions }}</span>
+            <span>Passing Score: {{ exam.passingScore }}%</span>
+        </div>
+    </div>
+    <div class="question-header">
+        <h2>Question {{ currentIndex + 1 }} of {{ totalQuestions }}</h2>
+        <div class="progress-bar">
+            <mat-progress-bar mode="determinate" [value]="((currentIndex + 1) / totalQuestions) * 100">
+            </mat-progress-bar>
+        </div>
+    </div>
+
+    <mat-card class="question-card" *ngIf="currentQuestion">
+        <mat-card-content>
+            <p class="question-text">{{ currentQuestion.text }}</p>
+
+            <div [ngSwitch]="currentQuestion.type">
+                <!-- Single Choice -->
+                <mat-radio-group *ngSwitchCase="'single'" [value]="selectedAnswers[currentIndex]"
+                    (change)="onSingleAnswerChange($event.value)">
+                    <mat-radio-button *ngFor="let option of currentQuestion.options" [value]="option.id"
+                        class="option-radio">
+                        {{ option.text }}
+                    </mat-radio-button>
+                </mat-radio-group>
+
+                <!-- Multiple Choice -->
+                <div *ngSwitchCase="'multiple'" class="multiple-choice">
+                    <mat-checkbox *ngFor="let option of currentQuestion.options" [checked]="isOptionSelected(option.id)"
+                        (change)="onMultipleAnswerChange(option.id, $event.checked)" class="option-checkbox">
+                        {{ option.text }}
+                    </mat-checkbox>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+
+
+    <div class="navigation-buttons">
+        <button mat-raised-button color="primary" (click)="previous()" [disabled]="currentIndex === 0">
+            Previous
+        </button>
+
+        <button mat-raised-button color="primary" *ngIf="currentIndex < totalQuestions - 1" (click)="next()" [disabled]="!hasCurrentAnswer()">
+            Next
+        </button>
+
+        <button mat-raised-button color="accent" *ngIf="currentIndex === totalQuestions - 1" (click)="submit()" [disabled]="!hasCurrentAnswer()">
+            Submit Test
+        </button>
+    </div>
+
+</div>

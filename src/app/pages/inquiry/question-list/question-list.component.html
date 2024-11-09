@@ -1,0 +1,37 @@
+<div class="question-list">
+    <h2 *ngIf="questions.length === 0">No questions yet</h2>
+  
+    <mat-accordion>
+      <mat-expansion-panel *ngFor="let question of questions">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ question.subject }}
+          </mat-panel-title>
+          <mat-panel-description>
+            <mat-chip-set>
+              <mat-chip [color]="getStatusColor(question.status)" [ngClass]="{'answered-chip': question.status === 'answered', 'pending-chip': question.status !== 'answered'}" selected style="color: '#fff' !important;">
+                {{ question.status }}
+              </mat-chip>
+            </mat-chip-set>
+            <span class="date">{{ formatDate(question.createdAt) }}</span>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+  
+        <p class="question-content">{{ question.content }}</p>
+  
+        <div class="responses" *ngIf="question.responses?.length">
+          <h3>Responses ({{ question.responses?.length }})</h3>
+          <div class="response" *ngFor="let response of question.responses">
+            <p>{{ response.content }}</p>
+            <small>{{ formatDate(response.createdAt) }}</small>
+          </div>
+        </div>
+  
+        <mat-action-row>
+          <button mat-button color="primary" (click)="viewQuestion(question.id)">
+            View Full Thread
+          </button>
+        </mat-action-row>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>

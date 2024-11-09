@@ -1,0 +1,36 @@
+<div class="dialog-header">
+    <h2>Summary</h2>
+    <button mat-icon-button (click)="closeDialog()" aria-label="Close">
+        <mat-icon>close</mat-icon>
+    </button>
+</div>
+<div class="dialog-content">
+    <div class="header">
+      <h2>{{data.examTitle}}</h2>
+      <div class="header-info">
+        <span class="date">{{formatDate(data.takenAt)}}</span>
+        <mat-chip [color]="getStatusColor(data.status)" selected>
+          {{data.status}}
+        </mat-chip>
+      </div>
+    </div>
+  
+    <div class="score-section">
+      <h3>Overall Score: {{data.score}}%</h3>
+      
+      <div *ngFor="let section of data.sectionScores" class="section-score">
+        <h4>{{section.name}}</h4>
+        <div>Score: {{section.score}}%</div>
+        <p class="feedback">{{section.feedback}}</p>
+      </div>
+    </div>
+  
+    <div class="recommendations">
+      <h3>Recommendations</h3>
+      <ul>
+        <li *ngFor="let rec of data.recommendations">
+          {{rec}}
+        </li>
+      </ul>
+    </div>
+  </div>
