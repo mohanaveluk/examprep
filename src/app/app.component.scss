@@ -3,7 +3,7 @@
   }
 
   .app-container {
-    min-height: 100vh;
+    min-height: 90vh;
     display: flex;
     flex-direction: column;
     background: #f5f6fa;
@@ -12,4 +12,9 @@
   .main-content {
     flex: 1 0 auto;
     padding: 1rem;
+  }
+
+  .page-container {
+    min-height: calc(100vh - 64px - 300px); /* Adjust based on your header and footer heights */
+    padding: 20px;
   }
