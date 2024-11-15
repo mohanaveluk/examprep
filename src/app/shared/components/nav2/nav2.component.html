@@ -1,0 +1,131 @@
+<mat-sidenav-container class="sidenav-container">
+    <mat-sidenav #drawer class="sidenav" fixedInViewport
+        [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+        [mode]="(isHandset$ | async) ? 'over' : 'side'"
+        [opened]="false">
+      <mat-toolbar>Menu {{isHandset$}}</mat-toolbar>
+      <mat-nav-list>
+        <a mat-list-item routerLink="/" routerLinkActive="active">Home</a>
+        <a mat-list-item routerLink="/about" routerLinkActive="active">About</a>
+        <a mat-list-item routerLink="/contact" routerLinkActive="active">Contact</a>
+        
+        <mat-expansion-panel *ngIf="isLoggedIn">
+          <mat-expansion-panel-header>
+            <mat-panel-title>Exams</mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-nav-list>
+            <a mat-list-item routerLink="/exam/list">Available Tests</a>
+            <a mat-list-item routerLink="/test/history">Test History</a>
+          </mat-nav-list>
+        </mat-expansion-panel>
+  
+        <mat-expansion-panel *ngIf="isLoggedIn">
+          <mat-expansion-panel-header>
+            <mat-panel-title>Support</mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-nav-list>
+            <a mat-list-item routerLink="/inquiry/inquiries">My Inquiries</a>
+            <a mat-list-item routerLink="/pricing/plans">Pricing Plans</a>
+          </mat-nav-list>
+        </mat-expansion-panel>
+      </mat-nav-list>
+    </mat-sidenav>
+    
+    <mat-sidenav-content>
+      <mat-toolbar color="primary">
+        <button
+          type="button"
+          aria-label="Toggle sidenav"
+          mat-icon-button
+          (click)="drawer.toggle()"
+          *ngIf="isHandset$ | async">
+          <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+        </button>
+        
+        <span class="logo">
+            <img src="assets/c-logo.png" alt="Logo" class="logo-img">
+        </span>
+        <a routerLink="/" class="brand">Entrance Exam</a>
+            
+        <div class="spacer"></div>
+        
+        <!-- Desktop Navigation -->
+        <div class="nav-menu" *ngIf="!(isHandset$ | async)">
+          <a mat-button routerLink="/" routerLinkActive="active">Home</a>
+          <a mat-button routerLink="/about" routerLinkActive="active">About</a>
+          <a mat-button routerLink="/contact" routerLinkActive="active">Contact</a>
+          
+          <!-- Exams Dropdown -->
+          <button mat-button [matMenuTriggerFor]="examsMenu" *ngIf="isLoggedIn">
+            <div class="menu-item">
+                <span>Exam</span> <mat-icon style="margin: 0px -2px">arrow_drop_down</mat-icon>
+            </div>
+        </button>
+        <mat-menu #examsMenu="matMenu">
+          <button mat-menu-item routerLink="/exam/list">Available Tests</button>
+          <button mat-menu-item routerLink="/test/history">Test History</button>
+          <button mat-menu-item routerLink="/inquiry/list">Inquiry</button>
+        </mat-menu>
+
+          
+        <!-- Inquiry Dropdown -->
+        <button mat-button [matMenuTriggerFor]="inquiryMenu" *ngIf="isLoggedIn">
+            <div class="menu-item">
+              <span>Connect</span> <mat-icon style="margin: 0px -2px">arrow_drop_down</mat-icon>
+            </div>          
+          </button>
+          <mat-menu #inquiryMenu="matMenu">
+            <a mat-menu-item routerLink="/inquiry/list">My Inquiries</a>
+          </mat-menu>
+    
+          <!-- Support Dropdown -->
+          <button mat-button [matMenuTriggerFor]="supportMenu">
+              <div class="menu-item">
+                  <span>Support</span> <mat-icon style="margin: 0px -2px">arrow_drop_down</mat-icon>
+                </div>          
+          </button>
+          <mat-menu #supportMenu="matMenu">
+            <a mat-menu-item routerLink="/pricing/plans">Pricing Plans</a>
+            <a mat-menu-item routerLink="/contact">Contact Us</a>
+            <a mat-menu-item routerLink="/faq">FAQ</a>
+          </mat-menu>
+            
+          <!-- <div class="dropdown-menu" *ngIf="isLoggedIn">
+            <div class="menu-item">
+                <span>Support</span> <mat-icon style="margin: 0px -2px">arrow_drop_down</mat-icon>
+              </div>
+            <div class="dropdown-content">
+              <a routerLink="/inquiry/inquiries">My Inquiries</a>
+              <a routerLink="/pricing/plans">Pricing Plans</a>
+            </div>
+          </div> -->
+        </div>
+        
+        <!-- User Menu -->
+        <div *ngIf="isLoggedIn">
+          <button mat-button [matMenuTriggerFor]="userMenu">
+            <div class="user-avatar">{{userInitials}}</div>
+          </button>
+          <mat-menu #userMenu="matMenu">
+            <button mat-menu-item routerLink="/pricing/account">
+              <mat-icon>account_circle</mat-icon>
+              <span>My Account</span>
+            </button>
+            <button mat-menu-item routerLink="/pricing/payment-history">
+              <mat-icon>history</mat-icon>
+              <span>Payment History</span>
+            </button>
+            <mat-divider></mat-divider>
+            <button mat-menu-item (click)="logout()">
+              <mat-icon>exit_to_app</mat-icon>
+              <span>Logout</span>
+            </button>
+          </mat-menu>
+        </div>
+        
+        <a mat-button routerLink="/auth/login" *ngIf="!isLoggedIn">Login</a>
+      </mat-toolbar>
+      
+      <ng-content></ng-content>
+    </mat-sidenav-content>
+  </mat-sidenav-container>

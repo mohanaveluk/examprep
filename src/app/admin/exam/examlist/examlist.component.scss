@@ -1,0 +1,120 @@
+.admin-examlist-container {
+    padding: 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+  
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+  
+      h1 {
+        margin: 0;
+        font-size: 2em;
+        color: #333;
+      }
+  
+      button {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+    }
+  
+    .filter-field {
+      width: 100%;
+      margin-bottom: 16px;
+    }
+  
+    .table-container {
+      overflow-x: auto;
+      
+      table {
+        width: 100%;
+  
+        .mat-mdc-row {
+          &:hover {
+            background-color: #f5f5f5;
+          }
+        }
+  
+        .mat-column-title {
+          min-width: 200px;
+          padding-right: 24px;
+  
+          .exam-description {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 4px;
+          }
+        }
+  
+        .mat-column-actions {
+          width: 125px;
+          text-align: center;
+        }
+  
+        .mat-column-status {
+          width: 100px;
+        }
+  
+        .mat-column-duration,
+        .mat-column-totalQuestions,
+        .mat-column-passingScore {
+          width: 130px;
+          text-align: center;
+        }
+  
+        .mat-column-updatedAt {
+          width: 150px;
+        }
+      }
+    }
+  }
+  
+  // Custom styles for empty state
+  .mat-mdc-row.mat-row-no-data {
+    height: 100px;
+  
+    .mat-mdc-cell {
+      text-align: center;
+      color: #666;
+      font-style: italic;
+    }
+  }
+  
+  // Responsive adjustments
+  @media (max-width: 768px) {
+    .admin-examlist-container {
+      padding: 16px;
+  
+      .header {
+        flex-direction: column;
+        gap: 16px;
+        align-items: stretch;
+  
+        button {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+    }
+  }
+
+/* Optional: Style the actions cell for alignment */
+.mat-column-actions {
+  text-align: center; /* Center-align the actions column */
+  width: 60px; /* Reduce the column width */
+}
+
+/* Optional: Style the dropdown menu for aesthetics */
+.mat-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Add spacing between the icon and text */
+}
+
+.mat-menu-item mat-icon {
+  font-size: 20px;
+}

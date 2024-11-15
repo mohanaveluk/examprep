@@ -1,0 +1,109 @@
+<div class="admin-examlist-container">
+    <div class="header">
+      <h1>Manage Exams</h1>
+      <button mat-raised-button color="primary" routerLink="/admin/exams/create">
+        <mat-icon>add</mat-icon>
+        Create New Exam
+      </button>
+    </div>
+  
+    <mat-form-field class="filter-field">
+      <mat-label>Filter</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Type to filter..." #input>
+    </mat-form-field>
+  
+    <div class="table-container mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource" matSort>
+        <!-- Title Column -->
+        <ng-container matColumnDef="title" >
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
+          <td mat-cell *matCellDef="let exam"  class="table-row" (mouseenter)="hoveredRow = exam" (mouseleave)="hoveredRow = null">
+            {{exam.title}}
+            <div class="exam-description">{{exam.description}}</div>
+          
+
+            <!-- Interactive Actions -->
+            <!-- <div class="action-icons" *ngIf="hoveredRow === exam">
+              <button mat-icon-button color="primary" (click)="onView(exam)" matTooltip="View Exam">
+                <mat-icon>visibility</mat-icon>
+              </button>
+              <button mat-icon-button color="accent" (click)="onEdit(exam)" matTooltip="Edit Exam">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" (click)="onDelete(exam)" matTooltip="Delete Exam">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div> -->
+          </td>
+        </ng-container>
+  
+        <!-- Duration Column -->
+        <ng-container matColumnDef="duration">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Duration</th>
+          <td mat-cell *matCellDef="let exam">{{exam.duration}} min</td>
+        </ng-container>
+  
+        <!-- Total Questions Column -->
+        <ng-container matColumnDef="totalQuestions">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Questions</th>
+          <td mat-cell *matCellDef="let exam">{{exam.totalQuestions}}</td>
+        </ng-container>
+  
+        <!-- Passing Score Column -->
+        <ng-container matColumnDef="passingScore">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Pass Score</th>
+          <td mat-cell *matCellDef="let exam">{{exam.passingScore}}%</td>
+        </ng-container>
+  
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+          <td mat-cell *matCellDef="let exam">
+            <mat-chip [color]="getStatusColor(exam.status)" selected>
+              {{exam.status}}
+            </mat-chip>
+          </td>
+        </ng-container>
+  
+        <!-- Updated At Column -->
+        <ng-container matColumnDef="updatedAt">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Updated</th>
+          <td mat-cell *matCellDef="let exam">{{formatDate(exam.updatedAt)}}</td>
+        </ng-container>
+  
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let exam">
+            <button mat-icon-button [matMenuTriggerFor]="menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-icon-button color="primary" (click)="onView(exam)" matTooltip="View Exam">
+                <mat-icon>visibility</mat-icon>
+              </button>
+              <button mat-icon-button color="accent" (click)="onEdit(exam)" matTooltip="Edit Exam">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" (click)="onDelete(exam)" matTooltip="Delete Exam">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </mat-menu>
+          </td>
+        </ng-container>
+  
+        <!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr> -->
+  
+        <!-- Row shown when there is no matching data -->
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="7">No exams found</td>
+        </tr>
+      </table>
+  
+      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of exams"></mat-paginator>
+    </div>
+  </div>

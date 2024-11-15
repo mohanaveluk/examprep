@@ -1,0 +1,86 @@
+<div class="nav-container">
+    <mat-toolbar color="primary">
+      <span class="logo">
+        <img src="assets/c-logo.png" alt="Logo" class="logo-img">
+      </span>
+      <a routerLink="/" class="brand">Medical Exam Prep</a>
+      <div class="spacer"></div>
+      <!-- Desktop Menu -->
+      <div class="nav-menu" [class.show-mobile-menu]="isMobileMenuOpen">
+        <a mat-button routerLink="/" routerLinkActive="active">Home</a>
+        
+        <!-- Exams Dropdown -->
+        <button mat-button [matMenuTriggerFor]="examsMenu" *ngIf="isLoggedIn">
+            <div class="menu-item">
+                <span>Exam</span> <mat-icon style="margin: 0px -2px">arrow_drop_down</mat-icon>
+            </div>
+        </button>
+        <mat-menu #examsMenu="matMenu">
+          <button mat-menu-item routerLink="/exam/list">Available Tests</button>
+          <button mat-menu-item routerLink="/test/history">Test History</button>
+          <button mat-menu-item routerLink="/inquiry/list">Inquiry</button>
+
+        </mat-menu>
+  
+        <!-- Inquiry Dropdown -->
+        <button mat-button [matMenuTriggerFor]="inquiryMenu" *ngIf="isLoggedIn">
+          <div class="menu-item">
+            <span>Connect</span> <mat-icon style="margin: 0px -2px">arrow_drop_down</mat-icon>
+          </div>          
+        </button>
+        <mat-menu #inquiryMenu="matMenu">
+          <a mat-menu-item routerLink="/inquiry/list">My Inquiries</a>
+        </mat-menu>
+  
+        <!-- Support Dropdown -->
+        <button mat-button [matMenuTriggerFor]="supportMenu">
+            <div class="menu-item">
+                <span>Support</span> <mat-icon style="margin: 0px -2px">arrow_drop_down</mat-icon>
+              </div>          
+        </button>
+        <mat-menu #supportMenu="matMenu">
+          <a mat-menu-item routerLink="/pricing/plans">Pricing Plans</a>
+          <a mat-menu-item routerLink="/contact">Contact Us</a>
+          <a mat-menu-item routerLink="/faq">FAQ</a>
+        </mat-menu>
+  
+        <a mat-button routerLink="/about" routerLinkActive="active">About</a>
+      </div>
+  
+      
+  
+      <!-- User Menu -->
+      <div class="user-menu" *ngIf="isLoggedIn">
+        <button mat-button [matMenuTriggerFor]="userMenu">
+          <div class="user-avatar">{{userInitials}}</div>
+        </button>
+        <mat-menu #userMenu="matMenu">
+          <button mat-menu-item routerLink="/pricing/account">
+            <mat-icon>account_circle</mat-icon>
+            <span>My Account</span>
+          </button>
+          <button mat-menu-item routerLink="/pricing/payment-history">
+            <mat-icon>history</mat-icon>
+            <span>Payment History</span>
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>exit_to_app</mat-icon>
+            <span>Logout</span>
+          </button>
+        </mat-menu>
+      </div>
+  
+      <!-- Login Button -->
+      <a mat-button routerLink="/auth/login" *ngIf="!isLoggedIn">Login</a>
+  
+      <!-- Mobile Menu Toggle -->
+      <button mat-icon-button class="mobile-menu-toggle" (click)="toggleMobileMenu()">
+        <mat-icon>{{ isMobileMenuOpen ? 'close' : 'menu' }}</mat-icon>
+      </button>
+    </mat-toolbar>
+  </div>
+  
+  <div class="content">
+    <ng-content></ng-content>
+  </div>

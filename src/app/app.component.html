@@ -5,8 +5,11 @@
   <button mat-button *ngIf="!isLoggedIn" routerLink="/auth/register">Register</button>
   <button mat-button *ngIf="isLoggedIn" (click)="logout()">Logout</button>
 </mat-toolbar> -->
-<app-navigation></app-navigation>
+
+<!-- <app-navigation></app-navigation>
 <div class="app-container">
   <main class="main-content"><router-outlet /></main>
-  <app-footer></app-footer>
-</div>
+  <app-footer1></app-footer1>
+</div> -->
+
+<router-outlet></router-outlet>

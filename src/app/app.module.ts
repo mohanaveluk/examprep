@@ -28,6 +28,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatListModule } from '@angular/material/list';
+import { SharedModule } from './shared/shared.module';
+import { AdminModule } from './admin/admin.module';
+import { PagesComponent } from './pages/pages.component';
 
 @NgModule({
   declarations: [
@@ -36,12 +39,14 @@ import { MatListModule } from '@angular/material/list';
     ContactUsComponent,
     AboutComponent,
     FooterComponent,
+    PagesComponent,
 
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    SharedModule,
     HttpClientModule,
     FormsModule,
     MatToolbarModule,
@@ -61,7 +66,8 @@ import { MatListModule } from '@angular/material/list';
     ExamModule,
     InquiryModule,
     TestHistoryModule,
-    PricingModule
+    PricingModule,
+    AdminModule
   ],
   providers: [
     provideAnimationsAsync()
