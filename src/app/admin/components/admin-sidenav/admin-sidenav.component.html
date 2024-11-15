@@ -1,0 +1,23 @@
+<div class="admin-sidenav-header" [class.collapsed]="!isExpanded">
+  <div class="header-content">
+    
+    <span class="logo" *ngIf="isExpanded">
+      <img src="assets/c-logo.png" alt="Logo" class="logo-img">
+      <span class="title">Entrance Exam</span>
+    </span>
+    <button mat-icon-button class="toggle-button" (click)="onToggleExpanded()">
+      <mat-icon>{{isExpanded ? 'chevron_left' : 'chevron_right'}}</mat-icon>
+    </button>
+  </div>
+</div>
+
+<mat-nav-list>
+  <a mat-list-item *ngFor="let item of menuItems" 
+     [routerLink]="item.route" 
+     routerLinkActive="active"
+     [matTooltip]="!isExpanded ? item.label : ''"
+     matTooltipPosition="right">
+    <mat-icon matListItemIcon>{{item.icon}}</mat-icon>
+    <span matListItemTitle *ngIf="isExpanded">{{item.label}}</span>
+  </a>
+</mat-nav-list>

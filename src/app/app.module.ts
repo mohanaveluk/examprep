@@ -29,6 +29,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatListModule } from '@angular/material/list';
 import { SharedModule } from './shared/shared.module';
+import { AdminModule } from './admin/admin.module';
+import { PagesComponent } from './pages/pages.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +39,7 @@ import { SharedModule } from './shared/shared.module';
     ContactUsComponent,
     AboutComponent,
     FooterComponent,
+    PagesComponent,
 
   ],
   imports: [
@@ -64,6 +67,7 @@ import { SharedModule } from './shared/shared.module';
     InquiryModule,
     TestHistoryModule,
     PricingModule,
+    AdminModule
   ],
   providers: [
     provideAnimationsAsync()
