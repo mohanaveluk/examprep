@@ -1,0 +1,77 @@
+.full-width {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+  
+  .type-selection {
+    margin-bottom: 1rem;
+  
+    mat-radio-button {
+      margin-right: 1rem;
+    }
+  }
+  
+  .options-container {
+    margin-bottom: 1rem;
+  
+    .option-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.5rem;
+  
+      .option-label {
+        font-weight: bold;
+        font-size: 1.1em;
+        width: 30px;
+        text-align: center;
+        color: #1976d2;
+      }
+
+      
+      mat-form-field {
+        flex: 1;
+      }
+    }
+  }
+  
+  .button-container {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  
+  .questions-table-container {
+    margin-top: 2rem;
+  
+    table {
+      width: 100%;
+    }
+  
+    .mat-column-actions {
+      //display: flex;
+      width: 250px;
+      text-align: center;
+    }
+  }
+  
+  button[type="submit"] {
+    margin-bottom: 1rem;
+  }
+
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.validation-error {
+  color: #f44336;
+  margin-bottom: 1rem;
+  
+  p {
+    margin: 0;
+  }
+}

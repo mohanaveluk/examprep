@@ -1,0 +1,38 @@
+.exam-form {
+    max-width: 600px;
+    margin: auto;
+    
+  
+    mat-card {
+        padding: 1rem;
+    }
+
+    mat-card-title {
+        padding: 0px 0px 16px 16px;
+    }
+
+    .full-width {
+      width: 100%;
+      margin-bottom: 16px;
+    }
+  
+    .button-container1 {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 16px;
+    }
+
+   
+
+    .button-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 24px;
+  
+      button {
+        width: 100%;
+        padding: 12px;
+      }
+    }
+  }

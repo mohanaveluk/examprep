@@ -1,15 +1,19 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AdminExam, ExamlistService } from '../examlist.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
+import { Router } from '@angular/router';
+import { ExamDialogComponent } from '../exam-dialog/exam-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { HeaderService } from '../../services/header.service';
 
 @Component({
   selector: 'app-examlist',
   templateUrl: './examlist.component.html',
   styleUrl: './examlist.component.scss'
 })
-export class ExamlistComponent {
+export class ExamlistComponent implements OnInit{
   displayedColumns: string[] = [
     'title',
     'duration',
@@ -25,11 +29,17 @@ export class ExamlistComponent {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private examlistService: ExamlistService) {
+  constructor(
+    private headerService: HeaderService,
+    private examlistService: ExamlistService,
+    private router: Router,
+    private dialog: MatDialog
+  ) {
     this.dataSource = new MatTableDataSource<AdminExam>([]);
   }
 
   ngOnInit(): void {
+    this.headerService.setTitle("Admin - Exam");
     this.loadExams();
   }
 
@@ -50,13 +60,16 @@ export class ExamlistComponent {
   }
 
   onView(exam: AdminExam): void {
-    // Implement view logic
-    console.log('View exam:', exam);
+    this.dialog.open(ExamDialogComponent, {
+      width: '900px',
+      data: exam
+    });
   }
 
   onEdit(exam: AdminExam): void {
-    // Implement edit logic
-    console.log('Edit exam:', exam);
+    this.router.navigate(['/admin/exam/update'], { 
+      queryParams: { id: exam.id, mode: 'edit' }
+    });
   }
 
   onDelete(exam: AdminExam): void {

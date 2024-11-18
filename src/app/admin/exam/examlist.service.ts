@@ -8,11 +8,12 @@ export interface AdminExam {
   id: string;
   title: string;
   description: string;
+  notes: string;
   duration: number;
   totalQuestions: number;
   passingScore: number;
   createdAt: Date;
-  updatedAt: Date;
+  updatedAt?: Date;
   status: 'active' | 'inactive';
 }
 
@@ -20,13 +21,14 @@ export interface AdminExam {
   providedIn: 'root'
 })
 export class ExamlistService {
-
+  private apiUrl = '/api/admin/exams';
   private mockExams: AdminExam[] = [
     {
       id: '1',
       title: 'Basic Medical Sciences',
       description: 'Test your knowledge in anatomy, physiology, and biochemistry',
       duration: 60,
+      notes: '',
       totalQuestions: 50,
       passingScore: 70,
       createdAt: new Date('2024-01-01'),
@@ -37,6 +39,7 @@ export class ExamlistService {
       id: '2',
       title: 'Clinical Sciences',
       description: 'Comprehensive test covering pathology, pharmacology, and medicine',
+      notes: '',
       duration: 90,
       totalQuestions: 75,
       passingScore: 75,
@@ -48,6 +51,7 @@ export class ExamlistService {
       id: '3',
       title: 'Medical Ethics & Patient Care',
       description: 'Evaluation of medical ethics and patient care principles',
+      notes: '',
       duration: 45,
       totalQuestions: 30,
       passingScore: 80,
@@ -65,7 +69,44 @@ export class ExamlistService {
   getExams(): Observable<AdminExam[]> {
     // In a real application, this would be an HTTP call
     // return this.http.get<AdminExam[]>('/api/admin/exams');
+    // return this.http.get<AdminExam[]>(this.apiUrl);
     return of(this.mockExams);
+  }
+
+  getExamById(id: string): Observable<AdminExam | undefined> {
+    // return this.http.get<AdminExam>(`${this.apiUrl}/${id}`);
+    return of(this.mockExams.find(exam => exam.id === id));
+  }
+
+  createExam(exam: Partial<AdminExam>): Observable<AdminExam> {
+    // return this.http.post<AdminExam>(this.apiUrl, exam);
+    const newExam: AdminExam = {
+      id: Date.now().toString(),
+      title: exam.title || '',
+      description: exam.description || '',
+      notes: exam.notes  || '',
+      duration: exam.duration || 0,
+      totalQuestions: 0,
+      passingScore: exam.passingScore || 0,
+      status: 'inactive',
+      createdAt: new Date()
+    };
+    this.mockExams.push(newExam);
+    return of(newExam);
+  }
+
+  updateExam(exam: Partial<AdminExam>): Observable<AdminExam> {
+    // return this.http.put<AdminExam>(`${this.apiUrl}/${exam.id}`, exam);
+    const index = this.mockExams.findIndex(e => e.id === exam.id);
+    if (index !== -1) {
+      this.mockExams[index] = {
+        ...this.mockExams[index],
+        ...exam,
+        updatedAt: new Date()
+      };
+      return of(this.mockExams[index]);
+    }
+    throw new Error('Exam not found');
   }
 
   deleteExam(id: string): Observable<boolean> {

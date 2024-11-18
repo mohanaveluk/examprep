@@ -1,0 +1,178 @@
+<div class="question-form">
+    <mat-card>
+      <mat-card-title>Add Questions</mat-card-title>
+      <mat-card-content>
+        <form [formGroup]="questionForm" (ngSubmit)="addQuestion()">
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Question</mat-label>
+            <input matInput formControlName="text" required>
+          </mat-form-field>
+  
+          <mat-radio-group formControlName="type" required>
+            <mat-radio-button value="single">Single Choice</mat-radio-button>
+            <mat-radio-button value="multiple">Multiple Choice</mat-radio-button>
+          </mat-radio-group>
+  
+          <div formArrayName="options" *ngFor="let ko of options.controls; let i = index" class="option-box">
+            <div [formGroupName]="i" class="option-input">
+              <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Option {{i + 1}}</mat-label>
+                <input matInput formControlName="text" required>
+              </mat-form-field>
+              <button mat-icon-button color="warn" (click)="removeOption(i)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+            <div class="correct-answer">
+              <ng-container *ngIf="questionForm.get('type')?.value === 'single'">
+                <mat-radio-group >
+                  <mat-radio-button [value]="i">Correct</mat-radio-button>
+                </mat-radio-group>
+              </ng-container>
+              <ng-container *ngIf="questionForm.get('type')?.value === 'multiple'">
+                <mat-checkbox formControlName="correct">Correct</mat-checkbox>
+              </ng-container>
+            </div>
+          </div>
+  
+          <button mat-button type="button" (click)="addOption()" [disabled]="options.length >= 5">Add Option</button>
+          <div class="button-container">
+            <button mat-raised-button color="primary" type="submit">Add Question</button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  
+  <div class="question-list">
+    <mat-card>
+      <mat-card-title>Question List</mat-card-title>
+      <mat-card-content>
+        <table mat-table [dataSource]="questions" class="mat-elevation-z8">
+          <ng-container matColumnDef="text">
+            <th mat-header-cell *matHeaderCellDef> Question </th>
+            <td mat-cell *matCellDef="let question"> {{question.text}} </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef> Type </th>
+            <td mat-cell *matCellDef="let question"> {{question.type}} </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef> Actions </th>
+            <td mat-cell *matCellDef="let question; let i = index">
+              <button mat-icon-button (click)="editQuestion(i)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button (click)="viewQuestion(question)">
+                <mat-icon>visibility</mat-icon>
+              </button>
+              <button mat-icon-button (click)="deleteQuestion(i)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+  
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  
+  <!-- View Question Modal -->
+  <ng-template #viewQuestionDialog let-data>
+    <h2 mat-dialog-title>{{ data.text }}</h2>
+    <mat-dialog-content>
+      <p>Type: {{ data.type }}</p>
+      <ul>
+        <li *ngFor="let option of data.options">
+          {{ option.text }} <span *ngIf="option.correct">(Correct)</span>
+        </li>
+      </ul>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+      <button mat-button (click)="closeModal()">Close</button>
+    </mat-dialog-actions>
+  </ng-template>
+  
+  
+  <!-- <div class="question-form">
+    <mat-card>
+      <mat-card-title>Question</mat-card-title>
+      <mat-card-content>
+        <form (ngSubmit)="addQuestion()">
+          <mat-form-field appearance="fill">
+            <mat-label>Question</mat-label>
+            <input matInput [(ngModel)]="question.text" name="questionText" required>
+          </mat-form-field>
+  
+          <mat-form-field appearance="fill">
+            <mat-label>Type</mat-label>
+            <mat-select [(ngModel)]="question.type" name="questionType" required>
+              <mat-option value="single">Single Choice</mat-option>
+              <mat-option value="multiple">Multiple Choice</mat-option>
+            </mat-select>
+          </mat-form-field>
+  
+          <div *ngFor="let option of question.options; let i = index">
+            <mat-form-field appearance="fill">
+              <mat-label>Option {{i + 1}}</mat-label>
+              <input matInput [(ngModel)]="option.text" name="option{{i}}" required>
+            </mat-form-field>
+            <mat-checkbox [(ngModel)]="option.correct" name="correct{{i}}">Correct</mat-checkbox>
+          </div>
+  
+          <button mat-button type="button" (click)="addOption()">Add Option</button>
+          <button mat-raised-button color="primary" type="submit">Add Question</button>
+        </form>
+  
+        <table mat-table [dataSource]="questions" class="mat-elevation-z8">
+          <ng-container matColumnDef="text">
+            <th mat-header-cell *matHeaderCellDef> Question </th>
+            <td mat-cell *matCellDef="let question"> {{question.text}} </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef> Type </th>
+            <td mat-cell *matCellDef="let question"> {{question.type}} </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef> Actions </th>
+            <td mat-cell *matCellDef="let question; let i = index">
+              <button mat-icon-button (click)="editQuestion(i)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button (click)="viewQuestion(question)">
+                <mat-icon>visibility</mat-icon>
+              </button>
+              <button mat-icon-button (click)="deleteQuestion(i)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+  
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </mat-card-content>
+    </mat-card>-->
+  
+    <!-- View Question Modal -->
+    <!--<mat-dialog-content *ngIf="viewingQuestion">
+      <h2 mat-dialog-title>{{ viewingQuestion.text }}</h2>
+      <mat-dialog-content>
+        <p>Type: {{ viewingQuestion.type }}</p>
+        <ul>
+          <li *ngFor="let option of viewingQuestion.options">
+            {{ option.text }} <span *ngIf="option.correct">(Correct)</span>
+          </li>
+        </ul>
+      </mat-dialog-content>
+      <mat-dialog-actions>
+        <button mat-button (click)="closeModal()">Close</button>
+      </mat-dialog-actions>
+    </mat-dialog-content>
+  </div> -->

@@ -1,4 +1,5 @@
 import { Component, Output, EventEmitter } from '@angular/core';
+import { HeaderService } from '../../services/header.service';
 
 @Component({
   selector: 'app-admin-header',
@@ -8,6 +9,8 @@ import { Component, Output, EventEmitter } from '@angular/core';
 export class AdminHeaderComponent {
   @Output() toggleMenu = new EventEmitter<void>();
 
+  constructor(public headerService: HeaderService) {}
+  
   onToggleMenu() {
     this.toggleMenu.emit();
   }
