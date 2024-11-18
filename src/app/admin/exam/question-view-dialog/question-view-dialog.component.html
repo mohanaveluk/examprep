@@ -1,0 +1,30 @@
+<div class="question-dialog">
+
+  <div class="dialog-header">
+    <h2 mat-dialog-title>Question Details</h2>
+    <button mat-icon-button (click)="onClose()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <mat-dialog-content>
+    <div class="question-details">
+      <h3>{{data.question}}</h3>
+      <p><strong>Type:</strong> {{data.type}}</p>
+
+      <div class="options-list">
+        <h4>Options:</h4>
+        <ul>
+          <li *ngFor="let option of data.options; let i = index" [class.correct]="data.correctAnswers.includes(i)">
+            <span class="option-letter">{{['A', 'B', 'C', 'D', 'E'][i]}}.</span>
+            {{option}} {{data.correctAnswers.includes(i) ? '(Correct)' : ''}}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="onClose()">Close</button>
+  </mat-dialog-actions>
+</div>

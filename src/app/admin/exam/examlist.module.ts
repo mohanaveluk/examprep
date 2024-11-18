@@ -19,20 +19,46 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { ExamPageComponent } from './exam-page/exam-page.component';
+import { QuestionPageComponent, ViewQuestionDialog } from './question-page/question-page.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatRadioModule } from '@angular/material/radio';
+import { QuestionOptionComponent } from './question-option/question-option.component';
+import { QuestionViewDialogComponent } from './question-view-dialog/question-view-dialog.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { TestQuestionComponent } from './test-question/test-question.component';
+import { ExamDialogComponent } from './exam-dialog/exam-dialog.component';
 
 
 
 @NgModule({
   declarations: [
-    ExamlistComponent
+    ExamlistComponent,
+    ExamPageComponent,
+    QuestionPageComponent,
+    ViewQuestionDialog,
+    QuestionOptionComponent,
+    QuestionViewDialogComponent,
+    TestQuestionComponent,
+    ExamDialogComponent 
+    
   ],
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     MatSidenavModule,
     MatToolbarModule,
     MatListModule,
+    MatExpansionModule,
     MatFormFieldModule,
     MatInputModule,
+    MatCheckboxModule,
+    MatRadioModule,
     MatSelectModule,
     MatChipsModule,
     MatIconModule,
@@ -45,7 +71,9 @@ import { MatSelectModule } from '@angular/material/select';
     MatSnackBarModule,
     MatSortModule,
     MatPaginatorModule,
+    MatDialogModule,
     ExamListRoutingModule
-  ]
+  ],
+  
 })
 export class ExamListModule { }
