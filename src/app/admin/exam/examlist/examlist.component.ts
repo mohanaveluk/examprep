@@ -66,6 +66,17 @@ export class ExamlistComponent implements OnInit{
     });
   }
 
+  onRowClick(event: MouseEvent, row: any) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.mat-mdc-cell:last-child')) {
+      this.dialog.open(ExamDialogComponent, {
+        width: '900px',
+        data: row
+      });
+    }
+  }
+
+
   onEdit(exam: AdminExam): void {
     this.router.navigate(['/admin/exam/update'], { 
       queryParams: { id: exam.id, mode: 'edit' }

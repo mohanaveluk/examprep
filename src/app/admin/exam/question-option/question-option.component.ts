@@ -37,6 +37,7 @@ export class QuestionOptionComponent  implements OnInit {
 
   ngOnInit(): void {
     this.headerService.setTitle("Admin - Exam");
+    this.setupTypeChangeListener();
     this.loadQuestions();
     this.questionForm.patchValue({
       type: 'single'
@@ -72,6 +73,34 @@ export class QuestionOptionComponent  implements OnInit {
     ]
   }
 
+  setupTypeChangeListener(): void {
+    this.questionForm.get('type')?.valueChanges.subscribe(type => {
+      if (type === 'true-false') {
+        this.resetOptionsForTrueFalse();
+      } else {
+        this.resetOptionsForChoices();
+      }
+      this.correctAnswers.clear();
+    });
+  }
+
+  resetOptionsForTrueFalse(): void {
+    const optionsArray = this.questionForm.get('options') as FormArray;
+    optionsArray.clear();
+    optionsArray.push(this.fb.control('True'));
+    optionsArray.push(this.fb.control('False'));
+  }
+
+  resetOptionsForChoices(): void {
+    const optionsArray = this.questionForm.get('options') as FormArray;
+    optionsArray.clear();
+    for (let i = 0; i < 4; i++) {
+      optionsArray.push(this.fb.control('', Validators.required));
+    }
+    optionsArray.push(this.fb.control(''));
+  }
+
+
   loadQuestions(): void {
     this.loading = true;
     this.questionService.getQuestions()
@@ -97,7 +126,7 @@ export class QuestionOptionComponent  implements OnInit {
       question: ['', Validators.required],
       type: ['single', Validators.required],
       options: this.fb.array([
-        this.fb.control('', Validators.required),
+        this.fb.control('', [Validators.required, Validators.minLength(5)]),
         this.fb.control('', Validators.required),
         this.fb.control('', Validators.required),
         this.fb.control('', Validators.required),
@@ -149,7 +178,9 @@ export class QuestionOptionComponent  implements OnInit {
       const questionData = {
         question: formValue.question,
         type: formValue.type,
-        options: formValue.options.filter((option: string) => option.trim() !== ''),
+        options: formValue.type === 'true-false' 
+          ? ['True', 'False']
+          : formValue.options.filter((option: string) => option.trim() !== ''),
         correctAnswers: formValue.correctAnswers
       };
 
@@ -218,8 +249,25 @@ export class QuestionOptionComponent  implements OnInit {
     this.questionForm.patchValue({
       question: question.question,
       type: question.type,
-      options: [...question.options, ...Array(5 - question.options.length).fill('')],
+      //options: [...question.options, ...Array(5 - question.options.length).fill('')],
     });
+
+    // Reset options based on question type
+    if (question.type === 'true-false') {
+      this.resetOptionsForTrueFalse();
+    }
+    else{
+      const optionsArray = this.questionForm.get('options') as FormArray;
+      optionsArray.clear();
+      question.options.forEach(option => {
+        optionsArray.push(this.fb.control(option));
+      });
+      // Fill remaining slots with empty strings if needed
+      while (optionsArray.length < 5) {
+        optionsArray.push(this.fb.control('', Validators.required));
+      }
+
+    }
 
      // Clear existing correct answers array
      while (this.correctAnswers.length) {

@@ -8,7 +8,7 @@
   <form [formGroup]="questionForm" (ngSubmit)="onSubmit()">
     <mat-form-field appearance="fill" class="full-width">
       <mat-label>Question</mat-label>
-      <input matInput formControlName="question" required>
+      <input matInput formControlName="question">
       <mat-error *ngIf="isSubmitted && questionForm.get('question')?.errors?.['required']">
         Question is required
       </mat-error>
@@ -18,21 +18,33 @@
       <mat-radio-group formControlName="type">
         <mat-radio-button value="single" checked>Single Choice</mat-radio-button>
         <mat-radio-button value="multiple">Multiple Choice</mat-radio-button>
+        <mat-radio-button value="true-false">True/False</mat-radio-button>
       </mat-radio-group>
     </div>
 
     <div class="options-container" formArrayName="options">
       <div *ngFor="let option of options.controls; let i = index" class="option-row">
-        <div class="option-label">{{['A', 'B', 'C', 'D', 'E'][i]}}</div>
-        <mat-form-field appearance="fill">
-          <mat-label>Option {{['A', 'B', 'C', 'D', 'E'][i]}}</mat-label>
-          <input matInput [formControlName]="i">
-          <mat-error *ngIf="isSubmitted && options.at(i).errors?.['required']">
-            Option is required
-          </mat-error>
-        </mat-form-field>
+        <ng-container *ngIf="questionForm.get('type')?.value !== 'true-false'">
+          <div class="option-label">{{['A', 'B', 'C', 'D', 'E'][i]}}</div>
+          <mat-form-field appearance="fill">
+            <mat-label>Option {{['A', 'B', 'C', 'D', 'E'][i]}}</mat-label>
+            <input matInput [formControlName]="i" >
+            <mat-error *ngIf="isSubmitted && options.at(i).errors?.['required']">
+              Option is required
+            </mat-error>
+          </mat-form-field>
+        </ng-container>
 
-        <ng-container *ngIf="questionForm.get('type')?.value === 'single'">
+        <ng-container *ngIf="questionForm.get('type')?.value === 'true-false'">
+          <div class="option-label">{{['A', 'B'][i]}}</div>
+          <mat-form-field appearance="fill">
+            <mat-label>{{options.at(i).value}}</mat-label>
+            <input matInput [formControlName]="i" readonly>
+          </mat-form-field>
+        </ng-container>
+
+
+        <ng-container *ngIf="questionForm.get('type')?.value === 'single' || questionForm.get('type')?.value === 'true-false'">
           <mat-radio-button 
             [value]="i"
             [checked]="correctAnswers.value.includes(i)"
