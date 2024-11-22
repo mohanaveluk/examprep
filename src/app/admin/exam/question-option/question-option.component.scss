@@ -7,7 +7,7 @@
     margin-bottom: 1rem;
   
     mat-radio-button {
-      margin-right: 1rem;
+      margin-right: 2rem;
     }
   }
   
@@ -28,12 +28,62 @@
         color: #1976d2;
       }
 
-      
+      mat-radio-button, mat-checkbox {
+        margin-right: 2rem;
+      }
+
       mat-form-field {
         flex: 1;
       }
     }
   }
+  
+  .ranking-container {
+    .ranking-instruction {
+      color: rgba(0, 0, 0, 0.6);
+      margin-bottom: 1rem;
+    }
+  
+    .ranking-help {
+      color: rgba(0, 0, 0, 0.6);
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+      font-style: italic;
+    }
+  
+    .ranking-list {
+      padding: 1rem;
+    }
+  
+    .ranking-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.5rem;
+      background: white;
+      border-radius: 4px;
+      margin-bottom: 0.5rem;
+  
+      &:last-child {
+        margin-bottom: 0;
+      }
+  
+      .ranking-input {
+        flex: 1;
+      }
+  
+      .option-label {
+        min-width: 30px;
+        font-weight: 500;
+      }
+  
+      .order-select {
+        width: 100px;
+        margin-right: 1rem;
+      }
+    }
+  }
+
   
   .button-container {
     display: flex;
@@ -49,6 +99,11 @@
       width: 100%;
     }
   
+    .search-field, .filter-field {
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+
     .mat-column-actions {
       //display: flex;
       width: 250px;

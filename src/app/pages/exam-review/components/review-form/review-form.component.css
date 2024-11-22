@@ -1,0 +1,23 @@
+.review-form {
+  padding: 20px;
+}
+
+.rating-field {
+  margin-bottom: 20px;
+}
+
+.rating-label {
+  display: block;
+  margin-bottom: 8px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}

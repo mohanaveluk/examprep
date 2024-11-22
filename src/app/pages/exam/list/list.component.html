@@ -19,9 +19,12 @@
                 <p>Passing Score: {{exam.passingScore}}%</p>
             </mat-card-content>
             <mat-card-actions>
-                <button mat-raised-button color="primary" [routerLink]="['/exam/take', exam.id]">
-                    Start Test
-                </button>
+                <div class="card-footer">
+                    <button mat-raised-button color="primary" [routerLink]="['/exam/take', exam.id]">
+                      Start Test
+                    </button>
+                    <app-review-rating [examId]="exam.id"></app-review-rating>
+                  </div>                
             </mat-card-actions>
         </mat-card>
     </div>

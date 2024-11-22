@@ -1,0 +1,38 @@
+<form [formGroup]="reviewForm" (ngSubmit)="onSubmit()" class="review-form">
+  <div class="rating-field">
+    <label class="rating-label">Rating</label>
+    <app-star-rating
+      [rating]="reviewForm.get('rating')?.value"
+      (ratingChange)="reviewForm.get('rating')?.setValue($event)">
+    </app-star-rating>
+    <mat-error *ngIf="reviewForm.get('rating')?.hasError('required') && reviewForm.get('rating')?.touched">
+      Please provide a rating
+    </mat-error>
+  </div>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Your Review</mat-label>
+    <textarea
+      matInput
+      formControlName="comment"
+      rows="4"
+      placeholder="Share your experience with this exam...">
+    </textarea>
+    <mat-error *ngIf="reviewForm.get('comment')?.hasError('required')">
+      Review comment is required
+    </mat-error>
+    <mat-error *ngIf="reviewForm.get('comment')?.hasError('minlength')">
+      Review must be at least 10 characters long
+    </mat-error>
+  </mat-form-field>
+
+  <div class="form-actions">
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="!reviewForm.valid">
+      Submit Review
+    </button>
+  </div>
+</form>

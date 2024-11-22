@@ -30,24 +30,23 @@
         margin-bottom: 0.5rem;
       }
 
-      ul {
-        list-style-type: none;
+      ul, ol {
+        list-style-position: inside;
         padding-left: 0;
-
+  
         li {
           padding: 0.5rem 0;
-
+          
           &.correct {
             color: #4caf50;
             font-weight: bold;
           }
-
-          .option-letter {
-            font-weight: bold;
-            color: #1976d2;
-            margin-right: 8px;
-          }
         }
+      }
+  
+      .correct-order {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
       }
     }
   }

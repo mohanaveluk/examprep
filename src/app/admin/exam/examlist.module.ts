@@ -32,6 +32,7 @@ import { QuestionViewDialogComponent } from './question-view-dialog/question-vie
 import { MatExpansionModule } from '@angular/material/expansion';
 import { TestQuestionComponent } from './test-question/test-question.component';
 import { ExamDialogComponent } from './exam-dialog/exam-dialog.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 
 
@@ -44,7 +45,7 @@ import { ExamDialogComponent } from './exam-dialog/exam-dialog.component';
     QuestionOptionComponent,
     QuestionViewDialogComponent,
     TestQuestionComponent,
-    ExamDialogComponent 
+    ExamDialogComponent,
     
   ],
   imports: [
@@ -72,6 +73,7 @@ import { ExamDialogComponent } from './exam-dialog/exam-dialog.component';
     MatSortModule,
     MatPaginatorModule,
     MatDialogModule,
+    DragDropModule,
     ExamListRoutingModule
   ],
   

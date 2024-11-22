@@ -1,0 +1,42 @@
+<div class="reviews-container">
+  <div class="header">
+    <h2>Reviews</h2>
+    <button mat-raised-button color="primary" (click)="openReviewDialog()">
+      <mat-icon>rate_review</mat-icon>
+      Write a Review
+    </button>
+  </div>
+
+  <div *ngIf="reviews.length === 0" class="no-reviews">
+    <mat-icon>rate_review</mat-icon>
+    <p>No reviews yet. Be the first to review!</p>
+  </div>
+
+  <mat-card *ngFor="let review of reviews" class="review-card">
+    <mat-card-content>
+      <div class="review-header">
+        <div class="review-meta">
+          <app-star-rating [rating]="review.rating" [readonly]="true"></app-star-rating>
+          <mat-chip [color]="getSentimentColor(review.sentiment)" selected>
+            {{review.sentiment}}
+          </mat-chip>
+          <span class="review-date">{{formatDate(review.createdAt)}}</span>
+        </div>
+      </div>
+
+      <div class="review-content">
+        {{review.comment}}
+      </div>
+
+      <div class="replies" *ngIf="review.replies?.length">
+        <h4>Replies</h4>
+        <div *ngFor="let reply of review.replies" class="reply">
+          <div class="reply-meta">
+            <span>{{formatDate(reply.createdAt)}}</span>
+          </div>
+          <div>{{reply.comment}}</div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

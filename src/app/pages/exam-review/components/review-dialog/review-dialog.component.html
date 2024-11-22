@@ -1,0 +1,13 @@
+<div class="dialog-content">
+  <div class="dialog-header">
+    <h2>Write a Review</h2>
+    <button mat-icon-button class="close-button" (click)="onClose()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <app-review-form
+    [examId]="data.examId"
+    (reviewSubmitted)="onReviewSubmitted()">
+  </app-review-form>
+</div>

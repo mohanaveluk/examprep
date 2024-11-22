@@ -1,0 +1,12 @@
+<div class="rating-container">
+    <div class="rating-info">
+      <span class="rating-value">{{averageRating}}</span>
+      <div class="stars">
+        <app-star-rating
+          [rating]="averageRating"
+          [readonly]="true">
+        </app-star-rating>
+      </div>
+    </div>
+    <span class="total-reviews">({{totalReviews}} reviews)</span>
+  </div>

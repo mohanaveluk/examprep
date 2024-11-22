@@ -7,9 +7,10 @@
       </button>
     </div>
   
-    <mat-form-field class="filter-field">
+    <mat-form-field appearance="outline" class="filter-field">
       <mat-label>Filter</mat-label>
       <input matInput (keyup)="applyFilter($event)" placeholder="Type to filter..." #input>
+      <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
   
     <div class="table-container mat-elevation-z8">

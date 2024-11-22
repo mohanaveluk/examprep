@@ -1,0 +1,11 @@
+<div class="star-rating" [class.readonly]="readonly">
+  <mat-icon
+    *ngFor="let star of stars"
+    class="star"
+    [class]="getStarClass(star)"
+    (click)="onStarClick(star)"
+    (mouseenter)="onStarHover(star)"
+    (mouseleave)="onStarLeave()">
+    star
+  </mat-icon>
+</div>
