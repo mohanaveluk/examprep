@@ -14,12 +14,22 @@
 
       <div class="options-list">
         <h4>Options:</h4>
-        <ul>
-          <li *ngFor="let option of data.options; let i = index" [class.correct]="data.correctAnswers.includes(i)">
-            <span class="option-letter">{{['A', 'B', 'C', 'D', 'E'][i]}}.</span>
-            {{option}} {{data.correctAnswers.includes(i) ? '(Correct)' : ''}}
-          </li>
-        </ul>
+        <ng-container *ngIf="data.type !== 'ranking'">
+          <ul>
+            <li *ngFor="let option of data.options; let i = index" 
+                [class.correct]="data.correctAnswers.includes(i)">
+              {{['A', 'B', 'C', 'D', 'E'][i]}} {{option}} {{data.correctAnswers.includes(i) ? '(Correct)' : ''}}
+            </li>
+          </ul>
+        </ng-container>
+        <ng-container *ngIf="data.type === 'ranking'">
+          <p class="correct-order">Correct order:</p>
+          <ol>
+            <li *ngFor="let index of data.correctAnswers">
+              {{['A', 'B', 'C', 'D', 'E'][index]}} {{data.options[index]}}
+            </li>
+          </ol>
+        </ng-container>
       </div>
     </div>
   </mat-dialog-content>

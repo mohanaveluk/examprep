@@ -1,0 +1,34 @@
+.rating-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+  }
+  
+  .rating-info {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  
+  .rating-value {
+    font-weight: 500;
+    color: #666;
+  }
+  
+  .total-reviews {
+    font-size: 0.9em;
+    color: #666;
+  }
+  
+  .stars {
+    display: flex;
+    align-items: center;
+  }
+  
+  .star {
+    color: #ffb000; /*color: #ffd700;*/
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }

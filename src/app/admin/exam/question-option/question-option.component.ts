@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { QuestionService } from '../services/question.service';
 import { MatExpansionPanel } from '@angular/material/expansion';
 import { HeaderService } from '../../services/header.service';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-question-option',
@@ -23,6 +24,7 @@ export class QuestionOptionComponent  implements OnInit {
   currentEditId: number | null = null;
   loading = false;
   isSubmitted = false;
+  searchQuery = '';
 
   constructor(
     private headerService: HeaderService,
@@ -37,7 +39,11 @@ export class QuestionOptionComponent  implements OnInit {
 
   ngOnInit(): void {
     this.headerService.setTitle("Admin - Exam");
-    this.setupTypeChangeListener();
+    //this.setupTypeChangeListener();
+    this.questionForm.get('type')?.valueChanges.subscribe(type => {
+      this.resetOptions(type);
+    });
+    
     this.loadQuestions();
     this.questionForm.patchValue({
       type: 'single'
@@ -71,6 +77,7 @@ export class QuestionOptionComponent  implements OnInit {
 
       },
     ]
+    this,this.questions = this.filteredQuestions;
   }
 
   setupTypeChangeListener(): void {
@@ -101,6 +108,63 @@ export class QuestionOptionComponent  implements OnInit {
   }
 
 
+  resetOptions(type: string): void {
+    const optionsArray = this.questionForm.get('options') as FormArray;
+    optionsArray.clear();
+    const correctAnswersArray = this.questionForm.get('correctAnswers') as FormArray;
+    // while (optionsArray.length) {
+    //   optionsArray.removeAt(0);
+    // }
+    while (correctAnswersArray.length) {
+      correctAnswersArray.removeAt(0);
+    }
+
+    if (type === 'true-false') {
+      optionsArray.push(this.fb.control('True', Validators.required));
+      optionsArray.push(this.fb.control('False', Validators.required));
+    } else if (type === 'ranking') {
+      for (let i = 0; i < 4; i++) {
+        optionsArray.push(this.fb.control('', Validators.required));
+      }
+      optionsArray.push(this.fb.control(''));
+      // For ranking, correctAnswers will store the correct order (0-4)
+      const correctAnswersArray = this.questionForm.get('correctAnswers') as FormArray;
+      [0, 1, 2, 3, 4].forEach(index => {
+        correctAnswersArray.push(this.fb.control(index));
+      });
+    } else {
+      for (let i = 0; i < 4; i++) {
+        optionsArray.push(this.fb.control('', Validators.required));
+      }
+      optionsArray.push(this.fb.control(''));
+    }
+  }
+
+
+  drop(event: CdkDragDrop<string[]>) {
+    const correctAnswers = this.questionForm.get('correctAnswers') as FormArray;
+    moveItemInArray(correctAnswers.controls, event.previousIndex, event.currentIndex);
+    correctAnswers.updateValueAndValidity();
+  }
+
+  updateOrder(optionIndex: number, newOrder: number): void {
+    const correctAnswers = this.questionForm.get('correctAnswers') as FormArray;
+    const currentOrder = correctAnswers.value;
+    
+    // Find the index that currently has the new order value
+    const swapIndex = currentOrder.indexOf(newOrder - 1);
+    
+    // Swap the values
+    if (swapIndex !== -1) {
+      const temp = currentOrder[optionIndex];
+      currentOrder[optionIndex] = currentOrder[swapIndex];
+      currentOrder[swapIndex] = temp;
+      
+      // Update the form array
+      correctAnswers.patchValue(currentOrder);
+    }
+  }
+  
   loadQuestions(): void {
     this.loading = true;
     this.questionService.getQuestions()
@@ -115,10 +179,6 @@ export class QuestionOptionComponent  implements OnInit {
           this.loading = false;
         }
       });
-  }
-
-  updateFilteredQuestions(): void {
-    this.filteredQuestions = this.questions.filter(q => !q.isDeleted);
   }
 
   createForm(): FormGroup {
@@ -341,4 +401,24 @@ export class QuestionOptionComponent  implements OnInit {
       panelClass: ['error-snackbar']
     });
   }
+
+  /** */
+  updateFilteredQuestions(): void {
+    this.filteredQuestions = this.questions
+      .filter(q => !q.isDeleted)
+      .filter(q => 
+        this.searchQuery ? 
+        q.question.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+        q.type.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+        q.options.some(opt => opt.toLowerCase().includes(this.searchQuery.toLowerCase()))
+        : true
+      );
+  }
+
+  onSearchChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.searchQuery = input.value;
+    this.updateFilteredQuestions();
+  }
+  /** */
 }

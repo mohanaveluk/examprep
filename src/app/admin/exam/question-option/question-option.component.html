@@ -19,48 +19,99 @@
         <mat-radio-button value="single" checked>Single Choice</mat-radio-button>
         <mat-radio-button value="multiple">Multiple Choice</mat-radio-button>
         <mat-radio-button value="true-false">True/False</mat-radio-button>
+        <mat-radio-button value="ranking">Ranking/Ordering</mat-radio-button>
       </mat-radio-group>
     </div>
 
     <div class="options-container" formArrayName="options">
-      <div *ngFor="let option of options.controls; let i = index" class="option-row">
-        <ng-container *ngIf="questionForm.get('type')?.value !== 'true-false'">
-          <div class="option-label">{{['A', 'B', 'C', 'D', 'E'][i]}}</div>
-          <mat-form-field appearance="fill">
-            <mat-label>Option {{['A', 'B', 'C', 'D', 'E'][i]}}</mat-label>
-            <input matInput [formControlName]="i" >
-            <mat-error *ngIf="isSubmitted && options.at(i).errors?.['required']">
-              Option is required
-            </mat-error>
-          </mat-form-field>
-        </ng-container>
+      <!-- Regular options for single, multiple, and true-false types -->
+      <ng-container *ngIf="questionForm.get('type')?.value !== 'ranking'">
+        <div *ngFor="let option of options.controls; let i = index" class="option-row">
+          <ng-container *ngIf="questionForm.get('type')?.value !== 'true-false'">
+            <div class="option-label">{{['A', 'B', 'C', 'D', 'E'][i]}}</div>
+            <mat-form-field appearance="fill">
+              <mat-label>Option {{['A', 'B', 'C', 'D', 'E'][i]}}</mat-label>
+              <input matInput [formControlName]="i">
+              <mat-error *ngIf="isSubmitted && options.at(i).errors?.['required']">
+                Option is required
+              </mat-error>
+            </mat-form-field>
+          </ng-container>
+      
+          <ng-container *ngIf="questionForm.get('type')?.value === 'true-false'">
+            <div class="option-label">{{['A', 'B'][i]}}</div>
+            <mat-form-field appearance="fill">
+              <mat-label>{{options.at(i).value}}</mat-label>
+              <input matInput [formControlName]="i" readonly>
+            </mat-form-field>
+          </ng-container>
+      
+      
+          <ng-container
+            *ngIf="questionForm.get('type')?.value === 'single' || questionForm.get('type')?.value === 'true-false'">
+            <mat-radio-button [value]="i" [checked]="correctAnswers.value.includes(i)"
+              (change)="correctAnswers.clear(); correctAnswers.push(fb.control(i))">Correct Answer
+            </mat-radio-button>
+          </ng-container>
+      
+          <ng-container *ngIf="questionForm.get('type')?.value === 'multiple'">
+            <mat-checkbox [checked]="correctAnswers.value.includes(i)" (change)="correctAnswers.value.includes(i) ? 
+                    correctAnswers.removeAt(correctAnswers.value.indexOf(i)) : 
+                    correctAnswers.push(fb.control(i))">Correct Answer
+            </mat-checkbox>
+          </ng-container>
+        </div>
+      </ng-container>
 
-        <ng-container *ngIf="questionForm.get('type')?.value === 'true-false'">
-          <div class="option-label">{{['A', 'B'][i]}}</div>
-          <mat-form-field appearance="fill">
-            <mat-label>{{options.at(i).value}}</mat-label>
-            <input matInput [formControlName]="i" readonly>
-          </mat-form-field>
-        </ng-container>
+      <!-- Ranking/Ordering options -->
+      <!-- Ranking/Ordering options -->
+      <ng-container *ngIf="questionForm.get('type')?.value === 'ranking'">
+        <div class="ranking-container">
+          <p class="ranking-instruction">Enter the options and select their correct order:</p>
+          <div class="ranking-list">
+            <div *ngFor="let option of options.controls; let i = index" class="ranking-item">
+              <div class="option-label">{{['A', 'B', 'C', 'D', 'E'][i]}}</div>
+              <mat-form-field appearance="fill" class="ranking-input">
+                <mat-label>Option {{['A', 'B', 'C', 'D', 'E'][i]}}</mat-label>
+                <input matInput [formControlName]="i">
+                <mat-error *ngIf="isSubmitted && options.at(i).errors?.['required']">
+                  Option is required
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="fill" class="order-select">
+                <mat-label>Order</mat-label>
+                <mat-select [value]="i + 1" (selectionChange)="updateOrder(i, $event.value)">
+                  <mat-option *ngFor="let num of [1,2,3,4,5]" [value]="num">
+                    {{num}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <p class="ranking-help">* Select numbers (1-5) to set the correct order</p>
+        </div>
+      </ng-container>
 
-
-        <ng-container *ngIf="questionForm.get('type')?.value === 'single' || questionForm.get('type')?.value === 'true-false'">
-          <mat-radio-button 
-            [value]="i"
-            [checked]="correctAnswers.value.includes(i)"
-            (change)="correctAnswers.clear(); correctAnswers.push(fb.control(i))">Correct Answer
-          </mat-radio-button>
-        </ng-container>
-
-        <ng-container *ngIf="questionForm.get('type')?.value === 'multiple'">
-          <mat-checkbox
-            [checked]="correctAnswers.value.includes(i)"
-            (change)="correctAnswers.value.includes(i) ? 
-              correctAnswers.removeAt(correctAnswers.value.indexOf(i)) : 
-              correctAnswers.push(fb.control(i))">Correct Answer
-          </mat-checkbox>
-        </ng-container>
-      </div>
+      <!-- <ng-container *ngIf="questionForm.get('type')?.value === 'ranking'">
+        <div class="ranking-container">
+          <p class="ranking-instruction">Enter the options and drag them to set the correct order:</p>
+          <div cdkDropList (cdkDropListDropped)="drop($event)" class="ranking-list">
+            <div *ngFor="let option of options.controls; let i = index" class="ranking-item" cdkDrag>
+              <div class="option-label">{{['A', 'B', 'C', 'D', 'E'][i]}}</div>
+              <mat-form-field appearance="fill" class="ranking-input">
+                <mat-label>Option {{['A', 'B', 'C', 'D', 'E'][i]}}</mat-label>
+                <input matInput [formControlName]="i">
+                <mat-error *ngIf="isSubmitted && options.at(i).errors?.['required']">
+                  Option is required
+                </mat-error>
+              </mat-form-field>
+              <div class="order-number">{{i + 1}}</div>
+              <mat-icon cdkDragHandle class="drag-handle">drag_indicator</mat-icon>
+            </div>
+          </div>
+          <p class="ranking-help">* Drag items to set their correct order (1 to 5)</p>
+        </div>
+      </ng-container> -->
     </div>
 
     <div class="validation-error" *ngIf="isSubmitted && questionForm.get('correctAnswers')?.errors">
@@ -82,7 +133,21 @@
   </form>
 </mat-expansion-panel>
 
+<!--
+<mat-form-field class="filter-field">
+  <mat-label>Filter</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Type to filter..." #input>
+</mat-form-field>-->
+
   <div class="questions-table-container">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Search questions</mat-label>
+      <input matInput 
+             [value]="searchQuery"
+             (input)="onSearchChange($event)"
+             placeholder="Search by question, type, or options...">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
     <table mat-table [dataSource]="filteredQuestions" class="mat-elevation-z8">
       <ng-container matColumnDef="question">
         <th mat-header-cell *matHeaderCellDef>Question</th>

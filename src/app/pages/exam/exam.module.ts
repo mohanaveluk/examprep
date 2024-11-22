@@ -16,6 +16,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatListModule } from '@angular/material/list';
+import { ExamReviewModule } from '../exam-review/exam-review.module';
 
 
 
@@ -25,6 +26,7 @@ import { MatListModule } from '@angular/material/list';
     DetailComponent,
     QuestionComponent,
     SummaryComponent,
+    
   ],
   imports: [
     CommonModule,
@@ -40,7 +42,8 @@ import { MatListModule } from '@angular/material/list';
     MatProgressBarModule, 
     FormsModule, 
     ReactiveFormsModule,
-    ExamRoutingModule
+    ExamRoutingModule,
+    ExamReviewModule
   ]
 })
 export class ExamModule { }
