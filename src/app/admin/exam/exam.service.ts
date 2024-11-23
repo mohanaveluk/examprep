@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ExamData } from '../models/exam.model';
+import { ExamData, ExamQuestion } from '../category/models/exam.model';
 import * as XLSX from 'xlsx';
 import * as Papa from 'papaparse';
 
