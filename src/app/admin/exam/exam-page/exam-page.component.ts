@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ExamlistService } from '../examlist.service';
+import { Category, ExamlistService } from '../examlist.service';
 import { HeaderService } from '../../services/header.service';
 
 @Component({
@@ -17,6 +17,7 @@ export class ExamPageComponent implements OnInit {
     passScore: 0
   };
   isEditMode = false;
+  categories: Category[] = [];
 
   constructor(
     private router: Router,
@@ -32,6 +33,13 @@ export class ExamPageComponent implements OnInit {
         this.isEditMode = true;
         this.loadExam(params['id']);
       }
+    });
+    this.loadCategory();
+  }
+
+  loadCategory(){
+    this.examlistService.getCategories().subscribe(data => {
+      this.categories = data;
     });
   }
 
@@ -53,6 +61,9 @@ export class ExamPageComponent implements OnInit {
     this.router.navigate(['/admin/exam/question']);
   }
 
+  selectCategory(eventValue: string){
+    console.log(eventValue);
+  }
   // onSubmit() {
   //   const examData = {
   //     ...this.exam,

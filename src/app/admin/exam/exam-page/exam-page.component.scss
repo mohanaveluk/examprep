@@ -22,7 +22,14 @@
       margin-top: 16px;
     }
 
-   
+    .form-row {
+      display: flex;
+      gap: 16px; /* Adjust the gap as needed */
+    }
+    
+    .form-field {
+      flex: 1;
+    }
 
     .button-container {
       display: flex;

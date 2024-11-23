@@ -17,17 +17,27 @@
             <mat-label>Notes</mat-label>
             <textarea matInput [(ngModel)]="exam.notes" name="notes"></textarea>
           </mat-form-field>
-  
-          <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Duration (minutes)</mat-label>
-            <input matInput type="number" [(ngModel)]="exam.duration" name="duration" required>
+
+          <mat-form-field appearance="fill" class="order-select" class="full-width">
+            <mat-label>Category</mat-label>
+            <mat-select (selectionChange)="selectCategory($event.value)">
+              <mat-option *ngFor="let num of categories" [value]="num.id">
+                {{num.name}}
+              </mat-option>
+            </mat-select>
           </mat-form-field>
-  
-          <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Pass Score</mat-label>
-            <input matInput type="number" [(ngModel)]="exam.passScore" name="passScore" required>
-          </mat-form-field>
-  
+
+          <div class="form-row">
+            <mat-form-field appearance="fill" class="form-field">
+              <mat-label>Duration (minutes)</mat-label>
+              <input matInput type="number" [(ngModel)]="exam.duration" name="duration" required>
+            </mat-form-field>
+          
+            <mat-form-field appearance="fill" class="form-field">
+              <mat-label>Pass Score</mat-label>
+              <input matInput type="number" [(ngModel)]="exam.passScore" name="passScore" required>
+            </mat-form-field>
+          </div>
           <div class="button-container">
             <button mat-raised-button color="primary" type="submit" class="full-height-button">
               {{ isEditMode ? 'Save Changes' : 'Create Exam' }}

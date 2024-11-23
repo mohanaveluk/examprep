@@ -33,6 +33,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { TestQuestionComponent } from './test-question/test-question.component';
 import { ExamDialogComponent } from './exam-dialog/exam-dialog.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { CategoryListComponent } from '../category/category-list/category-list.component';
+import { CategoryDialogComponent } from '../category/category-dialog/category-dialog.component';
 
 
 
@@ -46,7 +48,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     QuestionViewDialogComponent,
     TestQuestionComponent,
     ExamDialogComponent,
-    
+    CategoryListComponent,
+    CategoryDialogComponent
   ],
   imports: [
     CommonModule,

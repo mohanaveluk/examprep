@@ -1,0 +1,23 @@
+.category-container {
+  padding: 20px;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    h1 {
+      margin: 0;
+    }
+  }
+
+  table {
+    width: 100%;
+
+    .mat-column-actions {
+      width: 150px;
+      text-align: center;
+    }
+  }
+}

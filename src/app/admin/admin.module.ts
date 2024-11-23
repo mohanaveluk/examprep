@@ -32,7 +32,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     AdminDashboardComponent,
     AdminHeaderComponent,
     AdminSidenavComponent,
-    AdminFooterComponent
+    AdminFooterComponent,
+
   ],
   imports: [
     CommonModule,

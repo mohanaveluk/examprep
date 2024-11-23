@@ -17,6 +17,11 @@ export interface AdminExam {
   status: 'active' | 'inactive';
 }
 
+export interface Category {
+  id: string;
+  name: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -61,10 +66,33 @@ export class ExamlistService {
     }
   ];
 
+  private mockCategory: Category[] = [
+    {
+      id: "1",
+      name: "Nurse"
+    },
+    {
+      id: "2",
+      name: "Medicine"
+    },
+    {
+      id: "3",
+      name: "Dental"
+    },
+    {
+      id: "4",
+      name: "Vision"
+    }
+  ];
   constructor(
     private http: HttpClient,
     private snackBar: MatSnackBar
   ) {}
+
+  getCategories(): Observable<any[]> {
+    //return this.http.get<any[]>(`${this.apiUrl}/categories`);
+    return of(this.mockCategory);
+  }
 
   getExams(): Observable<AdminExam[]> {
     // In a real application, this would be an HTTP call
