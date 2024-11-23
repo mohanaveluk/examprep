@@ -16,7 +16,8 @@ export class AdminSidenavComponent {
     { icon: 'people', label: 'Users', route: '/admin/users' },
     { icon: 'assignment', label: 'Exams', route: '/admin/exam/list' },
     { icon: 'question_answer', label: 'Inquiries', route: '/admin/inquiries' },
-    { icon: 'payments', label: 'Payments', route: '/admin/payments' }
+    { icon: 'payments', label: 'Payments', route: '/admin/payments' },
+    { icon: 'category', label: 'Category', route: '/admin/exam/category' }
   ];
 
   onToggleExpanded() {
