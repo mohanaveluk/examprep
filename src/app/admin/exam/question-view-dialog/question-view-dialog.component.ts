@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogModule, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Question } from '../examlist/models/question.model';
+import { Question } from '../models/question.model';
 
 @Component({
   selector: 'app-question-view-dialog',

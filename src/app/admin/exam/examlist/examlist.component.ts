@@ -16,6 +16,7 @@ import { HeaderService } from '../../services/header.service';
 export class ExamlistComponent implements OnInit{
   displayedColumns: string[] = [
     'title',
+    'category',
     'duration',
     'totalQuestions',
     'passingScore',

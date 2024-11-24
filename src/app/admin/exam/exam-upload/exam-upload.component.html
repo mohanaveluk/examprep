@@ -1,0 +1,56 @@
+<div class="exam-upload-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Upload Exam Questions</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="examForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Exam Title</mat-label>
+          <input matInput formControlName="examTitle" required>
+          <mat-error *ngIf="examForm.get('examTitle')?.hasError('required')">
+            Exam title is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description" required rows="3"></textarea>
+          <mat-error *ngIf="examForm.get('description')?.hasError('required')">
+            Description is required
+          </mat-error>
+        </mat-form-field>
+
+        <div class="file-upload">
+          <button type="button" mat-raised-button color="primary" (click)="fileInput.click()">
+            Choose File
+          </button>
+          <span class="file-name">{{selectedFileName || 'No file selected'}}</span>
+          <input #fileInput type="file" (change)="onFileSelected($event)" 
+                 accept=".xlsx,.xls,.csv" style="display: none">
+        </div>
+
+        <div class="questions-preview" *ngIf="questions.length > 0">
+          <h3>Preview: {{questions.length}} questions loaded</h3>
+          <mat-list>
+            <mat-list-item *ngFor="let question of questions.slice(0, 3)">
+              <span class="question-preview">{{question.question}}</span>
+            </mat-list-item>
+            <mat-list-item *ngIf="questions.length > 3">
+              <span class="more-questions">... and {{questions.length - 3}} more questions</span>
+            </mat-list-item>
+          </mat-list>
+        </div>
+
+        <div class="actions">
+          <button mat-raised-button color="primary" type="submit"
+                  [disabled]="!examForm.valid || questions.length === 0 || isLoading">
+            <mat-spinner diameter="20" *ngIf="isLoading"></mat-spinner>
+            <span *ngIf="!isLoading">Upload Exam</span>
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

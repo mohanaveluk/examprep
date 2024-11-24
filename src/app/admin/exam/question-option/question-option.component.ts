@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Question } from '../examlist/models/question.model';
+import { Question } from '../models/question.model';
 import { QuestionViewDialogComponent } from '../question-view-dialog/question-view-dialog.component';
 import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl, ValidationErrors } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
