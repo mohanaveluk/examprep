@@ -5,4 +5,5 @@ export interface Question {
     options: string[];
     correctAnswers: number[];
     isDeleted: boolean;
+    order?: number[];
   }

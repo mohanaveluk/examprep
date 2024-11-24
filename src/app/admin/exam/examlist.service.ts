@@ -3,18 +3,22 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Question } from './models/question.model';
 
 export interface AdminExam {
   id: string;
   title: string;
   description: string;
   notes: string;
+  category: number,
+  categoryText?: string,
   duration: number;
   totalQuestions: number;
   passingScore: number;
   createdAt: Date;
   updatedAt?: Date;
   status: 'active' | 'inactive';
+  questions?: Question[];
 }
 
 export interface Category {
@@ -34,6 +38,8 @@ export class ExamlistService {
       description: 'Test your knowledge in anatomy, physiology, and biochemistry',
       duration: 60,
       notes: '',
+      category: 1,
+      categoryText: 'Nurse',
       totalQuestions: 50,
       passingScore: 70,
       createdAt: new Date('2024-01-01'),
@@ -45,6 +51,8 @@ export class ExamlistService {
       title: 'Clinical Sciences',
       description: 'Comprehensive test covering pathology, pharmacology, and medicine',
       notes: '',
+      category: 1,
+      categoryText: 'Medicone',
       duration: 90,
       totalQuestions: 75,
       passingScore: 75,
@@ -57,6 +65,8 @@ export class ExamlistService {
       title: 'Medical Ethics & Patient Care',
       description: 'Evaluation of medical ethics and patient care principles',
       notes: '',
+      category: 1,
+      categoryText: 'Vision',
       duration: 45,
       totalQuestions: 30,
       passingScore: 80,
@@ -113,6 +123,7 @@ export class ExamlistService {
       title: exam.title || '',
       description: exam.description || '',
       notes: exam.notes  || '',
+      category: exam.category  || 0,
       duration: exam.duration || 0,
       totalQuestions: 0,
       passingScore: exam.passingScore || 0,

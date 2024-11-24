@@ -38,6 +38,12 @@
           </td>
         </ng-container>
   
+        <!-- Category Column -->
+        <ng-container matColumnDef="category">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Category</th>
+          <td mat-cell *matCellDef="let exam">{{exam.categoryText}}</td>
+        </ng-container>
+
         <!-- Duration Column -->
         <ng-container matColumnDef="duration">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Duration</th>

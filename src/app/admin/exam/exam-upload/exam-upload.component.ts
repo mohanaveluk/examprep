@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ExamService } from '../exam.service';
-import { ExamData, ExamQuestion } from '../../category/models/exam.model';
+import { ExamData, ExamQuestion } from '../models/exam.model';
 
 @Component({
   selector: 'app-exam-upload',
