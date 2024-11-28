@@ -8,7 +8,7 @@
   
   mat-card {
     width: 100%;
-    max-width: 400px;
+    max-width: 600px;
     padding: 20px;
   }
   
@@ -24,4 +24,11 @@
   
   button[type="submit"] {
     margin-top: 16px;
+  }
+
+  .error-message {
+    padding: 5px 2px 0px 20px;
+    font-weight: 500;
+    color: red;
+    margin-bottom: 20px;
   }

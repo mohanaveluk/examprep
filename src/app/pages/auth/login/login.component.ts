@@ -13,7 +13,8 @@ export class LoginComponent {
   public email = ''
   public password = ''
   loginForm: FormGroup;
-  
+  errorMessage = null;
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
@@ -32,7 +33,10 @@ export class LoginComponent {
           this.router.navigate(['/exam/list']);
           console.log(response);
         },
-        error: (error) => console.error('Login failed:', error)
+        error: (error) => {
+          this.errorMessage = error?.error?.message;
+          console.error('Login failed:', error);
+        }
       });
     }
   }

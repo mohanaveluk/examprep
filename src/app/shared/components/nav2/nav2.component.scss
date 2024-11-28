@@ -116,6 +116,16 @@
   .dropdown-content a:hover, mat-menu a:hover {
     background-color: #f5f5f5;
   }
+
+  mat-menu  
+  {
+    min-width: 250px !important;
+    max-width: 400px !important;
+  }
+  
+  .p-menu {
+    padding: 20px;
+  }
   
   @media (max-width: 768px) {
     .nav-menu {

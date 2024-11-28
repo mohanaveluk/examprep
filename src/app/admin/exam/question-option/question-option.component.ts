@@ -8,6 +8,7 @@ import { QuestionService } from '../services/question.service';
 import { MatExpansionPanel } from '@angular/material/expansion';
 import { HeaderService } from '../../services/header.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-question-option',
@@ -17,17 +18,20 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 export class QuestionOptionComponent  implements OnInit {
   @ViewChild(MatExpansionPanel) expansionPanel!: MatExpansionPanel;
 
+  examId: string="";
   questionForm: FormGroup;
   questions: Question[] = [];
   filteredQuestions: Question[] = [];
-  displayedColumns: string[] = ['question', 'type', 'actions'];
+  displayedColumns: string[] = ['seqNo', 'question', 'type', 'actions'];
   currentEditId: number | null = null;
+  qguid: string = "";
   loading = false;
   isSubmitted = false;
   searchQuery = '';
 
   constructor(
     private headerService: HeaderService,
+    private route: ActivatedRoute,
     public fb: FormBuilder,
     private dialog: MatDialog,
     private questionService: QuestionService,
@@ -37,14 +41,24 @@ export class QuestionOptionComponent  implements OnInit {
     this.setupFormValidation();
   }
 
+
+
+  get rankingOrder(): FormArray {
+    return this.questionForm.get('rankingOrder') as FormArray;
+  }
+
+  
+
   ngOnInit(): void {
     this.headerService.setTitle("Admin - Exam");
+    this.examId = this.route.snapshot.params['examId'];
+
     //this.setupTypeChangeListener();
     this.questionForm.get('type')?.valueChanges.subscribe(type => {
       this.resetOptions(type);
     });
     
-    this.loadQuestions();
+    this.loadQuestions(this.examId);
     this.questionForm.patchValue({
       type: 'single'
     });
@@ -77,7 +91,6 @@ export class QuestionOptionComponent  implements OnInit {
 
       },
     ]
-    this,this.questions = this.filteredQuestions;
   }
 
   setupTypeChangeListener(): void {
@@ -110,7 +123,10 @@ export class QuestionOptionComponent  implements OnInit {
 
   resetOptions(type: string): void {
     const optionsArray = this.questionForm.get('options') as FormArray;
+    const rankingOrderArray = this.questionForm.get('rankingOrder') as FormArray;
     optionsArray.clear();
+    rankingOrderArray.clear();
+
     const correctAnswersArray = this.questionForm.get('correctAnswers') as FormArray;
     // while (optionsArray.length) {
     //   optionsArray.removeAt(0);
@@ -125,13 +141,17 @@ export class QuestionOptionComponent  implements OnInit {
     } else if (type === 'ranking') {
       for (let i = 0; i < 4; i++) {
         optionsArray.push(this.fb.control('', Validators.required));
+        rankingOrderArray.push(this.fb.control(i + 1)); // Initialize with default order
+
       }
       optionsArray.push(this.fb.control(''));
+      rankingOrderArray.push(this.fb.control(5));
+
       // For ranking, correctAnswers will store the correct order (0-4)
-      const correctAnswersArray = this.questionForm.get('correctAnswers') as FormArray;
-      [0, 1, 2, 3, 4].forEach(index => {
-        correctAnswersArray.push(this.fb.control(index));
-      });
+      // const correctAnswersArray = this.questionForm.get('correctAnswers') as FormArray;
+      // [0, 1, 2, 3, 4].forEach(index => {
+      //   correctAnswersArray.push(this.fb.control(index));
+      // });
     } else {
       for (let i = 0; i < 4; i++) {
         optionsArray.push(this.fb.control('', Validators.required));
@@ -147,7 +167,7 @@ export class QuestionOptionComponent  implements OnInit {
     correctAnswers.updateValueAndValidity();
   }
 
-  updateOrder(optionIndex: number, newOrder: number): void {
+  updateOrder1(optionIndex: number, newOrder: number): void {
     const correctAnswers = this.questionForm.get('correctAnswers') as FormArray;
     const currentOrder = correctAnswers.value;
     
@@ -165,13 +185,15 @@ export class QuestionOptionComponent  implements OnInit {
     }
   }
   
-  loadQuestions(): void {
+  loadQuestions(examId: string): void {
     this.loading = true;
-    this.questionService.getQuestions()
+    this.questionService.getQuestions(examId)
       .subscribe({
-        next: (questions) => {
-          this.questions = questions;
-          this.updateFilteredQuestions();
+        next: (questions: any) => {
+          if(questions.success){
+            this.questions = questions?.data?.questions;
+            this.updateFilteredQuestions();
+          }
           this.loading = false;
         },
         error: (error) => {
@@ -181,7 +203,7 @@ export class QuestionOptionComponent  implements OnInit {
       });
   }
 
-  createForm(): FormGroup {
+  createForm1(): FormGroup {
     return this.fb.group({
       question: ['', Validators.required],
       type: ['single', Validators.required],
@@ -192,18 +214,29 @@ export class QuestionOptionComponent  implements OnInit {
         this.fb.control('', Validators.required),
         this.fb.control('')
       ]),
-      correctAnswers: this.fb.array([], [Validators.required])
+      correctAnswers: this.fb.array([], [Validators.required]),
     });
   }
 
+  createForm(): FormGroup {
+    return this.fb.group({
+      question: ['', Validators.required],
+      type: ['single', Validators.required],
+      options: this.fb.array([]),
+      correctAnswers: this.fb.array([]),
+      rankingOrder: this.fb.array([]) // New FormArray for ranking order
+    });
+  }
 
   setupFormValidation(): void {
     this.questionForm.get('type')?.valueChanges.subscribe(type => {
       const correctAnswers = this.questionForm.get('correctAnswers') as FormArray;
-      if (type === 'single') {
+      if (type === 'single' || type === 'true-false') {
         correctAnswers.setValidators([Validators.required, this.exactLengthValidator(1)]);
-      } else {
+      } else if (type === 'multiple'){
         correctAnswers.setValidators([Validators.required, this.minLengthValidator(2)]);
+      } else if (type === 'ranking'){
+        correctAnswers.setValidators([]);
       }
       correctAnswers.updateValueAndValidity();
     });
@@ -231,39 +264,49 @@ export class QuestionOptionComponent  implements OnInit {
     return this.questionForm.get('correctAnswers') as FormArray;
   }
 
-  onSubmit(): void {
+  onSubmit1(): void {
     this.isSubmitted = true;
     if (this.questionForm.valid) {
       const formValue = this.questionForm.value;
       const questionData = {
+        qguid: this.qguid,
         question: formValue.question,
         type: formValue.type,
         options: formValue.type === 'true-false' 
           ? ['True', 'False']
           : formValue.options.filter((option: string) => option.trim() !== ''),
-        correctAnswers: formValue.correctAnswers
+        correctAnswers: formValue.correctAnswers.map((answer: any) => answer+1),
+        order: []
       };
 
       this.loading = true;
 
       if (this.currentEditId) {
-        this.questionService.updateQuestion(this.currentEditId, questionData)
+        this.questionService.updateQuestion(this.examId, this.qguid, questionData)
           .subscribe({
-            next: (updatedQuestion) => {
+            next: (updatedQuestion: any) => {
               const index = this.questions.findIndex(q => q.id === this.currentEditId);
               if (index !== -1) {
-                this.questions[index] = updatedQuestion;
+                this.questions[index] = {
+                  id: updatedQuestion.data.id,
+                  isDeleted: updatedQuestion.data.isDeleted,
+                  qguid: updatedQuestion.data.qguid,
+                  question: updatedQuestion.data.question,
+                  type: updatedQuestion.data.type,
+                  options: [],
+                  correctAnswers: []
+                };
                 this.updateFilteredQuestions();
               }
               this.resetForm();
               this.showSuccess('Question updated successfully');
               this.expansionPanel.close();
             },
-            error: (error) => this.showError('Failed to update question'),
+            error: (error) => this.showError(`Failed to update question - ${error.message}`),
             complete: () => this.loading = false
           });
       } else {
-        this.questionService.createQuestion(questionData)
+        this.questionService.createQuestion(this.examId, questionData)
           .subscribe({
             next: (newQuestion) => {
               this.questions.push(newQuestion);
@@ -272,7 +315,7 @@ export class QuestionOptionComponent  implements OnInit {
               this.showSuccess('Question created successfully');
               this.expansionPanel.close();
             },
-            error: (error) => this.showError('Failed to create question'),
+            error: (error) => this.showError(`Failed to create question - ${error.message}`),
             complete: () => this.loading = false
           });
       }
@@ -283,7 +326,7 @@ export class QuestionOptionComponent  implements OnInit {
     }
   }
 
-  private resetForm(): void {
+  private resetForm2(): void {
     this.currentEditId = null;
     this.questionForm.reset();
     // Set default values after reset
@@ -300,47 +343,348 @@ export class QuestionOptionComponent  implements OnInit {
     });
   }
 
-  editQuestion(question: Question): void {
-    this.currentEditId = question.id;
+  resetForm(): void {
+    this.currentEditId = null;
+    this.qguid = "";
+    this.isSubmitted = false;
+    this.questionForm.reset({
+      type: 'single'
+    });
+    this.resetOptions('single');
+  }
+
+  editQuestion1(item: Question): void {
+    this.qguid = item.qguid!;
+    this.currentEditId = item.id;
     this.isSubmitted = false;
     // Reset form first to clear any previous state
     this.questionForm.reset();
-    // Then patch all values including type
-    this.questionForm.patchValue({
-      question: question.question,
-      type: question.type,
-      //options: [...question.options, ...Array(5 - question.options.length).fill('')],
-    });
+    this.loading = true;
 
-    // Reset options based on question type
-    if (question.type === 'true-false') {
-      this.resetOptionsForTrueFalse();
-    }
-    else{
-      const optionsArray = this.questionForm.get('options') as FormArray;
-      optionsArray.clear();
-      question.options.forEach(option => {
-        optionsArray.push(this.fb.control(option));
+    this.questionService.getQuestion(this.qguid)
+      .subscribe({
+        next: (qresponse: any) => {
+          if(qresponse.success){
+            const fetchData = qresponse?.data;
+            fetchData.correctAnswers = fetchData.correctAnswers.map((answer: any) => parseInt(answer, 10)-1);
+            fetchData.order = fetchData?.order?.map((answer: any) => parseInt(answer, 10)-1);
+
+            // Then patch all values including type
+            this.questionForm.patchValue({
+              question: fetchData.question,
+              type: fetchData.type,
+              //options: [...question.options, ...Array(5 - question.options.length).fill('')],
+            });
+
+            // Reset options based on question type
+            if (fetchData.type === 'true-false') {
+              this.resetOptionsForTrueFalse();
+            }
+            else{
+              const optionsArray = this.questionForm.get('options') as FormArray;
+              optionsArray.clear();
+              fetchData.options.forEach((option: any) => {
+                optionsArray.push(this.fb.control(option.text));
+              });
+              // Fill remaining slots with empty strings if needed
+              while (optionsArray.length < 4) {
+                optionsArray.push(this.fb.control('', Validators.required));
+              }
+              if (optionsArray.length === 4) {
+                optionsArray.push(this.fb.control(''));
+              }
+            }
+
+            // Clear existing correct answers array
+            while (this.correctAnswers.length) {
+              this.correctAnswers.removeAt(0);
+            }
+            
+            // Add correct answers to the form array
+            fetchData.correctAnswers.forEach((index: any) => {
+              this.correctAnswers.push(this.fb.control(index));
+            });
+
+
+          }
+          this.loading = false;
+        },
+        error: (error) => {
+          this.showError(error?.message);
+          this.loading = false;
+        }
       });
-      // Fill remaining slots with empty strings if needed
-      while (optionsArray.length < 5) {
-        optionsArray.push(this.fb.control('', Validators.required));
-      }
 
-    }
 
-     // Clear existing correct answers array
-     while (this.correctAnswers.length) {
-      this.correctAnswers.removeAt(0);
-    }
+
     
-    // Add correct answers to the form array
-    question.correctAnswers.forEach(index => {
-      this.correctAnswers.push(this.fb.control(index));
-    });
+
+
 
     this.expansionPanel.open();
   }
+
+  updateOrder(optionIndex: number, newPosition: number): void {
+    const correctAnswers = this.questionForm.get('correctAnswers') as FormArray;
+    const rankingOrderArray = this.questionForm.get('rankingOrder') as FormArray;
+    const currentOrder = [...rankingOrderArray.value];
+    
+        // Find the option that currently has the new position
+        const swapIndex = currentOrder.findIndex(pos => pos === newPosition);
+        const oldPosition = currentOrder[optionIndex];
+        
+        // Swap the positions
+        if (swapIndex !== -1) {
+          currentOrder[swapIndex] = oldPosition;
+        }
+        currentOrder[optionIndex] = newPosition;
+        
+        // Update the form array
+        while (rankingOrderArray.length) {
+          rankingOrderArray.removeAt(0);
+          correctAnswers.removeAt(0);
+        }
+        
+        currentOrder.forEach(value => {
+          rankingOrderArray.push(this.fb.control(value));
+          //correctAnswers.push(this.fb.control(value));
+        });
+  }
+
+  onSubmit(): void {
+    this.isSubmitted = true;
+    if (this.questionForm.valid) {
+      const formValue = this.questionForm.value;
+      let questionData: any = {
+        qguid: this.qguid,
+        question: formValue.question,
+        type: formValue.type,
+        options: formValue.options.filter((option: string) => option.trim() !== ''),
+        correctAnswers: [],
+        order: []
+      };
+
+      // Handle different question types
+      if (formValue.type === 'ranking') {
+        // For ranking questions, use the rankingOrder array
+        questionData.order = formValue.rankingOrder;
+        // Keep the original options order in correctAnswers
+        //questionData.correctAnswers = Array.from({ length: formValue.options.length }, (_, i) => i + 1);
+
+        //questionData.correctAnswers = formValue.correctAnswers.map((index: number) => index + 1);
+        //questionData.order = formValue.correctAnswers.map((index: number) => index + 1);
+      } else if (formValue.type === 'true-false') {
+        questionData.options = ['True', 'False'];
+        questionData.correctAnswers = formValue.correctAnswers.map((answer: number) => answer + 1);
+      } else {
+        // For single and multiple choice questions
+        questionData.correctAnswers = formValue.correctAnswers.map((answer: number) => answer + 1);
+      }
+
+      this.loading = true;
+
+      if (this.currentEditId) {
+        this.questionService.updateQuestion(this.examId, this.qguid, questionData)
+          .subscribe({
+            next: (updatedQuestion: any) => {
+              const index = this.questions.findIndex(q => q.id === this.currentEditId);
+              if (index !== -1) {
+                this.questions[index] = {
+                  id: updatedQuestion.data.id,
+                  isDeleted: updatedQuestion.data.isDeleted,
+                  qguid: updatedQuestion.data.qguid,
+                  question: updatedQuestion.data.question,
+                  type: updatedQuestion.data.type,
+                  options: updatedQuestion.data.options,
+                  correctAnswers: updatedQuestion.data.correctAnswers,
+                  order: updatedQuestion.data.order
+                };
+                this.updateFilteredQuestions();
+              }
+              this.resetForm();
+              this.showSuccess('Question updated successfully');
+              this.expansionPanel.close();
+            },
+            error: (error) => this.showError(`Failed to update question - ${error.message}`),
+            complete: () => this.loading = false
+          });
+      } else {
+        this.questionService.createQuestion(this.examId, questionData)
+          .subscribe({
+            next: (newQuestion: any) => {
+              if(newQuestion.success){
+                this.questions.push(newQuestion.data);
+                this.updateFilteredQuestions();
+                this.resetForm();
+                this.showSuccess('Question created successfully');
+                this.expansionPanel.close();
+              }
+              else{
+                this.showError(`Failed to create question`);
+              }
+            },
+            error: (error) => this.showError(`Failed to create question - ${error.message}`),
+            complete: () => this.loading = false
+          });
+      }
+    } else {
+      this.showError('Please fill in all required fields correctly');
+    }
+  }
+
+  editQuestion2(item: Question): void {
+    this.qguid = item.qguid!;
+    this.currentEditId = item.id;
+    this.isSubmitted = false;
+    this.questionForm.reset();
+    this.loading = true;
+
+    this.questionService.getQuestion(this.qguid)
+      .subscribe({
+        next: (qresponse: any) => {
+          if (qresponse.success) {
+            const fetchData = qresponse?.data;
+            
+            // Convert correctAnswers to 0-based index
+            const correctAnswers = fetchData.correctAnswers.map((answer: string) => parseInt(answer, 10) - 1);
+            const order = fetchData.order?.map((answer: string) => parseInt(answer, 10) - 1) || [];
+
+            // Set basic form values
+            this.questionForm.patchValue({
+              question: fetchData.question,
+              type: fetchData.type,
+            });
+
+            // Handle options based on question type
+            const optionsArray = this.questionForm.get('options') as FormArray;
+            optionsArray.clear();
+
+            if (fetchData.type === 'true-false') {
+              optionsArray.push(this.fb.control('True'));
+              optionsArray.push(this.fb.control('False'));
+            } else {
+              // Handle other question types
+              fetchData.options.forEach((option: any) => {
+                optionsArray.push(this.fb.control(option.text));
+              });
+              // Fill remaining slots if needed
+              while (optionsArray.length < 4) {
+                optionsArray.push(this.fb.control('', Validators.required));
+              }
+              if (optionsArray.length === 4) {
+                optionsArray.push(this.fb.control(''));
+              }
+            }
+
+            // Clear and set correct answers
+            const correctAnswersArray = this.questionForm.get('correctAnswers') as FormArray;
+            while (correctAnswersArray.length) {
+              correctAnswersArray.removeAt(0);
+            }
+
+            if (fetchData.type === 'ranking') {
+              // For ranking questions, use the order array if available, otherwise use correctAnswers
+              const orderToUse = order.length > 0 ? order : correctAnswers;
+              orderToUse.forEach((index: number) => {
+                correctAnswersArray.push(this.fb.control(index));
+              });
+            } else {
+              correctAnswers.forEach((index: number) => {
+                correctAnswersArray.push(this.fb.control(index));
+              });
+            }
+          }
+          this.loading = false;
+        },
+        error: (error) => {
+          this.showError(error?.message);
+          this.loading = false;
+        }
+      });
+
+    this.expansionPanel.open();
+  }
+
+  editQuestion(item: Question): void {
+    this.qguid = item.qguid!;
+    this.currentEditId = item.id;
+    this.isSubmitted = false;
+    this.questionForm.reset();
+    this.loading = true;
+    console.log(this.qguid);
+
+    this.questionService.getQuestion(this.qguid)
+      .subscribe({
+        next: (qresponse: any) => {
+          if (qresponse.success) {
+            const fetchData = qresponse?.data;
+            
+            // Set basic form values
+            this.questionForm.patchValue({
+              question: fetchData.question,
+              type: fetchData.type,
+            });
+
+            // Handle options based on question type
+            const optionsArray = this.questionForm.get('options') as FormArray;
+            const rankingOrderArray = this.questionForm.get('rankingOrder') as FormArray;
+            optionsArray.clear();
+            rankingOrderArray.clear();
+
+            if (fetchData.type === 'ranking') {
+              // Store original options order
+              fetchData.options.forEach((option: any) => {
+                optionsArray.push(this.fb.control(option.text));
+              });
+
+              // Set ranking order from the order property
+              const order = fetchData.order?.map((answer: string) => parseInt(answer, 10)); // || Array.from({ length: fetchData.options.length }, (_, i) => i + 1);
+              order.forEach((position: number) => {
+                rankingOrderArray.push(this.fb.control(position));
+              });
+            } else if (fetchData.type === 'true-false') {
+              optionsArray.push(this.fb.control('True'));
+              optionsArray.push(this.fb.control('False'));
+              
+              // Set correct answers
+              const correctAnswers = fetchData.correctAnswers.map((answer: string) => parseInt(answer, 10) - 1);
+              const correctAnswersArray = this.questionForm.get('correctAnswers') as FormArray;
+              correctAnswers.forEach((index: number) => {
+                correctAnswersArray.push(this.fb.control(index));
+              });
+            } else {
+              // Handle single/multiple choice
+              fetchData.options.forEach((option: any) => {
+                optionsArray.push(this.fb.control(option.text));
+              });
+              
+              // Fill remaining slots if needed
+              while (optionsArray.length < 4) {
+                optionsArray.push(this.fb.control('', Validators.required));
+              }
+              if (optionsArray.length === 4) {
+                optionsArray.push(this.fb.control(''));
+              }
+
+              // Set correct answers
+              const correctAnswers = fetchData.correctAnswers.map((answer: string) => parseInt(answer, 10) - 1);
+              const correctAnswersArray = this.questionForm.get('correctAnswers') as FormArray;
+              correctAnswers.forEach((index: number) => {
+                correctAnswersArray.push(this.fb.control(index));
+              });
+            }
+          }
+          this.loading = false;
+        },
+        error: (error) => {
+          this.showError(error?.message);
+          this.loading = false;
+        }
+      });
+
+    this.expansionPanel.open();
+  }
+
 
   cancelEdit(): void {
     this.currentEditId = null;
@@ -409,8 +753,8 @@ export class QuestionOptionComponent  implements OnInit {
       .filter(q => 
         this.searchQuery ? 
         q.question.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-        q.type.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-        q.options.some(opt => opt.toLowerCase().includes(this.searchQuery.toLowerCase()))
+        q.type.toLowerCase().includes(this.searchQuery.toLowerCase())
+        //q.options.some(opt => opt.toLowerCase().includes(this.searchQuery.toLowerCase()))
         : true
       );
   }

@@ -67,7 +67,7 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
           <td mat-cell *matCellDef="let exam">
             <mat-chip [color]="getStatusColor(exam.status)" selected>
-              {{exam.status}}
+              {{exam.status === 1 ? 'active': 'inactive'}}
             </mat-chip>
           </td>
         </ng-container>
@@ -75,7 +75,7 @@
         <!-- Updated At Column -->
         <ng-container matColumnDef="updatedAt">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Updated</th>
-          <td mat-cell *matCellDef="let exam">{{formatDate(exam.updatedAt)}}</td>
+          <td mat-cell *matCellDef="let exam">{{formatDate(!exam.updatedAt ? exam.createdAt : exam.updatedAt)}}</td>
         </ng-container>
   
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

@@ -13,7 +13,7 @@ const routes: Routes = [
   { path: 'category', component: CategoryListComponent },
   { path: 'list', component: ExamlistComponent },
   { path: 'update', component: ExamPageComponent },
-  { path: 'question', component: QuestionOptionComponent },
+  { path: 'question/:examId', component: QuestionOptionComponent },
   { path: 'examupload', component: ExamUploadComponent }
 //   { path: 'take/:id', component: DetailComponent },
 //   { path: 'question/:id', component: QuestionComponent },

@@ -54,7 +54,7 @@
       
           <ng-container
             *ngIf="questionForm.get('type')?.value === 'single' || questionForm.get('type')?.value === 'true-false'">
-            <mat-radio-button [value]="i" [checked]="correctAnswers.value.includes(i)"
+            <mat-radio-button [value]="i" [checked]="correctAnswers.value.includes(i)" [disabled]="i === 4 && !options.at(i).value"
               (change)="correctAnswers.clear(); correctAnswers.push(fb.control(i))">Correct Answer
             </mat-radio-button>
           </ng-container>
@@ -78,14 +78,14 @@
               <div class="option-label">{{['A', 'B', 'C', 'D', 'E'][i]}}</div>
               <mat-form-field appearance="fill" class="ranking-input">
                 <mat-label>Option {{['A', 'B', 'C', 'D', 'E'][i]}}</mat-label>
-                <input matInput [formControlName]="i">
+                <input matInput [formControl]="$any(options.at(i))">
                 <mat-error *ngIf="isSubmitted && options.at(i).errors?.['required']">
                   Option is required
                 </mat-error>
               </mat-form-field>
               <mat-form-field appearance="fill" class="order-select">
                 <mat-label>Order</mat-label>
-                <mat-select [value]="i + 1" (selectionChange)="updateOrder(i, $event.value)">
+                <mat-select [formControl]="$any(rankingOrder.at(i))" (selectionChange)="updateOrder(i, $event.value)">
                   <mat-option *ngFor="let num of [1,2,3,4,5]" [value]="num">
                     {{num}}
                   </mat-option>
@@ -128,7 +128,7 @@
       </p>
     </div>
     <div class="form-actions">
-      <button mat-raised-button color="primary" type="submit" [disabled]="!questionForm.valid">
+      <button mat-raised-button color="primary" type="submit"> <!-- [disabled]="!questionForm.valid"-->
         {{currentEditId ? 'Update' : 'Submit'}}
       </button>
       <button mat-button type="button" *ngIf="currentEditId" (click)="cancelEdit()">
@@ -154,6 +154,11 @@
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
     <table mat-table [dataSource]="filteredQuestions" class="mat-elevation-z8">
+      <!-- Sequence Number Column -->
+    <ng-container matColumnDef="seqNo">
+      <th mat-header-cell *matHeaderCellDef>No.</th>
+      <td mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+    </ng-container>      
       <ng-container matColumnDef="question">
         <th mat-header-cell *matHeaderCellDef>Question</th>
         <td mat-cell *matCellDef="let element">{{element.question}}</td>

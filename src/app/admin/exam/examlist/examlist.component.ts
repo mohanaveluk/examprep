@@ -50,8 +50,14 @@ export class ExamlistComponent implements OnInit{
   }
 
   loadExams(): void {
-    this.examlistService.getExams().subscribe(exams => {
-      this.dataSource.data = exams;
+    this.examlistService.getExams().subscribe((exams: any) => {
+      if(exams.success){
+        
+        this.dataSource.data = exams.data;
+      }
+    }, (error) => {
+      this.dataSource.data = [];
+      console.log(error);
     });
   }
 

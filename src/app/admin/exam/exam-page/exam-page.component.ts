@@ -18,7 +18,7 @@ export class ExamPageComponent implements OnInit {
     title: '',
     description: '',
     notes: '',
-    category: 0,
+    categoryId: '0',
     duration: 0,
     passScore: 0,
     
@@ -61,8 +61,8 @@ export class ExamPageComponent implements OnInit {
   }
 
   loadCategory(){
-    this.examlistService.getCategories().subscribe(data => {
-      this.categories = data;
+    this.examlistService.getCategories().subscribe((categoryList: any) => {
+      this.categories = categoryList.data;
     });
   }
 
@@ -91,13 +91,13 @@ export class ExamPageComponent implements OnInit {
         id: '',
         title: this.examForm.get('title')?.value,
         description: this.examForm.get('description')?.value,
-        category: this.examForm.get('category')?.value,
+        categoryId: this.examForm.get('category')?.value,
         notes: this.examForm.get('notes')?.value,
         createdAt: new Date(),
         duration: this.examForm.get('duration')?.value,
         passingScore: this.examForm.get('passScore')?.value,
         totalQuestions: 0,
-        status: 'active',
+        status: 1,
         questions: this.questions.map(item => {
           return {
             id: 0,
@@ -112,18 +112,27 @@ export class ExamPageComponent implements OnInit {
       };
 
       this.isLoading = true;
-      const request = this.isEditMode ? 
+      const request = this.isEditMode ?
         this.examlistService.updateExam(examData) :
         this.examlistService.createExam(examData);
-      this.router.navigate(['/admin/exam/question']);
+
       request.subscribe({
-        next: () => {
+        next: (response: any) => {
           this.snackBar.open('Exam data uploaded successfully', 'Close', { duration: 3000 });
-          this.resetForm();
+          if(response.success){
+            this.snackBar.open('Exam created successfully', 'Close', { duration: 3000 });
+            const examId = response?.data.id;
+            this.router.navigate([`/admin/exam/question/${examId}`]);
+            this.resetForm();
+          }
+          else{
+            this.snackBar.open('Failed to create exam', 'Close', { duration: 3000 });
+          }
           // Navigate to the question page
-          this.router.navigate(['/admin/exam/question']);
         },
         error: (error) => {
+          this.snackBar.open(`Error saving exam: ${error}`, 'Close', { duration: 3000 });
+          this.isLoading = false;
           console.error('Error saving exam:', error);
         }
       });
