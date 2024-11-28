@@ -24,6 +24,8 @@ export class ExamPageComponent implements OnInit {
     
   };
   isEditMode = false;
+  examId: string = ""
+  categoryId: string = ""
   categories: Category[] = [];
   questions: ExamQuestion[] = [];
   isLoading = false;
@@ -67,12 +69,25 @@ export class ExamPageComponent implements OnInit {
   }
 
   loadExam(id: string) {
-    this.examlistService.getExamById(id).subscribe(exam => {
+    this.examlistService.getExamById(id).subscribe((exam: any) => {
       if (exam) {
+        const detail = exam.data;
+        this.examId = detail.id;
+        this.categoryId = detail.category.id;
         this.exam = {
-          ...exam,
-          passScore: exam.passingScore
+          ...detail,
+          passScore: detail.passingScore
         };
+
+        this.examForm.patchValue({
+          title: detail.title,
+          description: detail.description,
+          notes: detail.notes,
+          duration: detail.duration,
+          passScore: detail.passingScore,
+          category: detail.category.id
+        });
+
       }
     });
   }
@@ -86,9 +101,9 @@ export class ExamPageComponent implements OnInit {
       return;
     }
 
-    if (this.examForm.valid && this.questions.length > 0) {
+    if (this.examForm.valid) {
       const examData: AdminExam = {
-        id: '',
+        id: this.isEditMode ? this.examId : '',
         title: this.examForm.get('title')?.value,
         description: this.examForm.get('description')?.value,
         categoryId: this.examForm.get('category')?.value,
@@ -98,7 +113,7 @@ export class ExamPageComponent implements OnInit {
         passingScore: this.examForm.get('passScore')?.value,
         totalQuestions: 0,
         status: 1,
-        questions: this.questions.map(item => {
+        questions: this.questions.length <= 0 ? [] : this.questions.map(item => {
           return {
             id: 0,
             question: item.question,

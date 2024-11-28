@@ -115,7 +115,7 @@ export class ExamlistService {
   }
 
   getExamById(id: string): Observable<AdminExam | undefined> {
-    const createApi = this.apiUrlBuilder.buildApiUrl('u-exam');
+    const createApi = this.apiUrlBuilder.buildApiUrl(`u-exam/${id}`);
     return this.http.get<AdminExam>(createApi);
     //return of(this.mockExams.find(exam => exam.id === id));
   }
@@ -142,8 +142,10 @@ export class ExamlistService {
   }
 
   updateExam(exam: Partial<AdminExam>): Observable<AdminExam> {
-    // return this.http.put<AdminExam>(`${this.apiUrl}/${exam.id}`, exam);
-    const index = this.mockExams.findIndex(e => e.id === exam.id);
+    const createApi = this.apiUrlBuilder.buildApiUrl(`u-exam/${exam.id}`);
+    return this.http.put<AdminExam>(createApi, exam);
+
+    /*const index = this.mockExams.findIndex(e => e.id === exam.id);
     if (index !== -1) {
       this.mockExams[index] = {
         ...this.mockExams[index],
@@ -152,7 +154,7 @@ export class ExamlistService {
       };
       return of(this.mockExams[index]);
     }
-    throw new Error('Exam not found');
+    throw new Error('Exam not found');*/
   }
 
   deleteExam(id: string): Observable<boolean> {

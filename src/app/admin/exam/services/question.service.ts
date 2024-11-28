@@ -17,7 +17,7 @@ export class QuestionService {
   ) {}
 
   getQuestions(examId: string): Observable<Question[]> {
-    const createApi = this.apiUrlBuilder.buildApiUrl(`u-exam/${examId}`);
+    const createApi = this.apiUrlBuilder.buildApiUrl(`u-exam/${examId}/questions`);
     return this.http.get<Question[]>(createApi)
       .pipe(
         catchError(this.handleError)
@@ -55,8 +55,9 @@ export class QuestionService {
       );
   }
 
-  deleteQuestion(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`)
+  deleteQuestion(examId: string, guid: string): Observable<void> {
+    const updateApi = this.apiUrlBuilder.buildApiUrl(`u-exam/${examId}/questions/${guid}`);
+    return this.http.delete<void>(updateApi)
       .pipe(
         catchError(this.handleError)
       );
