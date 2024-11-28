@@ -31,6 +31,7 @@ import { MatListModule } from '@angular/material/list';
 import { SharedModule } from './shared/shared.module';
 import { AdminModule } from './admin/admin.module';
 import { PagesComponent } from './pages/pages.component';
+import { MatCard, MatCardModule } from '@angular/material/card';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { PagesComponent } from './pages/pages.component';
     ReactiveFormsModule,
     MatToolbarModule,
     ReactiveFormsModule,
+    MatCardModule,
     MatButtonModule,
     MatIconModule,
     MatMenuModule,

@@ -17,6 +17,7 @@ import { ContactService } from './contact.service';
 export class ContactUsComponent {
   contactForm: FormGroup;
   public isSubmitting = false;
+  isSubmitted = false;
 
   constructor(
     private fb: FormBuilder,
@@ -24,18 +25,26 @@ export class ContactUsComponent {
     private snackBar: MatSnackBar
   ) {
     this.contactForm = this.fb.group({
-      name: ['', [Validators.required]],
+      fullName: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
-      examType: ['', [Validators.required]],
+      //examType: ['', [Validators.required]],
       message: ['', [Validators.required, Validators.minLength(10)]]
     });
   }
 
   onSubmit() {
+    if (this.contactForm.invalid) {
+      this.markAllAsTouched();
+      return;
+    }
+
     if (this.contactForm.valid && !this.isSubmitting) {
       this.isSubmitting = true;
-      const formData: ContactForm = this.contactForm.value;
+      let phoneNumber = this.contactForm.value.phone.replace('+1', '');
+      let formData: ContactForm = this.contactForm.value;
+      formData.mobile = `+1${phoneNumber}`;
+
 
       this.contactService.submitContactForm(formData).subscribe({
         next: (response) => {
@@ -44,6 +53,7 @@ export class ContactUsComponent {
             horizontalPosition: 'end',
             verticalPosition: 'top'
           });
+          this.isSubmitted = true;
           this.contactForm.reset();
           this.isSubmitting = false;
         },
@@ -57,5 +67,12 @@ export class ContactUsComponent {
         }
       });
     }
+  }
+
+  private markAllAsTouched() {
+    Object.keys(this.contactForm.controls).forEach(field => {
+      const control = this.contactForm.get(field);
+      control?.markAsTouched({ onlySelf: true });
+    });
   }
 }

@@ -120,6 +120,14 @@
     .search-field, .filter-field {
       width: 100%;
       margin-bottom: 1rem;
+      .mdc-notched-outline--upgraded{
+        background-color: #fff !important;
+      }
+    }
+
+    .mat-column-seqNo {
+      width: 3rem;
+      text-align: center;
     }
 
     .mat-column-actions {

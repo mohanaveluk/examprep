@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { CategoryService } from '../services/category.service';
 import { Category } from '../models/category.model';
 import { CategoryDialogComponent } from '../category-dialog/category-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-category-list',
@@ -15,7 +16,8 @@ export class CategoryListComponent implements OnInit {
 
   constructor(
     private categoryService: CategoryService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -24,7 +26,7 @@ export class CategoryListComponent implements OnInit {
 
   loadCategories(): void {
     this.categoryService.getCategories().subscribe(
-      (data) => this.categories = data
+      (categoryList: any) => this.categories = categoryList.data
     );
   }
 
@@ -38,10 +40,12 @@ export class CategoryListComponent implements OnInit {
       if (result) {
         if (result.id) {
           this.categoryService.updateCategory(result.id, result).subscribe(() => {
+            this.snackBar.open('Category updated successfully', 'Close', { duration: 3000 });
             this.loadCategories();
           });
         } else {
           this.categoryService.addCategory(result).subscribe(() => {
+            this.snackBar.open('Category added  successfully', 'Close', { duration: 3000 });
             this.loadCategories();
           });
         }
@@ -49,9 +53,10 @@ export class CategoryListComponent implements OnInit {
     });
   }
 
-  deleteCategory(id: number): void {
+  deleteCategory(id: string): void {
     if (confirm('Are you sure you want to delete this category?')) {
       this.categoryService.deleteCategory(id).subscribe(() => {
+        this.snackBar.open('Category deleted successfully', 'Close', { duration: 3000 });
         this.loadCategories();
       });
     }

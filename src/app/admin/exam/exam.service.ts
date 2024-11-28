@@ -51,15 +51,18 @@ export class ExamService {
   processCsvFile(file: File): Promise<ExamQuestion[]> {
     return new Promise((resolve, reject) => {
       Papa.parse(file, {
-        complete: (results) => {
+        complete: (results: any) => {
           try {
-            const questions = this.mapToQuestions(results.data);
+            // Filter out rows where the 'question' column is empty
+            const filteredData = results.data.filter((row: { question: string; }) => row.question && row.question.trim() !== '');
+            const questions = this.mapToQuestions(filteredData);
             resolve(questions);
           } catch (error) {
             reject(error);
           }
         },
         header: true,
+        skipEmptyLines: true, // This will skip completely empty lines
         error: (error) => reject(error)
       });
     });
@@ -110,7 +113,13 @@ export class ExamService {
 
     const correctAnswers = row.correctAnswers
       ?.split(',')
-      .map((answer: string) => answer.trim())
+      .map((answer: string) => {
+        if(this.isStringInteger(answer.trim())){
+          return parseInt(answer.trim(), 10);
+        }
+        return null;
+      })
+      .filter((answer: null) => answer !== null)
       .filter(Boolean) || [];
 
     return {
@@ -127,7 +136,7 @@ export class ExamService {
     return {
       question: row.question,
       options: ['True', 'False'],
-      correctAnswers: [row.correctAnswers?.toString()],
+      correctAnswers: [this.isStringInteger(row.correctAnswers?.trim()) ? parseInt(row.correctAnswers?.trim(), 10):  (row.correctAnswers?.toString().toLowerCase() === 'true' ? 1 : 2)],
       type: QuestionType.TRUE_FALSE
     };
   }
@@ -149,10 +158,14 @@ export class ExamService {
     return {
       question: row.question,
       options,
-      correctAnswers: order.map((i: number) => options[i - 1]),
+      correctAnswers: [], //order.map((i: number) => options[i - 1]),
       type: QuestionType.ORDERING,
       order
     };
   }
-  
+    
+  private isStringInteger(value: string): boolean {
+    const parsed = parseInt(value, 10);
+    return !isNaN(parsed) && Number.isInteger(parsed);
+  }
 }

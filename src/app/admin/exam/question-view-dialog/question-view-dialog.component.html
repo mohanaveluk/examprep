@@ -9,24 +9,24 @@
 
   <mat-dialog-content>
     <div class="question-details">
-      <h3>{{data.question}}</h3>
-      <p><strong>Type:</strong> {{data.type}}</p>
+      <h3>{{question.question}}</h3>
+      <p><strong>Type:</strong> {{question.type}}</p>
 
       <div class="options-list">
         <h4>Options:</h4>
-        <ng-container *ngIf="data.type !== 'ranking'">
+        <ng-container *ngIf="question.type !== 'ranking'">
           <ul>
-            <li *ngFor="let option of data.options; let i = index" 
-                [class.correct]="data.correctAnswers.includes(i)">
-              {{['A', 'B', 'C', 'D', 'E'][i]}} {{option}} {{data.correctAnswers.includes(i) ? '(Correct)' : ''}}
+            <li *ngFor="let option of question.options; let i = index" 
+                [class.correct]="question.correctAnswers.includes(i+1)">
+              {{['A', 'B', 'C', 'D', 'E'][i]}} {{option.text}} {{question.correctAnswers.includes(i+1) ? '(Correct)' : ''}}
             </li>
           </ul>
         </ng-container>
-        <ng-container *ngIf="data.type === 'ranking'">
+        <ng-container *ngIf="question.type === 'ranking'">
           <p class="correct-order">Correct order:</p>
           <ol>
-            <li *ngFor="let index of data.correctAnswers">
-              {{['A', 'B', 'C', 'D', 'E'][index]}} {{data.options[index]}}
+            <li *ngFor="let index of question.order">
+              {{['A', 'B', 'C', 'D', 'E'][index-1]}} {{question.options[index-1].text}}
             </li>
           </ol>
         </ng-container>

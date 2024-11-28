@@ -8,7 +8,7 @@ export enum QuestionType {
 export interface ExamQuestion {
   question: string;
   options: string[];
-  correctAnswers: string[];
+  correctAnswers: number[];
   type: QuestionType;
   order?: number[];  // For ordering questions
 }

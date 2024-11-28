@@ -13,6 +13,7 @@ export class RegisterComponent {
   public email!: string;
   public password!: string;
   registerForm!: FormGroup;
+  errorMessage = null;
 
   constructor(
     private fb: FormBuilder,
@@ -20,17 +21,24 @@ export class RegisterComponent {
     private router: Router
   ) {
     this.registerForm = this.fb.group({
-      name: ['', [Validators.required]],
+      first_name: ['', [Validators.required]],
+      last_name: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
+      password: ['', [Validators.required, Validators.minLength(10)]]
     });
   }
   onSubmit() {
-    this.authService.register(this.name, this.email, this.password).subscribe(response => {
+
+    let phoneNumber = this.registerForm.value.phone?.replace('+1', '');
+    const register = this.registerForm.value;
+    //register.mobile = phoneNumber !== undefined ? `+1${phoneNumber}`: null;
+
+    this.authService.register(register).subscribe(response => {
       // Handle successful registration
       this.router.navigate(['/login']);
     }, error => {
       // Handle registration error
+      this.errorMessage = error?.error?.message;
       console.error('Registration failed', error);
     });
   }

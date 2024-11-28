@@ -4,20 +4,21 @@ import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Question } from './models/question.model';
+import { ApiUrlBuilder } from '../../shared/utility/api-url-builder';
 
 export interface AdminExam {
   id: string;
   title: string;
   description: string;
   notes: string;
-  category: number,
+  categoryId: string,
   categoryText?: string,
   duration: number;
   totalQuestions: number;
   passingScore: number;
   createdAt: Date;
   updatedAt?: Date;
-  status: 'active' | 'inactive';
+  status: number;
   questions?: Question[];
 }
 
@@ -38,41 +39,41 @@ export class ExamlistService {
       description: 'Test your knowledge in anatomy, physiology, and biochemistry',
       duration: 60,
       notes: '',
-      category: 1,
+      categoryId: '1',
       categoryText: 'Nurse',
       totalQuestions: 50,
       passingScore: 70,
       createdAt: new Date('2024-01-01'),
       updatedAt: new Date('2024-01-15'),
-      status: 'active'
+      status: 1
     },
     {
       id: '2',
       title: 'Clinical Sciences',
       description: 'Comprehensive test covering pathology, pharmacology, and medicine',
       notes: '',
-      category: 1,
+      categoryId: '1',
       categoryText: 'Medicone',
       duration: 90,
       totalQuestions: 75,
       passingScore: 75,
       createdAt: new Date('2024-01-05'),
       updatedAt: new Date('2024-01-20'),
-      status: 'active'
+      status: 1
     },
     {
       id: '3',
       title: 'Medical Ethics & Patient Care',
       description: 'Evaluation of medical ethics and patient care principles',
       notes: '',
-      category: 1,
+      categoryId: '1',
       categoryText: 'Vision',
       duration: 45,
       totalQuestions: 30,
       passingScore: 80,
       createdAt: new Date('2024-01-10'),
       updatedAt: new Date('2024-01-25'),
-      status: 'inactive'
+      status: 1
     }
   ];
 
@@ -96,28 +97,33 @@ export class ExamlistService {
   ];
   constructor(
     private http: HttpClient,
+    private apiUrlBuilder: ApiUrlBuilder,
     private snackBar: MatSnackBar
   ) {}
 
   getCategories(): Observable<any[]> {
-    //return this.http.get<any[]>(`${this.apiUrl}/categories`);
-    return of(this.mockCategory);
+    const createApi = this.apiUrlBuilder.buildApiUrl('categories');
+    return this.http.get<Category[]>(createApi);
+    //return of(this.mockCategory);
   }
 
   getExams(): Observable<AdminExam[]> {
     // In a real application, this would be an HTTP call
-    // return this.http.get<AdminExam[]>('/api/admin/exams');
-    // return this.http.get<AdminExam[]>(this.apiUrl);
-    return of(this.mockExams);
+    const createApi = this.apiUrlBuilder.buildApiUrl('u-exam');
+    return this.http.get<AdminExam[]>(createApi);
+    //return of(this.mockExams);
   }
 
   getExamById(id: string): Observable<AdminExam | undefined> {
-    // return this.http.get<AdminExam>(`${this.apiUrl}/${id}`);
-    return of(this.mockExams.find(exam => exam.id === id));
+    const createApi = this.apiUrlBuilder.buildApiUrl('u-exam');
+    return this.http.get<AdminExam>(createApi);
+    //return of(this.mockExams.find(exam => exam.id === id));
   }
 
   createExam(exam: Partial<AdminExam>): Observable<AdminExam> {
-    // return this.http.post<AdminExam>(this.apiUrl, exam);
+    const createApi = this.apiUrlBuilder.buildApiUrl('u-exam');
+    return this.http.post<AdminExam>(createApi, exam);
+    /*
     const newExam: AdminExam = {
       id: Date.now().toString(),
       title: exam.title || '',
@@ -127,11 +133,12 @@ export class ExamlistService {
       duration: exam.duration || 0,
       totalQuestions: 0,
       passingScore: exam.passingScore || 0,
-      status: 'inactive',
+      status: 0,
       createdAt: new Date()
     };
     this.mockExams.push(newExam);
     return of(newExam);
+    */
   }
 
   updateExam(exam: Partial<AdminExam>): Observable<AdminExam> {
@@ -185,4 +192,5 @@ export class ExamlistService {
       panelClass: ['error-snackbar']
     });
   }
+
 }
