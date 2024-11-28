@@ -20,6 +20,7 @@ export class QuestionOptionComponent  implements OnInit {
   @ViewChild(MatExpansionPanel) expansionPanel!: MatExpansionPanel;
 
   examId: string="";
+  examTitle: string = ""
   questionForm: FormGroup;
   questions: Question[] = [];
   filteredQuestions: Question[] = [];
@@ -202,6 +203,7 @@ export class QuestionOptionComponent  implements OnInit {
       .subscribe({
         next: (questions: any) => {
           if(questions.success){
+            this.examTitle = questions.data.title;
             this.questions = questions?.data?.questions ?? [];
             this.updateFilteredQuestions();
           }
