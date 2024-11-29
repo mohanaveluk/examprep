@@ -38,6 +38,14 @@
             </mat-form-field>
 
             <mat-form-field appearance="fill" class="form-field">
+              <mat-label>Total Question</mat-label>
+              <input matInput type="number"  formControlName="totalQuestion" name="totalQuestion" required>
+              <mat-error *ngIf="examForm.get('totalQuestion')?.hasError('required')" >
+                Exam total question is required
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="form-field">
               <mat-label>Duration (minutes)</mat-label>
               <input matInput type="number"  formControlName="duration" name="duration" required>
               <mat-error *ngIf="examForm.get('duration')?.hasError('required')" >

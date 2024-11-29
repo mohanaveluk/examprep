@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AdminExam, Category, ExamlistService } from '../examlist.service';
+import { AdminExam, ExamlistService } from '../examlist.service';
 import { HeaderService } from '../../services/header.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ExamService } from '../exam.service';
 import { ExamQuestion } from '../models/exam.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Category } from '../../../shared/models/category.model';
 
 @Component({
   selector: 'app-exam-page',
@@ -19,6 +20,7 @@ export class ExamPageComponent implements OnInit {
     description: '',
     notes: '',
     categoryId: '0',
+    totalQuestion: 0,
     duration: 0,
     passScore: 0,
     
@@ -45,6 +47,7 @@ export class ExamPageComponent implements OnInit {
       description: ['', Validators.required],
       notes: [''],
       category: [null, Validators.required],
+      totalQuestion: [0, Validators.required],
       duration: [0, Validators.required],
       passScore: [0, Validators.required],
       file: [null]
@@ -83,6 +86,7 @@ export class ExamPageComponent implements OnInit {
           title: detail.title,
           description: detail.description,
           notes: detail.notes,
+          totalQuestion: detail.totalQuestions,
           duration: detail.duration,
           passScore: detail.passingScore,
           category: detail.category.id
@@ -109,9 +113,9 @@ export class ExamPageComponent implements OnInit {
         categoryId: this.examForm.get('category')?.value,
         notes: this.examForm.get('notes')?.value,
         createdAt: new Date(),
+        totalQuestions: this.examForm.get('totalQuestion')?.value,
         duration: this.examForm.get('duration')?.value,
         passingScore: this.examForm.get('passScore')?.value,
-        totalQuestions: 0,
         status: 1,
         questions: this.questions.length <= 0 ? [] : this.questions.map(item => {
           return {

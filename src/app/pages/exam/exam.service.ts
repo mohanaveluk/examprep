@@ -1,31 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-
-
-
-export interface Exam {
-  id: string;
-  title: string;
-  description: string;
-  duration: number;
-  totalQuestions: number;
-  passingScore: number;
-}
-
-export interface Question {
-  id: number;
-  text: string;
-  type: 'single' | 'multiple';
-  options: Option[];
-  maxSelections?: number;
-}
-
-export interface Option {
-  id: number;
-  text: string;
-}
-
+import { ApiUrlBuilder } from '../../shared/utility/api-url-builder';
+import { Exam, Question } from '../models/exam.model';
 
 
 @Injectable({
@@ -35,7 +12,10 @@ export class ExamService {
 
   private apiUrl = 'http://localhost:3000/api/exams'; // Replace with your API URL
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private apiUrlBuilder: ApiUrlBuilder
+  ) { }
 
   getExams(): Observable<any> {
     // Replace with actual API call
@@ -45,9 +25,11 @@ export class ExamService {
     ]);
   }
 
-  getExam(examId: number): Observable<any> {
+  getExam(examId: string): Observable<Exam> {
     // Replace with actual API call
-    return of({ id: examId, name: 'Physics Exam', description: 'Physics entrance exam' });
+    const createApi = this.apiUrlBuilder.buildApiUrl(`u-exam/${examId}`);
+    return this.http.get<Exam>(createApi);    
+    //return of({ id: examId, name: 'Physics Exam', description: 'Physics entrance exam' });
   }
   
   getQuestions(examId: number): Observable<any> {
@@ -61,7 +43,7 @@ export class ExamService {
 
   //------------------------------
 
-  private mockExams: Exam[] = [
+  /*private mockExams: Exam[] = [
     {
       id: '1',
       title: 'Basic Medical Sciences',
@@ -86,7 +68,7 @@ export class ExamService {
       totalQuestions: 30,
       passingScore: 80
     }
-  ];
+  ];*/
 
   private mockQuestions: { [key: string]: Question[] } = {
     '1': [
@@ -182,7 +164,9 @@ export class ExamService {
   };
 
   getAvailableExams(): Observable<Exam[]> {
-    return of(this.mockExams);
+    const createApi = this.apiUrlBuilder.buildApiUrl('u-exam');
+    return this.http.get<Exam[]>(createApi);
+    //return of(this.mockExams);
   }
 
   getQuestion(examId: string, index: number): Observable<{ question: Question, totalQuestions: number }> {

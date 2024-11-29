@@ -5,7 +5,7 @@
         <app-admin-sidenav [isExpanded]="isExpanded" (toggleExpanded)="toggleSidenav()"></app-admin-sidenav>
     </mat-sidenav>
 
-    <mat-sidenav-content [class.expanded]="isExpanded" [ngClass]="isExpanded ? 's-exanded' : 'snot-exanded'">
+    <mat-sidenav-content [class.expanded]="isExpanded" [ngClass]="isExpanded ? 's-expanded' : 'snot-expanded'">
         <app-admin-header (toggleMenu)="drawer.toggle()"></app-admin-header>
 
         <main class="admin-content">

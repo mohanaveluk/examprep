@@ -5,6 +5,7 @@ import { catchError, map } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Question } from './models/question.model';
 import { ApiUrlBuilder } from '../../shared/utility/api-url-builder';
+import { Category } from '../../shared/models/category.model';
 
 export interface AdminExam {
   id: string;
@@ -13,18 +14,13 @@ export interface AdminExam {
   notes: string;
   categoryId: string,
   categoryText?: string,
-  duration: number;
   totalQuestions: number;
+  duration: number;
   passingScore: number;
   createdAt: Date;
   updatedAt?: Date;
   status: number;
   questions?: Question[];
-}
-
-export interface Category {
-  id: string;
-  name: string;
 }
 
 @Injectable({
@@ -77,7 +73,7 @@ export class ExamlistService {
     }
   ];
 
-  private mockCategory: Category[] = [
+  /*private mockCategory: Category[] = [
     {
       id: "1",
       name: "Nurse"
@@ -94,7 +90,7 @@ export class ExamlistService {
       id: "4",
       name: "Vision"
     }
-  ];
+  ];*/
   constructor(
     private http: HttpClient,
     private apiUrlBuilder: ApiUrlBuilder,

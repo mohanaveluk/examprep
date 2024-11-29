@@ -1,6 +1,42 @@
 <mat-card>
-    <mat-card-title>{{ exam.name }}</mat-card-title>
-    <mat-card-content>{{ exam.description }}</mat-card-content>
+    <mat-card-title>{{ exam.title }}</mat-card-title>
+    <mat-card-content>
+
+        <div class="detail-row">
+            <span class="label">Description:</span>
+            <span class="value">{{ exam.description }}</span>
+        </div>
+        
+        <div class="detail-row">
+            <span class="label">Notes:</span>
+            <span class="value">{{ exam.notes }}</span>
+        </div>
+        
+        <div class="detail-main-row">
+            <div *ngIf="exam.categoryText" class="ind-row">
+                <span class="label">Category:</span>
+                <span class="value">{{ exam.categoryText }}</span>
+            </div>
+            <div *ngIf="exam.duration" class="ind-row">
+                <span class="label">Duration:</span>
+                <span class="value">{{ exam.duration }}</span>
+            </div>
+            <div *ngIf="exam.totalQuestions" class="ind-row">
+                <span class="label">Total Questions:</span>
+                <span class="value">{{ exam.totalQuestions }}</span>
+            </div>
+            <div *ngIf="exam.passingScore" class="ind-row">
+                <span class="label">Passing Score:</span>
+                <span class="value">{{ exam.passingScore }}</span>
+            </div>
+            <div *ngIf="exam.updatedAt" class="ind-row">
+                <span class="label">Updated At:</span>
+                <span class="value">{{ exam.updatedAt | date }}</span>
+            </div>
+        </div>
+          
+        
+    </mat-card-content>
     <!-- Add Review Section -->
     <app-review-list [examId]="exam.id"></app-review-list>
 

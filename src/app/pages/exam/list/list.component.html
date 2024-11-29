@@ -6,7 +6,9 @@
 
 <div class="exam-list-container">
     <h2>Available Tests</h2>
-
+    <div *ngIf="warningMessage" class="warning-message">
+        {{ warningMessage }}
+    </div>
     <div class="exam-grid">
         <mat-card *ngFor="let exam of exams">
             <mat-card-header>

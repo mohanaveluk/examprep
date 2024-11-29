@@ -32,6 +32,7 @@ import { SharedModule } from './shared/shared.module';
 import { AdminModule } from './admin/admin.module';
 import { PagesComponent } from './pages/pages.component';
 import { MatCard, MatCardModule } from '@angular/material/card';
+import { AlertComponent } from './shared/components/alert/alert.component';
 
 @NgModule({
   declarations: [
@@ -40,8 +41,7 @@ import { MatCard, MatCardModule } from '@angular/material/card';
     ContactUsComponent,
     AboutComponent,
     FooterComponent,
-    PagesComponent,
-
+    PagesComponent
   ],
   imports: [
     BrowserModule,

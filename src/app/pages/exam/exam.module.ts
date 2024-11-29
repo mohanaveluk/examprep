@@ -17,6 +17,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatListModule } from '@angular/material/list';
 import { ExamReviewModule } from '../exam-review/exam-review.module';
+import { AlertComponent } from '../../shared/components/alert/alert.component';
+import { SharedModule } from '../../shared/shared.module';
 
 
 
@@ -43,7 +45,8 @@ import { ExamReviewModule } from '../exam-review/exam-review.module';
     FormsModule, 
     ReactiveFormsModule,
     ExamRoutingModule,
-    ExamReviewModule
+    ExamReviewModule,
+    SharedModule
   ]
 })
 export class ExamModule { }

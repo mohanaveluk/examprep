@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Exam, ExamService, Question } from '../exam.service';
+import { Exam, Question } from '../../models/exam.model';
+import { ExamService } from '../exam.service';
+
 
 @Component({
   selector: 'app-question',

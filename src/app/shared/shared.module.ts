@@ -15,13 +15,15 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { NavComponent } from './components/nav/nav.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { Nav2Component } from './components/nav2/nav2.component';
+import { AlertComponent } from './components/alert/alert.component';
 
 
 @NgModule({
   declarations: [
     NavComponent,
     FooterComponent,
-    Nav2Component
+    Nav2Component,
+    AlertComponent
   ],
   imports: [
     CommonModule,
@@ -39,7 +41,8 @@ import { Nav2Component } from './components/nav2/nav2.component';
   exports: [
     NavComponent,
     FooterComponent,
-    Nav2Component
+    Nav2Component,
+    AlertComponent,
   ]
 })
 export class SharedModule { }

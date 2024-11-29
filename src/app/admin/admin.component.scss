@@ -45,15 +45,22 @@ mat-sidenav-content:not(.expanded) {
   margin-left: 64px;
 }
 
-.s-exanded {
-  margin-left: 250px !important;
-  transition: margin-left 0.3s ease-in-out;
-}
-
-.snot-exanded {
+.snot-expanded {
   margin-left: 64px !important;
   transition: margin-left 0.3s ease-in-out;
 }
+
+/* Responsive adjustments*/
+@media (max-width: 760px) {
+  mat-sidenav-content.expanded {
+    margin-left: 64px !important;
+  }
+  .s-expanded {
+    margin-left: 64px !important;
+    transition: margin-left 0.3s ease-in-out;
+  }
+}
+
 
 /*
 .admin-container {
