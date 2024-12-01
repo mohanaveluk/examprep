@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, delay, Observable, of, tap } from 'rxjs';
 import { ApiUrlBuilder } from '../../shared/utility/api-url-builder';
+import { TokenService } from '../../core/services/token.service';
 export interface UserModel{
   id: string,
   email: string,
@@ -21,14 +22,15 @@ export interface UserResponse{
   providedIn: 'root'
 })
 export class AuthService {
+  AUTH_TOKEN = 'lrpd_opr';
   private loggedIn = new BehaviorSubject<boolean>(this.hasToken());
   private userName!: string;
   private user!: UserModel;
   private isAuthenticated = false;
-
+  
   private apiUrl = 'http://localhost:3000/api/auth'; // Replace with your API URL
 
-  constructor(private http: HttpClient, private apiUrlBuilder: ApiUrlBuilder) {
+  constructor(private http: HttpClient, private apiUrlBuilder: ApiUrlBuilder, private tokenService: TokenService) {
     this.userName = localStorage.getItem('userName') || '';
     const userobj  = localStorage?.getItem('user');
     this.user = userobj !== null ? JSON.parse(userobj) : {};
@@ -45,10 +47,9 @@ export class AuthService {
       tap((response: any) => {
         if (response.status) {
           this.userName = `${response?.user.firstName} ${response?.user.lastName}`;
-          localStorage.setItem('token', 'your-token'); // Replace with actual token
           localStorage.setItem('user', JSON.stringify(response.user));
           localStorage.setItem('userName', this.userName);
-          localStorage.setItem('token', response.access_token);
+          localStorage.setItem(this.AUTH_TOKEN, response.access_token);
           this.loggedIn.next(true);
         }
       })
@@ -69,7 +70,6 @@ export class AuthService {
       tap(response => {
         if (response.success) {
           this.userName = response.userName;
-          localStorage.setItem('token', 'your-token'); // Replace with actual token
           localStorage.setItem('userName', response.userName);
           this.loggedIn.next(true);
         }
@@ -80,18 +80,20 @@ export class AuthService {
 
   logout(): void {
     this.isAuthenticated = false;
-    localStorage.removeItem('token');
+    localStorage.removeItem(this.AUTH_TOKEN);
     localStorage.removeItem('userName');
     localStorage.removeItem('user');
+    this.tokenService.removeToken();
     this.loggedIn.next(false);
     this.userName = "";
   }
 
   isLoggedIn(): boolean {
     this.loggedIn.next(false);
-    this.userName =  localStorage.getItem('userName') || '';
+    
+    this.userName =  localStorage.getItem(this.AUTH_TOKEN) || '';
     return this.isAuthenticated;
-
+    //return this.tokenService.hasToken();
   }
 
   isUserLoggedIn(): Observable<boolean> {
@@ -103,7 +105,7 @@ export class AuthService {
   }
 
   private hasToken(): boolean {
-    return !!localStorage.getItem('token');
+    return !!localStorage.getItem(this.AUTH_TOKEN);
   }
 
 }

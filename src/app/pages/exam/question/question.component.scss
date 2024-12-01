@@ -1,5 +1,5 @@
 .exam-container {
-    max-width: 800px;
+    max-width: 1100px;
     margin: 0 auto;
     padding: 20px;
   }
@@ -34,6 +34,58 @@
   .progress-bar {
     margin-top: 10px;
   }
+
+
+  .exam-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1px;
+  }
+  
+  .exam-status {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .exam-status h2 {
+    margin: 0;
+    font-size: 1.5em;
+    color: #333;
+  }
+  
+  .status-chip {
+    background-color: #089d0e;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 16px;
+    font-size: 0.9em;
+  }
+  
+  .status-chip.paused {
+    background-color: #ff9800;
+  }
+  
+  .exam-timer {
+    font-size: 1.2em;
+    font-weight: 500;
+    color: #d32f2f;
+  }
+  
+  .exam-progress {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: 20px 0;
+  }
+  
+  .progress-stats {
+    text-align: center;
+    color: #666;
+  }
+
+
   
   .question-card {
     margin-bottom: 20px;
@@ -60,4 +112,24 @@
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
+    gap: 16px;
+
+    div {
+      display: flex;
+      gap: 15px; /* Space between the buttons within each group */
+    }
+  }
+
+  .remaining-time {
+    font-size: 1.1em;
+    font-weight: 550;
+    color: #d32f2f;
+  }
+  
+  /* Add this if you want the timer to be more prominent */
+  .exam-info .remaining-time {
+    background-color: #fff3f3;
+    padding: 8px 16px;
+    border-radius: 4px;
+    border: 1px solid #ffcdd2;
   }

@@ -1,0 +1,22 @@
+<div class="ordering-container">
+  <div class="options-list">
+    <h3>Original Order:</h3>
+    <div class="option" *ngFor="let option of question.options">
+      {{ option.text }}
+    </div>
+  </div>
+
+  <div class="ordered-list">
+    <h3>Your Order:</h3>
+    <div cdkDropList 
+         (cdkDropListDropped)="drop($event)"
+         class="ordered-box">
+      <div class="option"
+           *ngFor="let option of orderedOptions"
+           cdkDrag>
+        <mat-icon cdkDragHandle>drag_indicator</mat-icon>
+        {{ option.text }}
+      </div>
+    </div>
+  </div>
+</div>

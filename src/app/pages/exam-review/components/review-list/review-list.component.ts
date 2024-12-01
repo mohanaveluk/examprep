@@ -20,7 +20,7 @@ export class ReviewListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadReviews();
+    //this.loadReviews();
   }
 
   loadReviews(): void {

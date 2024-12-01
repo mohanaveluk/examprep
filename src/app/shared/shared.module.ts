@@ -16,6 +16,14 @@ import { NavComponent } from './components/nav/nav.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { Nav2Component } from './components/nav2/nav2.component';
 import { AlertComponent } from './components/alert/alert.component';
+import { SessionExpiredDialogComponent } from './components/session-expired-dialog/session-expired-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 
 @NgModule({
@@ -23,7 +31,8 @@ import { AlertComponent } from './components/alert/alert.component';
     NavComponent,
     FooterComponent,
     Nav2Component,
-    AlertComponent
+    AlertComponent,
+    SessionExpiredDialogComponent
   ],
   imports: [
     CommonModule,
@@ -31,12 +40,31 @@ import { AlertComponent } from './components/alert/alert.component';
     LayoutModule,
     MatToolbarModule,
     MatButtonModule,
+    MatCardModule,
+    MatMenuModule,
+    MatFormFieldModule,
+    MatInputModule,  
+    MatCheckboxModule,
+    MatRadioModule,
+    MatListModule,
+    MatProgressBarModule, 
+    MatToolbarModule,
+    MatButtonModule,
+    MatMenuModule,
+    MatListModule,
+    MatToolbarModule,
+    MatButtonModule,
     MatSidenavModule,
     MatIconModule,
     MatListModule,
     MatMenuModule,
     MatExpansionModule,
-    MatDividerModule
+    MatDividerModule,
+    MatDialogModule,
+    MatIconModule,
+    MatDialogModule,
+    MatIconModule,
+    MatDialogModule,
   ],
   exports: [
     NavComponent,

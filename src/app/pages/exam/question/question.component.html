@@ -5,7 +5,40 @@
             <span>Duration: {{ exam.duration }} minutes</span>
             <span>Total Questions: {{ exam.totalQuestions }}</span>
             <span>Passing Score: {{ exam.passingScore }}%</span>
+            <!-- <span class="remaining-time">Time Remaining: {{ formatRemainingTime() }}</span> -->
         </div>
+        <div class="exam-info">
+            <div class="exam-status">
+                <h3>Status</h3>
+                <div class="status-chip" [class.paused]="session?.status === 'paused'">
+                  {{ session?.status === 'paused' ? 'PAUSED' : 'IN PROGRESS' }}
+                </div>
+              </div>
+              <div class="progress-stats" *ngIf="session !== undefined && session.totalQuestions > 0">
+                <div>Questions Answered: {{ session.answeredQuestions || 0 }}/{{ session.totalQuestions || 0 }}</div>
+              </div>
+              <div class="remaining-time">
+                Time Remaining: {{ formatRemainingTime() }}
+              </div>
+              <button mat-raised-button color="warn" *ngIf="session?.status === 'active'" (click)="onPauseClick()">
+                <mat-icon>pause</mat-icon> Pause Exam
+            </button>
+            <button mat-raised-button color="primary" *ngIf="session?.status === 'paused'" (click)="resumeExam()">
+                <mat-icon>play_arrow</mat-icon> Resume Exam
+            </button>
+        </div>
+        <!-- <div class="exam-progress">
+            <app-exam-progress-chart [session]="session"></app-exam-progress-chart>
+        </div> -->
+        
+        <!-- <div class="exam-actions">
+            <button mat-raised-button color="warn" *ngIf="session?.status === 'active'" (click)="onPauseClick()">
+                <mat-icon>pause</mat-icon> Pause Exam
+            </button>
+            <button mat-raised-button color="primary" *ngIf="session?.status === 'paused'" (click)="resumeExam()">
+                <mat-icon>play_arrow</mat-icon> Resume Exam
+            </button>
+        </div> -->
     </div>
     <div class="question-header">
         <h2>Question {{ currentIndex + 1 }} of {{ totalQuestions }}</h2>
@@ -17,7 +50,11 @@
 
     <mat-card class="question-card" *ngIf="currentQuestion">
         <mat-card-content>
-            <p class="question-text">{{ currentQuestion.text }}</p>
+            <p class="question-text">{{ currentQuestion.question }}</p>
+            <button mat-button color="accent" (click)="addToReview()">
+                <mat-icon>bookmark</mat-icon>
+                Add to Review
+            </button>
 
             <div [ngSwitch]="currentQuestion.type">
                 <!-- Single Choice -->
@@ -36,23 +73,50 @@
                         {{ option.text }}
                     </mat-checkbox>
                 </div>
+
+                <!-- True/False -->
+                <app-true-false-question
+                *ngSwitchCase="'true-false'"
+                [question]="currentQuestion"
+                [selectedAnswer]="getSelectedAnswer(currentIndex)"
+                (answerChange)="onSingleAnswerChange($event)">
+            </app-true-false-question>
+
+            <!-- Ordering -->
+            <app-ordering-question
+                *ngSwitchCase="'ranking'"
+                [question]="currentQuestion"
+                [selectedAnswer]="getSelectedAnswerForOrdering(currentIndex)"
+                (answerChange)="onOrderingAnswerChange($event)">
+            </app-ordering-question>
+            
             </div>
         </mat-card-content>
     </mat-card>
 
 
-    <div class="navigation-buttons">
-        <button mat-raised-button color="primary" (click)="previous()" [disabled]="currentIndex === 0">
-            Previous
-        </button>
+    <div class="navigation-buttons" *ngIf="session?.status === 'active'">
+        <div>
+            <button mat-raised-button color="primary" (click)="previous()" [disabled]="currentIndex === 0">
+                Previous
+            </button>
+        </div>
+        <div *ngIf="session?.status === 'active'">
+            <button mat-raised-button color="accent" *ngIf="reviewList.length > 0" (click)="openReviewList()">
+                Review List ({{reviewList.length}})
+            </button>
+    
+            <button mat-raised-button color="primary" *ngIf="currentIndex < totalQuestions - 1" (click)="next()"
+                [disabled]="!hasCurrentAnswer()">
+                Next
+            </button>
+        
+            <button mat-raised-button color="accent" *ngIf="currentIndex === totalQuestions - 1" (click)="submit()"
+                [disabled]="!hasCurrentAnswer()">
+                Submit Test
+            </button>
+        </div>
 
-        <button mat-raised-button color="primary" *ngIf="currentIndex < totalQuestions - 1" (click)="next()" [disabled]="!hasCurrentAnswer()">
-            Next
-        </button>
-
-        <button mat-raised-button color="accent" *ngIf="currentIndex === totalQuestions - 1" (click)="submit()" [disabled]="!hasCurrentAnswer()">
-            Submit Test
-        </button>
     </div>
 
 </div>

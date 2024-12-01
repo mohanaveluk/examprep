@@ -33,6 +33,7 @@ import { AdminModule } from './admin/admin.module';
 import { PagesComponent } from './pages/pages.component';
 import { MatCard, MatCardModule } from '@angular/material/card';
 import { AlertComponent } from './shared/components/alert/alert.component';
+import { CoreModule } from './core/core.module';
 
 @NgModule({
   declarations: [
@@ -66,6 +67,7 @@ import { AlertComponent } from './shared/components/alert/alert.component';
     MatDialogModule,
     FlexLayoutModule,
     MatListModule,
+    CoreModule,
     AuthModule,
     ExamModule,
     InquiryModule,

@@ -1,0 +1,19 @@
+<h2 mat-dialog-title>Questions for Review</h2>
+
+<mat-dialog-content>
+  <mat-list>
+    <mat-list-item *ngFor="let item of data.questions" 
+                   (click)="goToQuestion(item.index)"
+                   class="review-item">
+      <mat-icon matListItemIcon [color]="item.answered ? 'primary' : 'warn'">
+        {{ item.answered ? 'check_circle' : 'error' }}
+      </mat-icon>
+      <div matListItemTitle>Question {{ item.index + 1 }}</div>
+      <div matListItemLine>{{ item.question }}</div>
+    </mat-list-item>
+  </mat-list>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card *ngIf="exam">
     <mat-card-title>{{ exam.title }}</mat-card-title>
     <mat-card-content>
 
@@ -37,8 +37,9 @@
           
         
     </mat-card-content>
-    <!-- Add Review Section -->
-    <app-review-list [examId]="exam.id"></app-review-list>
+    <button mat-raised-button color="primary" (click)="startExam()">Start</button>
 
-    <button mat-raised-button color="primary" [routerLink]="['/question', exam.id]">Start</button>
+    <!-- Add Review Section -->
+    <!-- <app-review-list [examId]="exam.id"></app-review-list> -->
+
 </mat-card>

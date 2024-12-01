@@ -1,16 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ApiUrlBuilder } from '../../shared/utility/api-url-builder';
-import { Exam, Question } from '../models/exam.model';
+import { ApiResponse, Exam, Question, RandomQuestionResponse, StartExam } from '../models/exam.model';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class ExamService {
-
-  private apiUrl = 'http://localhost:3000/api/exams'; // Replace with your API URL
 
   constructor(
     private http: HttpClient,
@@ -23,6 +22,11 @@ export class ExamService {
       { id: 1, name: 'Physics Exam', description: 'Physics entrance exam' },
       { id: 2, name: 'Chemistry Exam', description: 'Chemistry entrance exam' }
     ]);
+  }
+
+  startNewExam(examId: string): Observable<ApiResponse<StartExam>> {
+    const createApi = this.apiUrlBuilder.buildApiUrl(`u-exam/${examId}/start`);
+    return this.http.post<any>(createApi, {});    
   }
 
   getExam(examId: string): Observable<Exam> {
@@ -176,6 +180,17 @@ export class ExamService {
       totalQuestions: questions.length
     });
   }
+
+  getRandomQuestion(examId: string, direction: string): Observable<{ question: RandomQuestionResponse, totalQuestions: number }> {
+    const createApi = this.apiUrlBuilder.buildApiUrl(`u-exam/${examId}/question?direction=${direction}`);
+    return this.http.get<RandomQuestionResponse>(createApi).pipe(
+      map(response => ({
+        question: response,
+        totalQuestions: response.totalQuestions
+      }))
+    );
+  }
+
 
   submitExam(examId: string, answers: any[]): Observable<any> {
     // Simulate API response with mock result
