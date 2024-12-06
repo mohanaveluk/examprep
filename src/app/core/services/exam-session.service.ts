@@ -25,33 +25,89 @@ export class ExamSessionService {
       );
   }
 
-  pauseExam(examId: string): Observable<ExamSession> {
-    const createApi = this.apiUrlBuilder.buildApiUrl(`u-exam/${examId}/pause`);
+  pauseExam(sessionId: string, examId: string): Observable<ExamSession> {
+    const createApi = this.apiUrlBuilder.buildApiUrl(`u-exam/${sessionId}/${examId}/pause`);
     return this.http.put<ExamSession>(createApi, {})
       .pipe(
         tap(session => this.sessionSubject.next(session))
       );
   }
 
-  resumeExam(examId: string): Observable<ExamSession> {
-    const createApi = this.apiUrlBuilder.buildApiUrl(`u-exam/${examId}/resume`);
+  resumeExam(sessionId: string, examId: string): Observable<ExamSession> {
+    const createApi = this.apiUrlBuilder.buildApiUrl(`u-exam/${sessionId}/${examId}/resume`);
     return this.http.put<ExamSession>(createApi, {})
       .pipe(
         tap(session => this.sessionSubject.next(session))
       );
   }
 
-  getProgress(examId: string): Observable<ExamSession> {
-    const createApi = this.apiUrlBuilder.buildApiUrl(`u-exam/${examId}/progress`);
+  submitAnswer(sessionId: string, examId: string, questionGuid: string, answers: number[], atr: string): Observable<ExamSession> {
+    const createApi = this.apiUrlBuilder.buildApiUrl(`u-exam/${sessionId}/${examId}/question/${questionGuid}/${atr}/submit`);
+    return this.http.post<ExamSession>(createApi, {selectedAnswers: answers})
+      .pipe(
+        tap(session => this.sessionSubject.next(session))
+      );
+  }
+
+  retrieveAnswer(sessionId: string, examId: string, questionGuid: string): Observable<any> {
+    const createApi = this.apiUrlBuilder.buildApiUrl(`u-exam/${examId}/session/${sessionId}/question/${questionGuid}/answer`);
+    return this.http.get<any>(createApi)
+      .pipe(
+        tap(session => this.sessionSubject.next(session))
+      );
+  }
+
+  getProgress(sessionId: string, examId: string): Observable<ExamSession> {
+    const createApi = this.apiUrlBuilder.buildApiUrl(`u-exam/${sessionId}/${examId}/progress`);
     return this.http.get<ExamSession>(createApi)
       .pipe(
         tap(session => this.sessionSubject.next(session))
       );
   }
 
-  getCurrentQuestion(examId: string, ): Observable<any> {
+  addToReview(sessionId: string, examId: string, questionId: string): Observable<ExamSession> {
+    const createApi = this.apiUrlBuilder.buildApiUrl(`u-exam/${sessionId}/${examId}/review/${questionId}`);
+    return this.http.post<ExamSession>(createApi, {})
+      .pipe(
+        tap(session => this.sessionSubject.next(session))
+      );
+  }
+
+  removeFromReview(sessionId: string, examId: string, questionId: string): Observable<ExamSession> {
+    const createApi = this.apiUrlBuilder.buildApiUrl(`u-exam/${sessionId}/${examId}/review/${questionId}`);
+    return this.http.delete<ExamSession>(createApi)
+      .pipe(
+        tap(session => this.sessionSubject.next(session))
+      );
+  }
+
+  getReviewList(sessionId: string, examId: string): Observable<any[]> {
+    const createApi = this.apiUrlBuilder.buildApiUrl(`u-exam/${sessionId}/${examId}/review`);
+    return this.http.get<any[]>(createApi);
+  }
+
+  getReviewQuestion(sessionId: string, examId: string, questionGuid: string): Observable<any> {
+    const createApi = this.apiUrlBuilder.buildApiUrl(`u-exam/${sessionId}/${examId}/review/${questionGuid}`);
+    return this.http.get<any>(createApi);
+  }
+
+
+  getResult(sessionId: string, examId: string): Observable<ExamSession> {
+    const createApi = this.apiUrlBuilder.buildApiUrl(`u-exam/${examId}/session/${sessionId}/results`);
+    return this.http.get<ExamSession>(createApi)
+      .pipe(
+        tap(session => this.sessionSubject.next(session))
+      );
+  }
+
+  getCurrentQuestion(examId: string): Observable<any> {
     const createApi = this.apiUrlBuilder.buildApiUrl(`u-exam/${examId}/examQuestion`);
     return this.http.get(createApi);
+  }
+
+  resultList(examId: string): Observable<any[]> {
+    const createApi = this.apiUrlBuilder.buildApiUrl(`u-exam/${examId}/results`);
+    return this.http.get<any[]>(createApi);
   }
 
   hasActiveSession(): boolean {

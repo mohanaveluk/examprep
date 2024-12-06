@@ -29,6 +29,14 @@ import { ExamProgressChartComponent } from './components/exam-progress-chart/exa
 import { PauseExamDialogComponent } from './question/pause-exam-dialog.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { SessionExpiredDialogComponent } from '../../shared/components/session-expired-dialog/session-expired-dialog.component';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { ResultComponent } from './result/result.component';
+import { InactivityDialogComponent } from './inactivity-dialog/inactivity-dialog.component';
+import { ReviewConfirmationDialogComponent } from './components/review-confirmation-dialog/review-confirmation-dialog.component';
+import { ResultHistoryComponent } from './components/result-history/result-history.component';
+import { ResultDetailsDialogComponent } from './components/result-details-dialog/result-details-dialog.component';
+import { ConfirmRetakeComponent } from './components/confirm-retake/confirm-retake.component';
 
 
 
@@ -43,7 +51,12 @@ import { SessionExpiredDialogComponent } from '../../shared/components/session-e
     ReviewListDialogComponent,
     ExamProgressChartComponent,
     PauseExamDialogComponent,
-    
+    ResultComponent,
+    InactivityDialogComponent,
+    ReviewConfirmationDialogComponent,
+    ResultHistoryComponent,
+    ResultDetailsDialogComponent,
+    ConfirmRetakeComponent
   ],
   imports: [
     CommonModule,
@@ -64,6 +77,8 @@ import { SessionExpiredDialogComponent } from '../../shared/components/session-e
     ExamReviewModule,
     MatIconModule,
     MatDialogModule,
+    MatChipsModule,
+    MatExpansionModule,
     NgxChartsModule,
     SharedModule
   ]

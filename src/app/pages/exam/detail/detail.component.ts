@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ExamService } from '../exam.service';
 import { Exam, StartExam } from '../../models/exam.model';
 import { ExamStateService } from '../../../core/services/exam-state.service';
+import { ExamSessionService } from '../../../core/services/exam-session.service';
 
 @Component({
   selector: 'app-detail',
@@ -14,31 +15,19 @@ export class DetailComponent {
   public warningMessage: string = ""
   public errorMessage: string = ""
   examId: string = "";
+  results: any[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private examService: ExamService,
-    private examStateService: ExamStateService
+    private examStateService: ExamStateService,
+    private examSessionService: ExamSessionService,
   ) { }
 
   ngOnInit() {
     this.examId = this.route.snapshot.paramMap.get('id') || '0';
-    this.examService.getExam(this.examId).subscribe({
-      next: (response: any) => {
-        if(response.success){
-          this.exam = response.data;
-          this.exam.categoryText = this.exam.category?.name;
-          
-        }
-        else{
-          this.warningMessage = "No exam found at this moment..."
-        }
-      },
-      error: (error) => {
-        console.error('Failed to load exams:', error);
-      }
-    });
+    this.checkHistory(this.examId);
   }
 
   startExam(){
@@ -58,7 +47,35 @@ export class DetailComponent {
         console.error('Login failed:', error);
       }
     });*/
+  }
 
+  loadExam(examId: string){
+    this.examService.getExam(examId).subscribe({
+      next: (response: any) => {
+        if(response.success){
+          this.exam = response.data;
+          this.exam.categoryText = this.exam.category?.name;
+        }
+        else{
+          this.warningMessage = "No exam found at this moment..."
+        }
+      },
+      error: (error) => {
+        console.error('Failed to load exams:', error);
+      }
+    });
+  }
+
+  checkHistory(examId: string){
+    this.examSessionService.resultList(examId).subscribe((results: any) => {
+      this.results = results.data.results;
+      if(results.data.results !== null && this.results.length){
+        this.router.navigate(['/exam/result-summary', this.examId]);
+      }
+      else{
+        this.loadExam(examId);
+      }
+    });
   }
 
   startTestState(examId: string, startExam: StartExam) {

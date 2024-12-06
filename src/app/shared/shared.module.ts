@@ -24,6 +24,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { StatCardComponent } from '../pages/inquiry/components/stat-card/stat-card.component';
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     FooterComponent,
     Nav2Component,
     AlertComponent,
-    SessionExpiredDialogComponent
+    SessionExpiredDialogComponent,
+    StatCardComponent
   ],
   imports: [
     CommonModule,
@@ -71,6 +73,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     FooterComponent,
     Nav2Component,
     AlertComponent,
+    StatCardComponent
   ]
 })
 export class SharedModule { }

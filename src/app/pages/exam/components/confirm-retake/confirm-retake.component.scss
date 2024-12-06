@@ -1,0 +1,26 @@
+.retake-confirm-dialog {
+    padding: 20px;
+    
+    mat-dialog-content {
+      margin: 20px 0;
+      
+      p {
+        color: #333;
+        font-size: 16px;
+        line-height: 1.5;
+        margin: 0;
+      }
+    }
+    
+    mat-dialog-actions {
+      padding: 16px 0 0;
+      
+      button {
+        min-width: 100px;
+        
+        &:not(:last-child) {
+          margin-right: 8px;
+        }
+      }
+    }
+  }

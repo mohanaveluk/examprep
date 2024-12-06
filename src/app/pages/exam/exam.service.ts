@@ -181,14 +181,19 @@ export class ExamService {
     });
   }
 
-  getRandomQuestion(examId: string, direction: string): Observable<{ question: RandomQuestionResponse, totalQuestions: number }> {
-    const createApi = this.apiUrlBuilder.buildApiUrl(`u-exam/${examId}/question?direction=${direction}`);
+  getRandomQuestion(sessionId: string, examId: string, direction: string): Observable<{ question: RandomQuestionResponse, totalQuestions: number }> {
+    const createApi = this.apiUrlBuilder.buildApiUrl(`u-exam/${sessionId}/${examId}/question?direction=${direction}`);
     return this.http.get<RandomQuestionResponse>(createApi).pipe(
       map(response => ({
         question: response,
         totalQuestions: response.totalQuestions
       }))
     );
+  }
+
+  getQuestionOptions(questionGuid: string): Observable<any[]> {
+    const createApi = this.apiUrlBuilder.buildApiUrl(`u-exam/question/${questionGuid}/options`);
+    return this.http.get<any[]>(createApi);
   }
 
 

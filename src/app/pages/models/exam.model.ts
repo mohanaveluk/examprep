@@ -48,8 +48,11 @@ export interface Exam {
     isDeleted: boolean;
     qguid?: string;
     questionNumber: number;
+    questionIndex: number;
     timeRemaining: number;
     totalQuestions: number;
+    userAnswers: number[];
+    reviewList: number[];
   }
   
   export interface OptionResponse {
@@ -58,6 +61,7 @@ export interface Exam {
   }
   
   export interface ExamSession {
+    id: string;
     examId: string;
     currentIndex: number;
     questionNumber: number;
@@ -69,6 +73,7 @@ export interface Exam {
     lastUpdated?: Date;
     pausedAt?: Date;
     totalPausedTime?: number;
-    questionOrder?: number;
+    questionOrder?: number[];
     remainingTime?: number | 0;
+    reviewList?: number[]
   }

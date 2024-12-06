@@ -1,5 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ExamSessionService } from '../../../../core/services/exam-session.service';
+import { RandomQuestionResponse } from '../../../models/exam.model';
 
 interface ReviewQuestion {
   index: number;
@@ -8,7 +10,9 @@ interface ReviewQuestion {
 }
 
 interface DialogData {
-  questions: ReviewQuestion[];
+  questions: ReviewQuestion[],
+  sessionId: string,
+  examId: string
 }
 
 @Component({
@@ -17,12 +21,30 @@ interface DialogData {
   styleUrls: ['./review-list-dialog.component.css']
 })
 export class ReviewListDialogComponent {
+
+  reviewList : any[] = []
   constructor(
+    private examSessionService: ExamSessionService,
     public dialogRef: MatDialogRef<ReviewListDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
-  ) {}
+  ) {
+    this.loadReviewList();
+  }
 
-  goToQuestion(index: number) {
-    this.dialogRef.close(index);
+  loadReviewList(){
+    this.examSessionService.getReviewList(this.data?.sessionId, this.data.examId).subscribe({
+      next: (response: any) => {
+        this.reviewList = response.data;
+        console.log(`Review List: ${response.data}`);
+
+      },
+      error: (error) => console.error('Failed to resume exam:', error)
+    });
+  }
+
+  
+  goToQuestion(id: number) {
+    let qguid = this.reviewList.find(x => x.id === id)?.qguid || "";
+    this.dialogRef.close({id, qguid});
   }
 }

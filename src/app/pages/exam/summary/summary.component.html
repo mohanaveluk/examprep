@@ -2,35 +2,79 @@
     <mat-card>
         <mat-card-header>
             <mat-card-title>
-              {{result?.passed ? 'Congratulations!' : 'Keep Going!'}}
+              <div class="result-section">
+                <span class="label">Status:</span>
+                <mat-chip [ngClass]="{'result-success': examResult?.passed, 'result-fail': !examResult?.passed}">
+                  {{examResult?.passed ? 'Passed' : 'Failed'}}
+                </mat-chip>
+              </div>
+              <div>
+                {{examResult?.passed ? 'Congratulations!' : 'Keep Going!'}}
+              </div>
             </mat-card-title>
             <mat-card-subtitle>
-              {{result?.passed ? 'You have passed the exam!' : 'Don\'t give up, try again!'}}
+              {{examResult?.passed ? 'You have passed the exam!' : 'Don\'t give up, try again!'}}
             </mat-card-subtitle>
           </mat-card-header>
 
           <mat-card-content>
             <div class="score-section">
-              <h3>Overall Score: {{result?.score}}%</h3>
-              <p>{{result?.passed ? 
+              <h3>Overall Score: {{examResult?.scorePercentage}}%</h3>
+              <p>{{examResult?.passed ? 
                 'Great job on passing the exam! Your hard work has paid off.' : 
                 'Don\'t be discouraged! Use this as a learning opportunity to improve.'}}</p>
             </div>
       
-            <div class="section-scores" *ngIf="result?.sectionScores">
+            <div class="section-scores" *ngIf="examResult?.sectionScores">
               <h3>Section-wise Performance</h3>
-              <div *ngFor="let section of result.sectionScores" class="section-score">
+              <div *ngFor="let section of examResult?.sectionScores" class="section-score">
                 <h4>{{section.name}}</h4>
                 <p>Score: {{section.score}}%</p>
-                <p class="section-feedback">{{section.feedback}}</p>
+                <p class="section-feedback">{{section?.feedback}}</p>
               </div>
             </div>
       
-            <div class="recommendations" *ngIf="result?.recommendations">
+            <div class="recommendations" *ngIf="examResult?.recommendations">
               <h3>Recommendations for Improvement</h3>
               <ul>
-                <li *ngFor="let rec of result.recommendations">{{rec}}</li>
+                <li *ngFor="let rec of examResult?.recommendations">{{rec}}</li>
               </ul>
+            </div>
+
+            <div class="questions-section">
+              <h3>Question Details</h3>
+              <mat-accordion>
+                <mat-expansion-panel *ngFor="let question of examResult?.questions; index as i">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Question {{i+1}}
+                    </mat-panel-title>
+                    <mat-panel-description>
+                      <mat-chip [color]="getQuestionStatusColor(question.isCorrect)" selected>
+                        {{question.isCorrect ? 'Correct' : 'Incorrect'}}
+                      </mat-chip>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+      
+                  <p class="question-text">{{question.question}}</p>
+                  
+                  <div class="answer-details">
+                    <div class="selected-options">
+                      <h4>Your Answer:</h4>
+                      <ul>
+                        <li *ngFor="let option of question.selectedOptions">{{option}}</li>
+                      </ul>
+                    </div>
+                    
+                    <div class="correct-options" *ngIf="!question.isCorrect">
+                      <h4>Correct Answer:</h4>
+                      <ul>
+                        <li *ngFor="let option of question.correctOptions">{{option}}</li>
+                      </ul>
+                    </div>
+                  </div>
+                </mat-expansion-panel>
+              </mat-accordion>
             </div>
           </mat-card-content>
       

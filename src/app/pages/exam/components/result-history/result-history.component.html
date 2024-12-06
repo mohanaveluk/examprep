@@ -1,0 +1,100 @@
+<div class="history-container">
+  <h1 class="page-title">History for {{examTitle}}</h1>
+
+  <!-- Statistics Cards -->
+  <div class="stats-grid">
+    <div>
+    <app-stat-card
+      title="Total Exams"
+      [count]="stats.total"
+      icon="assignment"
+      color="primary">
+    </app-stat-card>
+  </div>
+  <div>
+    <app-stat-card
+      title="Average Score"
+      [count]="stats.averageScore"
+      icon="analytics"
+      color="accent">
+    </app-stat-card>
+  </div>
+  <div>
+    <app-stat-card
+      title="Passed"
+      [count]="stats.passedCount"
+      icon="check_circle"
+      color="primary">
+    </app-stat-card>
+  </div>
+  <div>
+    <app-stat-card
+      title="Failed"
+      [count]="stats.failedCount"
+      icon="cancel"
+      color="warn">
+    </app-stat-card>
+  </div>
+  </div>
+
+  <div class="results-grid">
+    <mat-card class="result-card" *ngFor="let result of results">
+      <div class="card-header">
+        <h3><span class="lbl">Status:</span><span class="failed"> {{ result.passed ? 'Passed' : 'Failed' }}</span></h3>
+        <mat-chip [color]="getStatusColor(result.passed)" selected>
+          {{ result.createdAt | date:'MMM dd, yyyy hh:mm a'}}
+        </mat-chip>
+      </div>
+
+      <mat-card-content class="card-content">
+        <div class="chart-container">
+          <ngx-charts-pie-chart
+            [results]="result.chartData"
+            [scheme]="colorScheme"
+            [gradient]="true"
+            [legend]="true"
+            [doughnut]="true">
+          </ngx-charts-pie-chart>
+        </div>
+
+        <div class="score-info">
+          <div class="score-value">
+            {{ calculatePercentage(result.correctAnswers, result.totalQuestions) }}%
+          </div>
+          <div class="score-label">Overall Score</div>
+        </div>
+
+        <div class="stats-grid" >
+          <div class="stat-item">
+            <div class="stat-label">Total Questions</div>
+            <div class="stat-value">{{ result.totalQuestions }}</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Correct Answers</div>
+            <div class="stat-value">{{ result.correctAnswers }}</div>
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions class="card-actions">
+        <button mat-raised-button color="primary" (click)="openDetails(result)">
+          View Details
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <mat-card class="action-card">
+    <mat-card-actions>
+      <button mat-stroked-button (click)="backToExams()">
+        <mat-icon>list</mat-icon>
+        View All Exams
+      </button>
+      <button mat-raised-button color="primary" (click)="retakeExam()">
+        <mat-icon>replay</mat-icon>
+        Retake Exam
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+</div>

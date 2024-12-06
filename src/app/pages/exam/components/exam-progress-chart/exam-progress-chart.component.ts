@@ -21,12 +21,12 @@ export class ExamProgressChartComponent implements OnChanges {
   private updateChartData() {
     if (!this.session) return;
 
-    const remaining = this.session.totalQuestions - this.session.answeredQuestions;
+    const remaining = this.session ? this.session.questionOrder!.length - (Object.values(this.session.answeredQuestions).length + this.session.reviewList!.length) : 0;
     
     this.chartData = [
       {
         name: 'Answered',
-        value: this.session.answeredQuestions
+        value: (Object.values(this.session.answeredQuestions).length + this.session.reviewList!.length)
       },
       {
         name: 'Remaining',
