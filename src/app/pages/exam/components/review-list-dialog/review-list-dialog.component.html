@@ -1,0 +1,19 @@
+<h2 mat-dialog-title>Questions for Review</h2>
+
+<mat-dialog-content>
+  <mat-list>
+    <mat-list-item *ngFor="let item of reviewList; index as i" 
+                   (click)="goToQuestion(item.id)"
+                   class="review-item">
+      <mat-icon matListItemIcon  [ngClass]="{'primary-color': !item.userAnswers?.includes('null'), 'warn-color': item.userAnswers?.includes('null')}">
+        {{ !item?.userAnswers || item?.userAnswers?.includes("null") ?  'error' : 'check_circle' }}
+      </mat-icon>
+      <div matListItemTitle>Question {{ i + 1 }}</div>
+      <div matListItemLine>{{ item.question }}</div>
+    </mat-list-item>
+  </mat-list>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { Category } from '../models/category.model';
+import { Category } from '../../../shared/models/category.model';
 import { ApiUrlBuilder } from '../../../shared/utility/api-url-builder';
 
 const mockCategory: Category[] = [

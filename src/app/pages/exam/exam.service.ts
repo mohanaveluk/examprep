@@ -1,31 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-
-
-
-export interface Exam {
-  id: string;
-  title: string;
-  description: string;
-  duration: number;
-  totalQuestions: number;
-  passingScore: number;
-}
-
-export interface Question {
-  id: number;
-  text: string;
-  type: 'single' | 'multiple';
-  options: Option[];
-  maxSelections?: number;
-}
-
-export interface Option {
-  id: number;
-  text: string;
-}
-
+import { map } from 'rxjs/operators';
+import { ApiUrlBuilder } from '../../shared/utility/api-url-builder';
+import { ApiResponse, Exam, Question, RandomQuestionResponse, StartExam } from '../models/exam.model';
 
 
 @Injectable({
@@ -33,9 +11,10 @@ export interface Option {
 })
 export class ExamService {
 
-  private apiUrl = 'http://localhost:3000/api/exams'; // Replace with your API URL
-
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private apiUrlBuilder: ApiUrlBuilder
+  ) { }
 
   getExams(): Observable<any> {
     // Replace with actual API call
@@ -45,9 +24,16 @@ export class ExamService {
     ]);
   }
 
-  getExam(examId: number): Observable<any> {
+  startNewExam(examId: string): Observable<ApiResponse<StartExam>> {
+    const createApi = this.apiUrlBuilder.buildApiUrl(`u-exam/${examId}/start`);
+    return this.http.post<any>(createApi, {});    
+  }
+
+  getExam(examId: string): Observable<Exam> {
     // Replace with actual API call
-    return of({ id: examId, name: 'Physics Exam', description: 'Physics entrance exam' });
+    const createApi = this.apiUrlBuilder.buildApiUrl(`u-exam/${examId}`);
+    return this.http.get<Exam>(createApi);    
+    //return of({ id: examId, name: 'Physics Exam', description: 'Physics entrance exam' });
   }
   
   getQuestions(examId: number): Observable<any> {
@@ -61,7 +47,7 @@ export class ExamService {
 
   //------------------------------
 
-  private mockExams: Exam[] = [
+  /*private mockExams: Exam[] = [
     {
       id: '1',
       title: 'Basic Medical Sciences',
@@ -86,7 +72,7 @@ export class ExamService {
       totalQuestions: 30,
       passingScore: 80
     }
-  ];
+  ];*/
 
   private mockQuestions: { [key: string]: Question[] } = {
     '1': [
@@ -182,7 +168,9 @@ export class ExamService {
   };
 
   getAvailableExams(): Observable<Exam[]> {
-    return of(this.mockExams);
+    const createApi = this.apiUrlBuilder.buildApiUrl('u-exam');
+    return this.http.get<Exam[]>(createApi);
+    //return of(this.mockExams);
   }
 
   getQuestion(examId: string, index: number): Observable<{ question: Question, totalQuestions: number }> {
@@ -192,6 +180,22 @@ export class ExamService {
       totalQuestions: questions.length
     });
   }
+
+  getRandomQuestion(sessionId: string, examId: string, direction: string): Observable<{ question: RandomQuestionResponse, totalQuestions: number }> {
+    const createApi = this.apiUrlBuilder.buildApiUrl(`u-exam/${sessionId}/${examId}/question?direction=${direction}`);
+    return this.http.get<RandomQuestionResponse>(createApi).pipe(
+      map(response => ({
+        question: response,
+        totalQuestions: response.totalQuestions
+      }))
+    );
+  }
+
+  getQuestionOptions(questionGuid: string): Observable<any[]> {
+    const createApi = this.apiUrlBuilder.buildApiUrl(`u-exam/question/${questionGuid}/options`);
+    return this.http.get<any[]>(createApi);
+  }
+
 
   submitExam(examId: string, answers: any[]): Observable<any> {
     // Simulate API response with mock result

@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AdminExam, Category, ExamlistService } from '../examlist.service';
+import { AdminExam, ExamlistService } from '../examlist.service';
 import { HeaderService } from '../../services/header.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ExamService } from '../exam.service';
 import { ExamQuestion } from '../models/exam.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Category } from '../../../shared/models/category.model';
 
 @Component({
   selector: 'app-exam-page',
@@ -19,11 +20,14 @@ export class ExamPageComponent implements OnInit {
     description: '',
     notes: '',
     categoryId: '0',
+    totalQuestion: 0,
     duration: 0,
     passScore: 0,
     
   };
   isEditMode = false;
+  examId: string = ""
+  categoryId: string = ""
   categories: Category[] = [];
   questions: ExamQuestion[] = [];
   isLoading = false;
@@ -43,6 +47,7 @@ export class ExamPageComponent implements OnInit {
       description: ['', Validators.required],
       notes: [''],
       category: [null, Validators.required],
+      totalQuestion: [0, Validators.required],
       duration: [0, Validators.required],
       passScore: [0, Validators.required],
       file: [null]
@@ -67,12 +72,26 @@ export class ExamPageComponent implements OnInit {
   }
 
   loadExam(id: string) {
-    this.examlistService.getExamById(id).subscribe(exam => {
+    this.examlistService.getExamById(id).subscribe((exam: any) => {
       if (exam) {
+        const detail = exam.data;
+        this.examId = detail.id;
+        this.categoryId = detail.category.id;
         this.exam = {
-          ...exam,
-          passScore: exam.passingScore
+          ...detail,
+          passScore: detail.passingScore
         };
+
+        this.examForm.patchValue({
+          title: detail.title,
+          description: detail.description,
+          notes: detail.notes,
+          totalQuestion: detail.totalQuestions,
+          duration: detail.duration,
+          passScore: detail.passingScore,
+          category: detail.category.id
+        });
+
       }
     });
   }
@@ -86,19 +105,19 @@ export class ExamPageComponent implements OnInit {
       return;
     }
 
-    if (this.examForm.valid && this.questions.length > 0) {
+    if (this.examForm.valid) {
       const examData: AdminExam = {
-        id: '',
+        id: this.isEditMode ? this.examId : '',
         title: this.examForm.get('title')?.value,
         description: this.examForm.get('description')?.value,
         categoryId: this.examForm.get('category')?.value,
         notes: this.examForm.get('notes')?.value,
         createdAt: new Date(),
+        totalQuestions: this.examForm.get('totalQuestion')?.value,
         duration: this.examForm.get('duration')?.value,
         passingScore: this.examForm.get('passScore')?.value,
-        totalQuestions: 0,
         status: 1,
-        questions: this.questions.map(item => {
+        questions: this.questions.length <= 0 ? [] : this.questions.map(item => {
           return {
             id: 0,
             question: item.question,

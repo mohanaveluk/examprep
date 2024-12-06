@@ -14,10 +14,10 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { InquiryDashboardComponent } from './inquiry-dashboard/inquiry-dashboard.component';
 import { AskQuestionComponent } from './ask-question/ask-question.component';
-import { StatCardComponent } from './components/stat-card/stat-card.component';
 import { InquiryRoutingModule } from './inquiry-routing.module';
 import { QuestionListComponent } from './question-list/question-list.component';
 import { QuestionDetailComponent } from './question-detail/question-detail.component';
+import { SharedModule } from '../../shared/shared.module';
 
 
 
@@ -25,7 +25,7 @@ import { QuestionDetailComponent } from './question-detail/question-detail.compo
   declarations: [
     InquiryDashboardComponent,
     AskQuestionComponent,
-    StatCardComponent,
+    //StatCardComponent,
     QuestionListComponent,
     QuestionDetailComponent,
   ],
@@ -43,7 +43,8 @@ import { QuestionDetailComponent } from './question-detail/question-detail.compo
     MatDividerModule,
     MatExpansionModule,
     MatSnackBarModule,
-    InquiryRoutingModule
+    InquiryRoutingModule,
+    SharedModule
   ]
 })
 export class InquiryModule { }

@@ -1,0 +1,54 @@
+<h2 mat-dialog-title>Question Details</h2>
+
+<mat-dialog-content class="dialog-content">
+  <div class="header">
+    <h2>{{ data.examTitle }}</h2>
+    <div class="exam-info">
+      Score: {{ data.scorePercentage }}% | Status: 
+      
+      <mat-chip [color]="data.passed ? 'primary' : 'warn'" selected>
+        {{ data.passed ? 'Pass' : 'Fail' }}
+      </mat-chip>
+    </div>
+  </div>
+
+  <div class="questions-list">
+    <div class="question-item" *ngFor="let question of data.questions; let i = index">
+      <div class="question-header">
+        <span class="question-number">Question {{ i + 1 }}</span>
+        <mat-chip [color]="getChipColor(question.isCorrect)" selected>
+          {{ getAnswerStatus(question) }}
+        </mat-chip>
+      </div>
+
+      <div class="question-text">
+        {{ question.question }}
+      </div>
+
+      <div class="answers-section">
+        <h4>Your Answer:</h4>
+        <ul class="answer-list">
+          <li *ngFor="let option of question.selectedOptions">
+            <mat-icon [class.correct]="question.isCorrect" 
+                      [class.incorrect]="!question.isCorrect">
+              {{ question.isCorrect ? 'check_circle' : 'cancel' }}
+            </mat-icon>
+            {{ option }}
+          </li>
+        </ul>
+
+        <h4 *ngIf="!question.isCorrect">Correct Answer:</h4>
+        <ul class="answer-list" *ngIf="!question.isCorrect">
+          <li *ngFor="let option of question.correctOptions">
+            <mat-icon class="correct">check_circle</mat-icon>
+            {{ option }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="dialog-actions">
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

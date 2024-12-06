@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Question } from '../models/question.model';
 import { QuestionViewDialogComponent } from '../question-view-dialog/question-view-dialog.component';
-import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl, ValidationErrors } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl, ValidationErrors, FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { QuestionService } from '../services/question.service';
@@ -9,6 +9,7 @@ import { MatExpansionPanel } from '@angular/material/expansion';
 import { HeaderService } from '../../services/header.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ActivatedRoute } from '@angular/router';
+import { FormManagementService } from '../../../shared/services/form-management.service';
 
 @Component({
   selector: 'app-question-option',
@@ -19,6 +20,7 @@ export class QuestionOptionComponent  implements OnInit {
   @ViewChild(MatExpansionPanel) expansionPanel!: MatExpansionPanel;
 
   examId: string="";
+  examTitle: string = ""
   questionForm: FormGroup;
   questions: Question[] = [];
   filteredQuestions: Question[] = [];
@@ -35,6 +37,7 @@ export class QuestionOptionComponent  implements OnInit {
     public fb: FormBuilder,
     private dialog: MatDialog,
     private questionService: QuestionService,
+    private formManagementService: FormManagementService,
     private snackBar: MatSnackBar
   ) {
     this.questionForm = this.createForm();
@@ -62,7 +65,7 @@ export class QuestionOptionComponent  implements OnInit {
     this.questionForm.patchValue({
       type: 'single'
     });
-    this.filteredQuestions = [
+    /*this.filteredQuestions = [
       {
         id: 1,
         type: 'single',
@@ -90,7 +93,7 @@ export class QuestionOptionComponent  implements OnInit {
         isDeleted: false
 
       },
-    ]
+    ]*/
   }
 
   setupTypeChangeListener(): void {
@@ -124,6 +127,7 @@ export class QuestionOptionComponent  implements OnInit {
   resetOptions(type: string): void {
     const optionsArray = this.questionForm.get('options') as FormArray;
     const rankingOrderArray = this.questionForm.get('rankingOrder') as FormArray;
+    const optionsValues = optionsArray.controls.map(control => control.value);
     optionsArray.clear();
     rankingOrderArray.clear();
 
@@ -153,10 +157,18 @@ export class QuestionOptionComponent  implements OnInit {
       //   correctAnswersArray.push(this.fb.control(index));
       // });
     } else {
-      for (let i = 0; i < 4; i++) {
-        optionsArray.push(this.fb.control('', Validators.required));
+      if(this.currentEditId){
+        for (let i = 0; i < 4; i++) {
+          optionsArray.push(this.fb.control(optionsValues != null && optionsValues.length > 0? optionsValues[i] : '', Validators.required));
+        }
+        optionsArray.push(this.fb.control(optionsValues != null && optionsValues.length > 3? optionsValues[4] : ''));
+ 
+      }else{
+        for (let i = 0; i < 4; i++) {
+          optionsArray.push(this.fb.control('', Validators.required));
+        }
+        optionsArray.push(this.fb.control(''));
       }
-      optionsArray.push(this.fb.control(''));
     }
   }
 
@@ -191,7 +203,8 @@ export class QuestionOptionComponent  implements OnInit {
       .subscribe({
         next: (questions: any) => {
           if(questions.success){
-            this.questions = questions?.data?.questions;
+            this.examTitle = questions.data.title;
+            this.questions = questions?.data?.questions ?? [];
             this.updateFilteredQuestions();
           }
           this.loading = false;
@@ -347,10 +360,24 @@ export class QuestionOptionComponent  implements OnInit {
     this.currentEditId = null;
     this.qguid = "";
     this.isSubmitted = false;
-    this.questionForm.reset({
-      type: 'single'
-    });
     this.resetOptions('single');
+    this.questionForm.reset({
+      question: this.fb.control('', Validators.required),
+      type: 'single',
+      //options: ['', '', '', '', ''],
+      options: this.fb.array([
+        this.fb.control('', [Validators.required, Validators.minLength(5)]),
+        this.fb.control('', Validators.required),
+        this.fb.control('', Validators.required),
+        this.fb.control('', Validators.required),
+        this.fb.control('')
+      ]),      
+      correctAnswers: []      
+    });
+    // Mark all controls as untouched
+    this.markFormGroupUntouched(this.questionForm);
+    this.resetFormGroupValidation(this.questionForm);
+
   }
 
   editQuestion1(item: Question): void {
@@ -487,25 +514,36 @@ export class QuestionOptionComponent  implements OnInit {
         this.questionService.updateQuestion(this.examId, this.qguid, questionData)
           .subscribe({
             next: (updatedQuestion: any) => {
-              const index = this.questions.findIndex(q => q.id === this.currentEditId);
-              if (index !== -1) {
-                this.questions[index] = {
-                  id: updatedQuestion.data.id,
-                  isDeleted: updatedQuestion.data.isDeleted,
-                  qguid: updatedQuestion.data.qguid,
-                  question: updatedQuestion.data.question,
-                  type: updatedQuestion.data.type,
-                  options: updatedQuestion.data.options,
-                  correctAnswers: updatedQuestion.data.correctAnswers,
-                  order: updatedQuestion.data.order
-                };
-                this.updateFilteredQuestions();
+              if (updatedQuestion.success) {
+                const index = this.questions.findIndex(q => q.id === this.currentEditId);
+                if (index !== -1) {
+                  this.questions[index] = {
+                    id: updatedQuestion.data.id,
+                    isDeleted: updatedQuestion.data.isDeleted,
+                    qguid: updatedQuestion.data.qguid,
+                    question: updatedQuestion.data.question,
+                    type: updatedQuestion.data.type,
+                    options: updatedQuestion.data.options,
+                    correctAnswers: updatedQuestion.data.correctAnswers,
+                    order: updatedQuestion.data.order
+                  };
+                  this.updateFilteredQuestions();
+                }
+                this.resetForm();
+                this.formManagementService.resetFormCompletely(this.questionForm);
+                this.isSubmitted = false;
+                this.showSuccess('Question updated successfully');
+                this.currentEditId = null;
+                this.expansionPanel.close();
+              } else {
+                this.showError('Failed to update question');
+                this.isSubmitted = false;
               }
-              this.resetForm();
-              this.showSuccess('Question updated successfully');
-              this.expansionPanel.close();
             },
-            error: (error) => this.showError(`Failed to update question - ${error.message}`),
+            error: (error) => {
+              this.showError(`Failed to update question - ${error.message}`);
+              this.isSubmitted = false;
+            },
             complete: () => this.loading = false
           });
       } else {
@@ -515,21 +553,55 @@ export class QuestionOptionComponent  implements OnInit {
               if(newQuestion.success){
                 this.questions.push(newQuestion.data);
                 this.updateFilteredQuestions();
-                this.resetForm();
+                this.completeFormReset();
+                this.formManagementService.resetFormCompletely(this.questionForm);
+                this.cancelEdit();
                 this.showSuccess('Question created successfully');
                 this.expansionPanel.close();
               }
               else{
                 this.showError(`Failed to create question`);
+                this.isSubmitted = false;
               }
             },
-            error: (error) => this.showError(`Failed to create question - ${error.message}`),
+            error: (error) => {
+              this.showError(`Failed to create question - ${error.message}`);
+              this.isSubmitted = false;
+            },
             complete: () => this.loading = false
           });
       }
     } else {
       this.showError('Please fill in all required fields correctly');
     }
+  }
+
+  completeFormReset(): void {
+    this.currentEditId = null;
+    this.qguid = "";
+    this.isSubmitted = false;
+    
+    // Use the form management service to reset the form
+    this.formManagementService.resetFormCompletely(this.questionForm);
+
+    // Reset the form with initial values
+    this.questionForm.patchValue({
+      question: '',
+      type: 'single'
+    });
+    
+    // Reset options based on type
+    this.resetOptions('single');
+    
+    // // Mark all form controls as pristine and untouched
+    // Object.keys(this.questionForm.controls).forEach(key => {
+    //   const control = this.questionForm.get(key);
+    //   if (control) {
+    //     control.markAsPristine();
+    //     control.markAsUntouched();
+    //     control.updateValueAndValidity();
+    //   }
+    // });
   }
 
   editQuestion2(item: Question): void {
@@ -654,8 +726,12 @@ export class QuestionOptionComponent  implements OnInit {
               });
             } else {
               // Handle single/multiple choice
-              fetchData.options.forEach((option: any) => {
-                optionsArray.push(this.fb.control(option.text));
+              fetchData.options.forEach((option: any, index: number) => {
+                if(index < 4){
+                  optionsArray.push(this.fb.control(option.text, Validators.required));
+                }else{
+                  optionsArray.push(this.fb.control(option.text));
+                }
               });
               
               // Fill remaining slots if needed
@@ -673,6 +749,9 @@ export class QuestionOptionComponent  implements OnInit {
                 correctAnswersArray.push(this.fb.control(index));
               });
             }
+            // Mark form as pristine and untouched after setting values
+            this.questionForm.markAsPristine();
+            this.questionForm.markAsUntouched();
           }
           this.loading = false;
         },
@@ -694,16 +773,19 @@ export class QuestionOptionComponent  implements OnInit {
       options: ['', '', '', '', ''],
       correctAnswers: []
     });
+    this.completeFormReset();
     this.expansionPanel.close();
+    //this.markFormGroupUntouched(this.questionForm);
   }
 
 
-  deleteQuestion(id: number): void {
+  deleteQuestion(id: string): void {
+    if (!confirm('Are you sure you want to delete this question?')) return;
     this.loading = true;
-    this.questionService.deleteQuestion(id)
+    this.questionService.deleteQuestion(this.examId, id)
       .subscribe({
         next: () => {
-          this.questions = this.questions.filter(q => q.id !== id);
+          this.questions = this.questions.filter(q => q.qguid !== id);
           this.updateFilteredQuestions();
           this.showSuccess('Question deleted successfully');
         },
@@ -748,6 +830,7 @@ export class QuestionOptionComponent  implements OnInit {
 
   /** */
   updateFilteredQuestions(): void {
+    if(!this.questions || this.questions.length <= 0) return;
     this.filteredQuestions = this.questions
       .filter(q => !q.isDeleted)
       .filter(q => 
@@ -764,5 +847,31 @@ export class QuestionOptionComponent  implements OnInit {
     this.searchQuery = input.value;
     this.updateFilteredQuestions();
   }
+
+  // Helper method to mark all controls as untouched
+  private markFormGroupUntouched(formGroup: FormGroup | FormArray): void {
+    Object.keys(formGroup.controls).forEach(key => {
+      const control = formGroup.get(key);
+      if (control instanceof FormControl) {
+        control.markAsUntouched();
+      } else if (control instanceof FormGroup || control instanceof FormArray) {
+        this.markFormGroupUntouched(control);
+      }
+    });
+  }
+
+
+  // Helper method to reset validation state
+  private resetFormGroupValidation(formGroup: FormGroup | FormArray): void {
+    Object.keys(formGroup.controls).forEach(key => {
+      const control = formGroup.get(key);
+      if (control instanceof FormControl) {
+        control.updateValueAndValidity();
+      } else if (control instanceof FormGroup || control instanceof FormArray) {
+        this.resetFormGroupValidation(control);
+      }
+    });
+  }
+
   /** */
 }

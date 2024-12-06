@@ -5,6 +5,7 @@ import { catchError, map } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Question } from './models/question.model';
 import { ApiUrlBuilder } from '../../shared/utility/api-url-builder';
+import { Category } from '../../shared/models/category.model';
 
 export interface AdminExam {
   id: string;
@@ -13,18 +14,13 @@ export interface AdminExam {
   notes: string;
   categoryId: string,
   categoryText?: string,
-  duration: number;
   totalQuestions: number;
+  duration: number;
   passingScore: number;
   createdAt: Date;
   updatedAt?: Date;
   status: number;
   questions?: Question[];
-}
-
-export interface Category {
-  id: string;
-  name: string;
 }
 
 @Injectable({
@@ -77,7 +73,7 @@ export class ExamlistService {
     }
   ];
 
-  private mockCategory: Category[] = [
+  /*private mockCategory: Category[] = [
     {
       id: "1",
       name: "Nurse"
@@ -94,7 +90,7 @@ export class ExamlistService {
       id: "4",
       name: "Vision"
     }
-  ];
+  ];*/
   constructor(
     private http: HttpClient,
     private apiUrlBuilder: ApiUrlBuilder,
@@ -115,7 +111,7 @@ export class ExamlistService {
   }
 
   getExamById(id: string): Observable<AdminExam | undefined> {
-    const createApi = this.apiUrlBuilder.buildApiUrl('u-exam');
+    const createApi = this.apiUrlBuilder.buildApiUrl(`u-exam/${id}`);
     return this.http.get<AdminExam>(createApi);
     //return of(this.mockExams.find(exam => exam.id === id));
   }
@@ -142,8 +138,10 @@ export class ExamlistService {
   }
 
   updateExam(exam: Partial<AdminExam>): Observable<AdminExam> {
-    // return this.http.put<AdminExam>(`${this.apiUrl}/${exam.id}`, exam);
-    const index = this.mockExams.findIndex(e => e.id === exam.id);
+    const createApi = this.apiUrlBuilder.buildApiUrl(`u-exam/${exam.id}`);
+    return this.http.put<AdminExam>(createApi, exam);
+
+    /*const index = this.mockExams.findIndex(e => e.id === exam.id);
     if (index !== -1) {
       this.mockExams[index] = {
         ...this.mockExams[index],
@@ -152,7 +150,7 @@ export class ExamlistService {
       };
       return of(this.mockExams[index]);
     }
-    throw new Error('Exam not found');
+    throw new Error('Exam not found');*/
   }
 
   deleteExam(id: string): Observable<boolean> {

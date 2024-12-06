@@ -90,14 +90,21 @@
               <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
-              <button mat-icon-button color="primary" (click)="onView(exam)" matTooltip="View Exam">
-                <mat-icon>visibility</mat-icon>
+              <button mat-menu-item color="primary" (click)="onView(exam)" matTooltip="">
+                <mat-icon class="view-icon">visibility</mat-icon>
+                <span>View Exam</span>
               </button>
-              <button mat-icon-button color="accent" (click)="onEdit(exam)" matTooltip="Edit Exam">
-                <mat-icon>edit</mat-icon>
+              <button mat-menu-item color="accent" (click)="onEdit(exam)" matTooltip="">
+                <mat-icon class="edit-icon">edit_square</mat-icon>
+                <span>Edit Exam</span>
               </button>
-              <button mat-icon-button color="warn" (click)="onDelete(exam)" matTooltip="Delete Exam">
-                <mat-icon>delete</mat-icon>
+              <button mat-menu-item color="accent" (click)="onEditQuestion(exam)" matTooltip="">
+                <mat-icon class="edit-question-icon">edit_note</mat-icon>
+                <span>Edit Question</span>
+              </button>
+              <button mat-menu-item color="warn" (click)="onDelete(exam)" matTooltip="">
+                <mat-icon class="delete-icon">delete</mat-icon>
+                <span>Delete Exam</span>
               </button>
             </mat-menu>
           </td>

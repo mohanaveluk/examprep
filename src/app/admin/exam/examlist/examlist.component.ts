@@ -52,8 +52,11 @@ export class ExamlistComponent implements OnInit{
   loadExams(): void {
     this.examlistService.getExams().subscribe((exams: any) => {
       if(exams.success){
-        
-        this.dataSource.data = exams.data;
+        let exdata = exams.data;
+        exdata.forEach((item: { categoryText: any; category: { name: any; }; }) => {
+          item.categoryText = item.category.name;
+        });
+        this.dataSource.data = exdata;
       }
     }, (error) => {
       this.dataSource.data = [];
@@ -87,6 +90,12 @@ export class ExamlistComponent implements OnInit{
   onEdit(exam: AdminExam): void {
     this.router.navigate(['/admin/exam/update'], { 
       queryParams: { id: exam.id, mode: 'edit' }
+    });
+  }
+
+  onEditQuestion(exam: AdminExam): void {
+    this.router.navigate([`/admin/exam/question/${exam.id}`], { 
+      queryParams: { mode: 'edit' }
     });
   }
 

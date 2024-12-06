@@ -1,0 +1,112 @@
+<div class="result-container">
+    <mat-card class="result-card">
+      <div class="result-header" [ngClass]="{'passed': examResult?.passed, 'failed': !examResult?.passed}">
+        <div class="header-content">
+          <div>
+            <h1>{{examResult?.exam?.title || 'Exam Result'}}</h1>
+            <span>{{examResult?.passed ? 'You have passed the exam!' : 'Don\'t give up, try again!'}}</span>
+        </div>
+          <div class="status-badge" [ngClass]="{'passed': examResult?.passed, 'failed': !examResult?.passed}">
+            {{examResult?.passed ? 'PASSED' : 'FAILED'}}
+          </div>
+        </div>
+      </div>
+  
+      <mat-card-content>
+        <div class="score-overview">
+          <div class="score-circle" [ngClass]="{'passed': examResult?.passed, 'failed': !examResult?.passed}">
+            <div class="score-value">{{examResult?.scorePercentage | number:'1.2-2' || 0}}%</div>
+            <div class="score-label">Overall Score</div>
+          </div>
+        </div>
+        <div class="score-overview">
+            <p>{{examResult?.passed ? 
+                'Great job on passing the exam! Your hard work has paid off.' : 
+                'Don\'t be discouraged! Use this as a learning opportunity to improve.'}}</p>
+        </div>
+        <div class="section-scores" *ngIf="examResult?.sectionScores">
+          <h2>Performance by Section</h2>
+          <div class="section-grid">
+            <mat-card class="section-card" *ngFor="let section of examResult?.sectionScores">
+              <div class="section-header">
+                <mat-icon [ngClass]="{'passed': section?.score! >= 70, 'failed': section?.score! < 70}">
+                  {{section?.score! >= 70 ? 'check_circle' : 'warning'}}
+                </mat-icon>
+                <h3>{{section.name}}</h3>
+              </div>
+              <div class="section-score">
+                <div class="score-bar">
+                  <div class="score-progress" [style.width.%]="section.score"></div>
+                </div>
+                <span class="score-percentage">{{section.score}}%</span>
+              </div>
+              <p class="feedback">{{section.feedback}}</p>
+            </mat-card>
+          </div>
+        </div>
+  
+        <div class="recommendations" *ngIf="examResult?.recommendations">
+          <h2>Improvement Areas</h2>
+          <div class="recommendations-grid">
+            <div class="recommendation-item" *ngFor="let rec of examResult?.recommendations">
+              <mat-icon>lightbulb</mat-icon>
+              <p>{{rec}}</p>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+  
+      <mat-card-actions>
+        <button mat-stroked-button (click)="backToExams()">
+          <mat-icon>list</mat-icon>
+          View All Exams
+        </button>
+        <button mat-raised-button color="primary" (click)="retakeExam()" *ngIf="!examResult?.passed">
+          <mat-icon>replay</mat-icon>
+          Retake Exam
+        </button>
+      </mat-card-actions>
+    </mat-card>
+    <p></p>
+
+    <mat-card class="result-card">
+
+          <mat-card-content>
+            <div class="questions-section">
+                <h3>Question Details</h3>
+                <mat-accordion>
+                  <mat-expansion-panel *ngFor="let question of examResult?.questions; index as i" (opened)="onPanelOpened(question)">
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>
+                        Question {{i+1}}
+                      </mat-panel-title>
+                      <mat-panel-description>
+                        <mat-chip [ngClass]="getQuestionStatusColor(question.isCorrect)" selected>
+                          {{question.isCorrect ? 'Correct' : 'Incorrect'}}
+                        </mat-chip>
+                      </mat-panel-description>
+                    </mat-expansion-panel-header>
+        
+                    <p class="question-text">{{question.question}}</p>
+                    
+                    <div class="answer-details">
+                      <div class="selected-options">
+                        <h4>Your Answer:</h4>
+                        <ul>
+                          <li *ngFor="let option of qOptions" [ngClass]="{'matched-option': isOptionMatched(option.id)}">{{option.text}}</li>
+                        </ul>
+                      </div>
+                      
+                      <div class="correct-options"> <!-- *ngIf="!question.isCorrect"-->
+                        <h4>Correct Answer:</h4>
+                        <ul>
+                          <li *ngFor="let option of sortedCops">{{option.text}}</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </mat-expansion-panel>
+                </mat-accordion>
+              </div>            
+          </mat-card-content>
+    </mat-card>
+  </div>

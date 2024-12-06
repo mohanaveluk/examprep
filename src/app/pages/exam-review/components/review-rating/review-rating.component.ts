@@ -14,7 +14,7 @@ export class ReviewRatingComponent  implements OnInit {
   constructor(private reviewService: ExamReviewService) {}
 
   ngOnInit(): void {
-    this.loadAverageRating();
+    //this.loadAverageRating();
   }
 
   private loadAverageRating(): void {

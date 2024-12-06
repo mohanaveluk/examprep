@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CategoryService } from '../services/category.service';
-import { Category } from '../models/category.model';
+import { Category } from '../../../shared/models/category.model';
 import { CategoryDialogComponent } from '../category-dialog/category-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 

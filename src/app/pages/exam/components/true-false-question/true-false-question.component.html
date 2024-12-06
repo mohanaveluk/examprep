@@ -1,0 +1,11 @@
+<div class="true-false-options">
+  <mat-radio-group [value]="selectedAnswer" (change)="onAnswerSelect($event.value)">
+    <mat-radio-button 
+      *ngFor="let option of question.options" 
+      [value]="option.id"
+      [checked]="selectedAnswer === option.id"
+      class="true-false-option">
+      {{ option.text }}
+    </mat-radio-button>
+  </mat-radio-group>
+</div>
