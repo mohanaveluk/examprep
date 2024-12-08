@@ -1,0 +1,42 @@
+<div class="dialog-content">
+  <div class="dialog-header">
+    <h2>Reply to Review</h2>
+    <button mat-icon-button class="close-button" (click)="onClose()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="original-review">
+    <h3>Original Review</h3>
+    <p>{{ data.review.comment }}</p>
+  </div>
+
+  <form [formGroup]="replyForm" (ngSubmit)="onSubmit()" class="reply-form">
+    <mat-form-field appearance="fill">
+      <mat-label>Your Reply</mat-label>
+      <textarea
+        matInput
+        formControlName="comment"
+        rows="4"
+        placeholder="Write your reply...">
+      </textarea>
+      <mat-error *ngIf="replyForm.get('comment')?.hasError('required')">
+        Reply is required
+      </mat-error>
+      <mat-error *ngIf="replyForm.get('comment')?.hasError('minlength')">
+        Reply must be at least 10 characters long
+      </mat-error>
+    </mat-form-field>
+
+    <div class="form-actions">
+      <button mat-button (click)="onClose()">Cancel</button>
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="!replyForm.valid">
+        Submit Reply
+      </button>
+    </div>
+  </form>
+</div>

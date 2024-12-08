@@ -81,3 +81,24 @@
   button[type="submit"] {
     align-self: flex-end;
   }
+
+
+  ::ng-deep .answered-chip {
+    background-color: #e6f4ea !important;
+    border: 1px #baffce solid !important;
+  }
+  
+  ::ng-deep .answered-chip span.mat-mdc-chip-action-label, .pending-chip span.mat-mdc-chip-action-label {
+    color: #188038 !important;
+    font-weight: 500 !important;
+  }
+
+  ::ng-deep .pending-chip span.mat-mdc-chip-action-label {
+    color: #7a0029 !important;
+    font-weight: 500 !important;
+  }
+
+  ::ng-deep .pending-chip {
+    background-color: #fff5f5 !important;
+    border: 1px #ffb9b9 solid !important;
+  }

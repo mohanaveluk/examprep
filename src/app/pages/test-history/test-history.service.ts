@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ApiUrlBuilder } from '../../shared/utility/api-url-builder';
 
 export interface TestResult {
   id: string;
@@ -76,8 +77,15 @@ export class TestHistoryService {
     }
   ];
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private apiUrlBuilder: ApiUrlBuilder) {}
   
+
+  userExamResults(): Observable<any[]> {
+    const createApi = this.apiUrlBuilder.buildApiUrl(`user-exam/dd5c8ff7/results/history`);
+    return this.http.get<any[]>(createApi);
+  }
+
+
   // Fetch all test history
   getTestHistory1(): Observable<TestResult[]> {
     return this.http.get<TestResult[]>(this.apiUrl).pipe(

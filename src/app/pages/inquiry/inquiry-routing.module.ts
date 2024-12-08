@@ -4,6 +4,7 @@ import { InquiryDashboardComponent } from './inquiry-dashboard/inquiry-dashboard
 
 import { AuthGuard } from '../auth/auth.guard';
 import { QuestionDetailComponent } from './question-detail/question-detail.component';
+import { AdminInquiryDashboardComponent } from './components/admin-inquiry-dashboard/admin-inquiry-dashboard.component';
 
 const routes: Routes = [
   { 
@@ -15,6 +16,12 @@ const routes: Routes = [
     path: 'list/:id',
     component: QuestionDetailComponent,
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'admin/inquiries',
+    component: AdminInquiryDashboardComponent,
+    canActivate: [AuthGuard]
+    // In real app, add additional admin role guard
   }
 ];
 

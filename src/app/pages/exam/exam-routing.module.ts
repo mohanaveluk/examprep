@@ -6,11 +6,13 @@ import { QuestionComponent } from './question/question.component';
 import { SummaryComponent } from './summary/summary.component';
 import { ResultComponent } from './result/result.component';
 import { ResultHistoryComponent } from './components/result-history/result-history.component';
+import { OverviewComponent } from './overview/overview.component';
 
 
 const routes: Routes = [
   { path: 'list', component: ListComponent },
   { path: 'take/:id', component: DetailComponent },
+  { path: 'overview/:id', component: OverviewComponent },
   { path: 'question/:id', component: QuestionComponent },
   { path: 'result-summary/:examId', component: ResultHistoryComponent },
   { path: 'summary/:sessionId/:examId', component: SummaryComponent },

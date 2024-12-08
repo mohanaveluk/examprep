@@ -11,6 +11,8 @@ import { MatCardModule } from '@angular/material/card';
 import { TestHistoryComponent } from './test-history/test-history.component';
 import { TestDetailDialogComponent } from './test-detail-dialog/test-detail-dialog.component';
 import { TestHistoryRoutingModule } from './test-history-routing.module';
+import { SharedModule } from '../../shared/shared.module';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 
 
@@ -28,7 +30,9 @@ import { TestHistoryRoutingModule } from './test-history-routing.module';
     MatButtonModule,
     MatChipsModule,
     MatIconModule,
-    MatCardModule
+    MatCardModule,
+    NgxChartsModule,
+    SharedModule
   ]
 })
 export class TestHistoryModule { }

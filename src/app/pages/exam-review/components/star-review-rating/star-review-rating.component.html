@@ -1,0 +1,12 @@
+<div class="rating-container">
+    <ng-container *ngFor="let star of fullStars">
+      <mat-icon>star</mat-icon>
+    </ng-container>
+    <ng-container *ngIf="hasHalfStar">
+      <mat-icon>star_half</mat-icon>
+    </ng-container>
+    <ng-container *ngFor="let star of emptyStars">
+      <mat-icon>star_border</mat-icon>
+    </ng-container>
+    <!-- <span class="rating-value">{{ rating }}</span> -->
+  </div>

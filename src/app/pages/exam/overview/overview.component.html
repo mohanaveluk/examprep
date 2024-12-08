@@ -1,0 +1,82 @@
+<mat-card *ngIf="exam" class="exam-detail-card">
+    <mat-card-header>
+      <mat-card-title>
+        <button mat-icon-button (click)="backToExams()">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+            {{ exam.title }}
+      </mat-card-title>
+      <mat-card-subtitle *ngIf="exam.categoryText">
+        <mat-icon>category</mat-icon>
+        {{ exam.categoryText }}
+      </mat-card-subtitle>
+    </mat-card-header>
+  
+    <mat-card-content>
+      <div class="content-section">
+        <div class="section-header">
+          <mat-icon>description</mat-icon>
+          <h3>Description</h3>
+        </div>
+        <p class="description">{{ exam.description }}</p>
+      </div>
+  
+      <div class="content-section" *ngIf="exam.notes">
+        <div class="section-header">
+          <mat-icon>notes</mat-icon>
+          <h3>Notes</h3>
+        </div>
+        <p class="notes">{{ exam.notes }}</p>
+      </div>
+  
+      <div class="exam-stats">
+        <div class="stat-card">
+          <mat-icon>timer</mat-icon>
+          <div class="stat-content">
+            <span class="stat-label">Duration</span>
+            <span class="stat-value">{{ exam.duration }} minutes</span>
+          </div>
+        </div>
+  
+        <div class="stat-card">
+          <mat-icon>quiz</mat-icon>
+          <div class="stat-content">
+            <span class="stat-label">Questions</span>
+            <span class="stat-value">{{ exam.totalQuestions }}</span>
+          </div>
+        </div>
+  
+        <div class="stat-card">
+          <mat-icon>grade</mat-icon>
+          <div class="stat-content">
+            <span class="stat-label">Passing Score</span>
+            <span class="stat-value">{{ exam.passingScore }}%</span>
+          </div>
+        </div>
+  
+        <div class="stat-card">
+          <mat-icon>update</mat-icon>
+          <div class="stat-content">
+            <span class="stat-label">Last Updated</span>
+            <span class="stat-value">{{ exam.updatedAt | date:'mediumDate' }}</span>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+      
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="examHistory()" *ngIf="isHistoryExist">
+        <mat-icon>history</mat-icon>
+        View History
+      </button>
+      <button mat-raised-button color="primary" (click)="startExam()">
+        <mat-icon>play_arrow</mat-icon>
+        Start Exam
+      </button>
+    </mat-card-actions>
+  
+    <mat-divider></mat-divider>
+    
+    <!-- Review Section -->
+    <app-review-list [examId]="exam.id"></app-review-list>
+  </mat-card>

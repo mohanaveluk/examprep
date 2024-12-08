@@ -2,10 +2,14 @@
     <div class="rating-info">
       <span class="rating-value">{{averageRating}}</span>
       <div class="stars">
-        <app-star-rating
+        <!-- <app-star-rating
           [rating]="averageRating"
           [readonly]="true">
-        </app-star-rating>
+        </app-star-rating> -->
+        <app-star-review-rating
+          [rating] = averageRating
+          [readonly]="true">
+        </app-star-review-rating>
       </div>
     </div>
     <span class="total-reviews">({{totalReviews}} reviews)</span>

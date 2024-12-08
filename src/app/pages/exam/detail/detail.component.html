@@ -37,9 +37,12 @@
           
         
     </mat-card-content>
-    <button mat-raised-button color="primary" (click)="startExam()">Start</button>
-
+    
+    <mat-card-actions>
+        <button mat-raised-button color="primary" (click)="examHistory()" *ngIf="isHistoryExist">History</button>
+        <button mat-raised-button color="primary" (click)="startExam()">Start</button>
+    </mat-card-actions>
     <!-- Add Review Section -->
-    <!-- <app-review-list [examId]="exam.id"></app-review-list> -->
+    <app-review-list [examId]="exam.id"></app-review-list>
 
 </mat-card>

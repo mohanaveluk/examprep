@@ -26,6 +26,31 @@
   gap: 12px;
 }
 
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.default-avatar {
+  width: 32px;
+  height: 32px;
+  font-size: 32px;
+  color: #757575;
+}
+
+.user-name {
+  font-weight: 500;
+  color: #333;
+}
+
 .review-date {
   color: rgba(0, 0, 0, 0.6);
   font-size: 0.9em;
@@ -34,6 +59,10 @@
 .review-content {
   margin: 16px 0;
   line-height: 1.5;
+}
+
+.review-reply{
+  font-size: 12px;
 }
 
 .replies {

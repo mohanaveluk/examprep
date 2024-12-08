@@ -37,6 +37,7 @@ import { ReviewConfirmationDialogComponent } from './components/review-confirmat
 import { ResultHistoryComponent } from './components/result-history/result-history.component';
 import { ResultDetailsDialogComponent } from './components/result-details-dialog/result-details-dialog.component';
 import { ConfirmRetakeComponent } from './components/confirm-retake/confirm-retake.component';
+import { OverviewComponent } from './overview/overview.component';
 
 
 
@@ -56,7 +57,8 @@ import { ConfirmRetakeComponent } from './components/confirm-retake/confirm-reta
     ReviewConfirmationDialogComponent,
     ResultHistoryComponent,
     ResultDetailsDialogComponent,
-    ConfirmRetakeComponent
+    ConfirmRetakeComponent,
+    OverviewComponent
   ],
   imports: [
     CommonModule,

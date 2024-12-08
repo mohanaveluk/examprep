@@ -12,6 +12,19 @@ mat-card {
     margin-bottom: 20px;
   }
   
+  mat-card-actions {
+    display: flex;
+    justify-content: space-around;
+    gap: 16px;
+    padding: 16px;
+    margin-top: 24px;
+    border-top: 1px solid #eee;
+
+    button {
+      width: 100%;
+    }
+  }
+
   button {
     margin-top: 10px;
     font-size: 1em;

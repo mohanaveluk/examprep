@@ -37,7 +37,9 @@ export class InquiryDashboardComponent {
 
   private loadStats() {
     this.inquiryService.getStats().subscribe({
-      next: (stats) => this.stats = stats,
+      next: (stats: any) => {
+        this.stats = stats.data;
+      },
       error: (error) => console.error('Failed to load stats:', error)
     });
   }
@@ -70,8 +72,8 @@ export class InquiryDashboardComponent {
 
   loadQuestions() {
     this.inquiryService.getQuestions().subscribe({
-      next: (questions) => {
-        this.questions = this.filteredQuestions = questions;
+      next: (questions: any) => {
+        this.questions = this.filteredQuestions = questions.data;
       },
       error: (error) => console.error('Failed to load questions:', error)
     });

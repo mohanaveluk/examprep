@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ExamService } from '../exam.service';
 import { ExamResult } from '../../models/exam-result.interface';
@@ -20,6 +20,9 @@ export class ResultComponent {
   sops: OptionResponse[] = []
   sortedCops: OptionResponse[] = []
   sortedSops: OptionResponse[] = []
+  @Input() sessionId!: string;
+  @Input() examId!: string;
+  
   private resultSubscription?: Subscription;
   
   constructor(
@@ -31,13 +34,16 @@ export class ResultComponent {
   ) {}
 
   ngOnInit() {
-    const sessionId = this.route.snapshot.params['sessionId'];
-    const examId = this.route.snapshot.params['examId'];
+
+    if (!this.sessionId || !this.examId) {
+      this.sessionId = this.route.snapshot.params['sessionId'];
+      this.examId = this.route.snapshot.params['examId'];
+    }
 
     this.resultSubscription = this.examResultService.getResult().subscribe(result => {
       if (!result) {
         //this.router.navigate(['/exam/list']);
-        this.getExamResult(sessionId, examId);
+        this.getExamResult(this.sessionId, this.examId);
       }
       this.examResult = result;
     });
