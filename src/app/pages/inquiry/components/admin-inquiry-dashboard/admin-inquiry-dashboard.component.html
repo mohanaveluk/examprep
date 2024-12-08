@@ -1,0 +1,108 @@
+<div class="admin-dashboard-container">
+    <div class="header">
+      <h1>Admin Inquiry Dashboard</h1>
+      <div class="stats-cards">
+        <mat-card class="stat-card total" (click)="applyFilter('all')">
+          <mat-card-content>
+            <div class="stat-content">
+              <mat-icon>question_answer</mat-icon>
+              <div class="stat-info">
+                <h3>{{stats.total}}</h3>
+                <p>Total Questions</p>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+  
+        <mat-card class="stat-card pending" (click)="applyFilter('pending')">
+          <mat-card-content>
+            <div class="stat-content">
+              <mat-icon>pending</mat-icon>
+              <div class="stat-info">
+                <h3>{{stats.pending}}</h3>
+                <p>Pending</p>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+  
+        <mat-card class="stat-card answered" (click)="applyFilter('answered')">
+          <mat-card-content>
+            <div class="stat-content">
+              <mat-icon>check_circle</mat-icon>
+              <div class="stat-info">
+                <h3>{{stats.answered}}</h3>
+                <p>Answered</p>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  
+    <div class="content-area">
+      <mat-card class="subjects-card">
+        <mat-card-header>
+          <mat-card-title>Subjects</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-nav-list>
+            <a mat-list-item
+               *ngFor="let subject of subjects"
+               (click)="selectSubject(subject)"
+               [class.active]="subject === selectedSubject">
+              <mat-icon matListItemIcon>folder</mat-icon>
+              <span matListItemTitle>{{subject}}</span>
+              <span matListItemMeta>
+                {{questionsBySubject[subject].length}}
+              </span>
+            </a>
+          </mat-nav-list>
+        </mat-card-content>
+      </mat-card>
+  
+      <div class="questions-list">
+        <mat-card *ngIf="selectedSubject">
+          <mat-card-header>
+            <mat-card-title>{{selectedSubject}}</mat-card-title>
+            <mat-card-subtitle>
+              {{filteredQuestionsBySubject[selectedSubject].length}} questions
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <mat-accordion>
+              <mat-expansion-panel *ngFor="let question of filteredQuestionsBySubject[selectedSubject]">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    {{question.subject}}
+                  </mat-panel-title>
+                  <mat-panel-description>
+                    <mat-chip [ngClass]="getStatusColor(question.status)" selected>
+                      {{question.status}}
+                    </mat-chip>
+                    <span class="date">{{formatDate(question.createdAt)}}</span>
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+  
+                <p class="question-content">{{question.content}}</p>
+  
+                <div class="responses" *ngIf="question.responses?.length">
+                  <h4>Previous Responses ({{question?.responses?.length}})</h4>
+                  <div class="response" *ngFor="let response of question.responses">
+                    <p>{{response.content}}</p>
+                    <small>{{formatDate(response.createdAt)}}</small>
+                  </div>
+                </div>
+  
+                <mat-action-row>
+                  <button mat-button color="primary" (click)="openResponseDialog(question)">
+                    Respond
+                  </button>
+                </mat-action-row>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>

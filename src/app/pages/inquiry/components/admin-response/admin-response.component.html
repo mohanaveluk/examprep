@@ -1,0 +1,48 @@
+<div class="admin-response-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Respond to Question</mat-card-title>
+      <mat-card-subtitle>Question: {{question.subject}}</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="question-details">
+        <p class="question-content">{{question.content}}</p>
+        <div class="question-meta">
+          <span class="date">Asked on {{formatDate(question.createdAt)}}</span>
+          <mat-chip [color]="question.status === 'answered' ? 'primary' : 'warn'" selected>
+            {{question.status}}
+          </mat-chip>
+        </div>
+      </div>
+
+      <form [formGroup]="responseForm" (ngSubmit)="onSubmit()" class="response-form">
+        <mat-form-field appearance="fill">
+          <mat-label>Your Response</mat-label>
+          <textarea
+            matInput
+            formControlName="content"
+            rows="4"
+            placeholder="Type your response here...">
+          </textarea>
+          <mat-error *ngIf="responseForm.get('content')?.hasError('required')">
+            Response is required
+          </mat-error>
+          <mat-error *ngIf="responseForm.get('content')?.hasError('minlength')">
+            Response must be at least 10 characters
+          </mat-error>
+        </mat-form-field>
+
+        <div class="form-actions">
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="!responseForm.valid">
+            Submit Response
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

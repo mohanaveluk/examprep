@@ -104,6 +104,10 @@ export class AuthService {
     return this.userName;
   }
 
+  getUser(): any {
+    return localStorage.getItem('user') !== null ? JSON.parse(localStorage.getItem('user')!) : {id: ""};
+  }
+
   private hasToken(): boolean {
     return !!localStorage.getItem(this.AUTH_TOKEN);
   }

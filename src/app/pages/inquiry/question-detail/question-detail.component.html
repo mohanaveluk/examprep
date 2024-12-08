@@ -11,7 +11,7 @@
         <p class="question-content">{{question.content}}</p>
         <div class="metadata">
           <mat-chip-set>
-            <mat-chip [color]="question.status === 'answered' ? 'primary' : 'warn'" selected>
+            <mat-chip [ngClass]="{'answered-chip': question.status === 'answered', 'pending-chip': question.status !== 'answered'}" selected>
               {{question.status}}
             </mat-chip>
           </mat-chip-set>
@@ -30,7 +30,16 @@
       </mat-card>
     </div>
   
-    <mat-card class="add-response">
+      <!-- Admin Response Section -->
+  <div *ngIf="isAdmin" class="admin-response-section">
+    <app-admin-response
+      [question]="question"
+      (responseAdded)="loadQuestion(question.id)">
+    </app-admin-response>
+  </div>
+
+    <!-- Student Follow-up Section -->
+    <mat-card *ngIf="!isAdmin" class="add-response">
       <mat-card-header>
         <mat-card-title>Add Follow-up Question</mat-card-title>
       </mat-card-header>

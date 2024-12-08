@@ -18,6 +18,11 @@ import { InquiryRoutingModule } from './inquiry-routing.module';
 import { QuestionListComponent } from './question-list/question-list.component';
 import { QuestionDetailComponent } from './question-detail/question-detail.component';
 import { SharedModule } from '../../shared/shared.module';
+import { AdminResponseComponent } from './components/admin-response/admin-response.component';
+import { AdminInquiryDashboardComponent } from './components/admin-inquiry-dashboard/admin-inquiry-dashboard.component';
+import { MatListModule } from '@angular/material/list';
+import { AdminResponseDialogComponent } from './components/admin-response-dialog/admin-response-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 
@@ -28,6 +33,10 @@ import { SharedModule } from '../../shared/shared.module';
     //StatCardComponent,
     QuestionListComponent,
     QuestionDetailComponent,
+    AdminResponseComponent,
+    AdminInquiryDashboardComponent,
+    AdminResponseDialogComponent,
+    
   ],
   imports: [
     CommonModule,
@@ -43,8 +52,13 @@ import { SharedModule } from '../../shared/shared.module';
     MatDividerModule,
     MatExpansionModule,
     MatSnackBarModule,
+    MatListModule,
     InquiryRoutingModule,
+    MatDialogModule,
     SharedModule
+  ],
+  exports: [
+    AdminResponseComponent
   ]
 })
 export class InquiryModule { }

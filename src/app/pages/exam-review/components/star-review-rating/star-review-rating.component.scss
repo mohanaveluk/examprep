@@ -1,0 +1,11 @@
+.rating-container {
+    display: flex;
+    align-items: center;
+  }
+  .rating-value {
+    margin-left: 8px;
+    font-size: 1.2em;
+  }
+  mat-icon {
+    color: #ffbb00; /* Gold color for stars */
+  }

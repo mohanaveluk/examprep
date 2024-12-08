@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { delay, tap } from 'rxjs/operators';
+import { UserInfo } from '../exam-review/exam-review.service';
+import { ApiUrlBuilder } from '../../shared/utility/api-url-builder';
+
 export interface Question {
   id: string;
   studentId: string;
@@ -13,6 +16,7 @@ export interface Question {
   isToday?: boolean;        // New property to indicate if the question was created today
   isThisMonth?: boolean;    // New property to indicate if the question was created this month
   isLastMonth?: boolean;    // New property to indicate if the question was created last month
+  user?: UserInfo;
 }
 
 export interface Response {
@@ -47,6 +51,12 @@ export class InquiryService {
       content: 'Can you explain the structure of the human heart in detail?',
       createdAt: new Date('2024-11-15T10:30:00'),
       status: 'answered',
+      user: {
+        "id": "2",
+            "name": "Kannappan Samuvel",
+            "profileImage": "",
+            "guid": "aee0671c-41bc-422c-a9bf-dbf1e86d0dd5"
+      },
       responses: [
         {
           id: 'r1',
@@ -63,7 +73,13 @@ export class InquiryService {
       subject: 'Biochemistry Doubt',
       content: 'What is the role of enzymes in cellular metabolism?',
       createdAt: new Date('2024-10-16T14:20:00'),
-      status: 'pending'
+      status: 'pending',
+      user: {
+        "id": "2",
+            "name": "Kannappan Samuvel",
+            "profileImage": "",
+            "guid": "aee0671c-41bc-422c-a9bf-dbf1e86d0dd5"
+      },
     },
     {
       id: '3',
@@ -72,6 +88,12 @@ export class InquiryService {
       content: 'How does the nervous system transmit signals?',
       createdAt: new Date('2024-11-08T09:15:00'),
       status: 'answered',
+      user: {
+        "id": "2",
+            "name": "Kannappan Samuvel",
+            "profileImage": "",
+            "guid": "aee0671c-41bc-422c-a9bf-dbf1e86d0dd5"
+      },
       responses: [
         {
           id: 'r2',
@@ -85,45 +107,55 @@ export class InquiryService {
   ];
 
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,     
+    private apiUrlBuilder: ApiUrlBuilder
+  ) {
     this.checkNewResponses();
   }
 
-  askQuestion1(question: Partial<Question>): Observable<Question> {
-    return this.http.post<Question>('/api/inquiries', question);
+  askQuestion(question: Partial<Question>): Observable<Question> {
+    const endpoint = this.apiUrlBuilder.buildApiUrl(`inquiries/`);
+    return this.http.post<Question>(endpoint, question);
   }
 
-  getQuestions1(): Observable<Question[]> {
-    return this.http.get<Question[]>('/api/inquiries');
+  getQuestions(): Observable<Question[]> {
+    const endpoint = this.apiUrlBuilder.buildApiUrl(`inquiries/`);
+    return this.http.get<Question[]>(endpoint);
   }
 
-  getQuestion1(id: string): Observable<Question> {
-    return this.http.get<Question>(`/api/inquiries/${id}`);
+  getQuestion(id: string): Observable<Question> {
+    const endpoint = this.apiUrlBuilder.buildApiUrl(`inquiries/${id}`);
+    return this.http.get<Question>(endpoint);
   }
 
-  addResponse1(questionId: string, content: string): Observable<Response> {
-    return this.http.post<Response>(`/api/inquiries/${questionId}/responses`, { content });
+  addResponse(questionId: string, content: string): Observable<Response> {
+    const endpoint = this.apiUrlBuilder.buildApiUrl(`inquiries/${questionId}/responses`);
+    return this.http.post<Response>(endpoint, { content });
   }
 
-  getStats1(): Observable<Stats> {
-    return this.http.get<Stats>('/api/inquiries/stats');
+  getStats(): Observable<Stats> {
+    const endpoint = this.apiUrlBuilder.buildApiUrl(`inquiries/stats`);
+    return this.http.get<Stats>(endpoint);
   }
 
-  private checkNewResponses1() {
+  private checkNewResponses() {
     // Poll for new responses every minute
+    const endpoint = this.apiUrlBuilder.buildApiUrl(`inquiries/notifications`);
     setInterval(() => {
-      this.http.get<number>('/api/inquiries/notifications')
+      this.http.get<number>(endpoint)
         .subscribe(count => this.notificationsSubject.next(count));
     }, 60000);
   }
 
-  markAsRead1(questionId: string): Observable<void> {
-    return this.http.post<void>(`/api/inquiries/${questionId}/read`, {});
+  markAsRead(questionId: string): Observable<void> {
+    const endpoint = this.apiUrlBuilder.buildApiUrl(`inquiries/${questionId}/read`);
+    return this.http.post<void>(endpoint, {});
   }
 
   /* static functions*/
 
-  askQuestion(question: Partial<Question>): Observable<Question> {
+  askQuestion1(question: Partial<Question>): Observable<Question> {
     const newQuestion: Question = {
       id: (this.mockQuestions.length + 1).toString(),
       studentId: 'student1',
@@ -137,11 +169,11 @@ export class InquiryService {
     return of(newQuestion).pipe(delay(500));
   }
 
-  getQuestions(): Observable<Question[]> {
+  getQuestions1(): Observable<Question[]> {
     return of(this.mockQuestions).pipe(delay(500));
   }
 
-  getQuestion(id: string): Observable<Question> {
+  getQuestion1(id: string): Observable<Question> {
     const question = this.mockQuestions.find(q => q.id === id);
     if (!question) {
       return of({
@@ -150,13 +182,14 @@ export class InquiryService {
         subject: 'Not Found',
         content: 'Question not found',
         createdAt: new Date(),
-        status: 'pending'
+        status: 'pending',
+        user: {}
       });
     }
     return of(question).pipe(delay(500));
   }
 
-  addResponse(questionId: string, content: string): Observable<Response> {
+  addResponse1(questionId: string, content: string): Observable<Response> {
     const question = this.mockQuestions.find(q => q.id === questionId);
     if (question) {
       const newResponse: Response = {
@@ -185,7 +218,7 @@ export class InquiryService {
   }
 
   
-  getStats(): Observable<Stats> {
+  getStats1(): Observable<Stats> {
     const today = new Date();
     const lastMonthDate = new Date(today);
     lastMonthDate.setMonth(today.getMonth() - 1);
@@ -241,7 +274,7 @@ export class InquiryService {
     return of(stats).pipe(delay(500));
   }
 
-  private checkNewResponses() {
+  private checkNewResponses1() {
     // Simulate checking for new responses every minute
     setInterval(() => {
       const newResponses = this.mockQuestions.reduce((count, question) => {
@@ -257,7 +290,7 @@ export class InquiryService {
     }, 60000);
   }
 
-  markAsRead(questionId: string): Observable<void> {
+  markAsRead1(questionId: string): Observable<void> {
     // Simulate marking a question as read
     return of(undefined).pipe(
       delay(500),

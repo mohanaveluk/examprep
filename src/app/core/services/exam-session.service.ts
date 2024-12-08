@@ -110,6 +110,8 @@ export class ExamSessionService {
     return this.http.get<any[]>(createApi);
   }
 
+
+
   hasActiveSession(): boolean {
     const session = this.sessionSubject.value;
     return session !== null && ['in-progress', 'paused'].includes(session.status);

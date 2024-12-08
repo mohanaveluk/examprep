@@ -16,6 +16,10 @@ import { ReviewListComponent } from './components/review-list/review-list.compon
 import { ReviewDialogComponent } from './components/review-dialog/review-dialog.component';
 import { StarRatingComponent } from './components/star-rating/star-rating.component';
 import { ReviewRatingComponent } from './components/review-rating/review-rating.component';
+import { StarReviewRatingComponent } from './components/star-review-rating/star-review-rating.component';
+import { EditReviewDialogComponent } from './components/edit-review-dialog/edit-review-dialog.component';
+import { ReplyDialogComponent } from './components/reply-dialog/reply-dialog.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -23,7 +27,10 @@ import { ReviewRatingComponent } from './components/review-rating/review-rating.
     ReviewListComponent,
     ReviewDialogComponent,
     StarRatingComponent,
-    ReviewRatingComponent
+    ReviewRatingComponent,
+    StarReviewRatingComponent,
+    EditReviewDialogComponent,
+    ReplyDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -37,12 +44,16 @@ import { ReviewRatingComponent } from './components/review-rating/review-rating.
     MatDialogModule,
     MatSnackBarModule,
     MatChipsModule,
+    MatIconModule,
+    MatTooltipModule
     //ExamReviewRoutingModule
   ],
   exports: [
     ReviewListComponent,
     ReviewDialogComponent,
-    ReviewRatingComponent
+    ReviewRatingComponent,
+    EditReviewDialogComponent,
+    ReplyDialogComponent
   ]
 })
 export class ExamReviewModule { }

@@ -30,8 +30,52 @@
   .date {
     color: #666;
     font-size: 0.9em;
+    font-weight: 500;
   }
   
+  .score-overview {
+    display: flex;
+    justify-content: center;
+    margin: 32px 0;
+    p {
+        font-weight: 500;
+    }
+  }
+  
+  .score-circle {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 8px solid;
+    transition: all 0.3s ease;
+  }
+  
+  .score-circle.passed {
+    border-color: #4CAF50;
+    color: #4CAF50;
+  }
+  
+  .score-circle.failed {
+    border-color: #f44336;
+    color: #f44336;
+  }
+  
+  .score-value {
+    font-size: 3em;
+    font-weight: 600;
+    line-height: 1;
+  }
+  
+  .score-label {
+    font-size: 1em;
+    color: #666;
+    margin-top: 8px;
+  }
+
   .score-section {
     margin: 24px 0;
     padding: 16px;
@@ -86,4 +130,55 @@
     background-color: #e3f2fd;
     border-radius: 4px;
     color: #333;
+  }
+
+  .flex-content{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .chart-container {
+    height: 250px;
+    margin: 16px 0;
+    display: flex;
+    margin-left: -100px;
+    align-items: center; 
+
+    h2 {
+      align-self: start;
+    }
+  }
+
+  .status-passed{
+    font-weight: 500;
+    font-size: 15pt;
+    color: #00af06;
+  }
+
+  .status-failed{
+    font-weight: 500;
+    font-size: 15pt;
+    color: #f44336;
+    span.mdc-evolution-chip__text-label.mat-mdc-chip-action-label {
+      font-weight: 500 !important;
+      font-size: 15pt !important;
+      color: #f44336 !important;
+  
+    }
+  }
+
+  ngx-charts-pie-chart {
+    flex: 1; /* Allow the chart to take available space */
+  }
+
+  .chart-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Vertically center the legend items */
+    width: 350px; /* Set the desired width for the legend */
+  }
+  
+  ::ng-deep .legend-wrap ul.legend-labels {
+    width: 100px !important;
   }

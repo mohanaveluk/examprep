@@ -11,6 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class QuestionDetailComponent {
   question: Question | null = null;
   responseForm: FormGroup;
+  isAdmin = false; // This should be determined by your auth service
 
   constructor(
     private route: ActivatedRoute,
@@ -21,6 +22,8 @@ export class QuestionDetailComponent {
     this.responseForm = this.fb.group({
       content: ['', [Validators.required, Validators.minLength(10)]]
     });
+    // Mock admin status - in real app, get from auth service
+    //this.isAdmin = true; // For demonstration purposes
   }
 
   ngOnInit() {
@@ -28,10 +31,10 @@ export class QuestionDetailComponent {
     this.loadQuestion(questionId);
   }
 
-  private loadQuestion(id: string) {
+  loadQuestion(id: string) {
     this.inquiryService.getQuestion(id).subscribe({
-      next: (question) => {
-        this.question = question;
+      next: (question: any) => {
+        this.question = question.data;
         this.inquiryService.markAsRead(id).subscribe();
       },
       error: (error) => {

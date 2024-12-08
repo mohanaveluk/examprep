@@ -348,9 +348,18 @@
   }
 
   .mat-mdc-chip-correct{
-    background-color: #00ac00 !important;
+    background-color: #00dd00  !important;
+    .mat-mdc-chip-action-label {
+      color: #ffffff;
+    }
   }
 
   .mat-mdc-chip-incorrect{
-    background-color: #f44336 !important;
+    background-color: #ffe8eb !important;
+  }
+
+  .flex-content{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
   }

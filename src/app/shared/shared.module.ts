@@ -25,6 +25,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { StatCardComponent } from '../pages/inquiry/components/stat-card/stat-card.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 
 @NgModule({
@@ -67,6 +68,7 @@ import { StatCardComponent } from '../pages/inquiry/components/stat-card/stat-ca
     MatDialogModule,
     MatIconModule,
     MatDialogModule,
+    NgxChartsModule,
   ],
   exports: [
     NavComponent,

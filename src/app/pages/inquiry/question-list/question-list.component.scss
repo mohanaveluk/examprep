@@ -62,6 +62,7 @@
 
   ::ng-deep .answered-chip {
     background-color: #e6f4ea !important;
+    border: 1px #baffce solid !important;
   }
   
   ::ng-deep .answered-chip span.mat-mdc-chip-action-label, .pending-chip span.mat-mdc-chip-action-label {
@@ -70,10 +71,11 @@
   }
 
   ::ng-deep .pending-chip span.mat-mdc-chip-action-label {
-    color: #7a5e00 !important;
+    color: #7a0029 !important;
     font-weight: 500 !important;
   }
 
   ::ng-deep .pending-chip {
-    background-color: #fef7e0 !important;
+    background-color: #fff5f5 !important;
+    border: 1px #ffb9b9 solid !important;
   }

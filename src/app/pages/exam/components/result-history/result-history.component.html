@@ -1,5 +1,11 @@
 <div class="history-container">
-  <h1 class="page-title">History for {{examTitle}}</h1>
+  <div class="header">
+    <button mat-icon-button (click)="backToExams()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1 class="page-title">History for {{examTitle}}</h1>
+  </div>
+
 
   <!-- Statistics Cards -->
   <div class="stats-grid">

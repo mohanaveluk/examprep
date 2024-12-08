@@ -3,6 +3,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ExamReviewService, Review } from '../../exam-review.service';
 import { ReviewDialogComponent } from '../review-dialog/review-dialog.component';
+import { EditReviewDialogComponent } from '../edit-review-dialog/edit-review-dialog.component';
+import { ReplyDialogComponent } from '../reply-dialog/reply-dialog.component';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-review-list',
@@ -12,19 +15,22 @@ import { ReviewDialogComponent } from '../review-dialog/review-dialog.component'
 export class ReviewListComponent implements OnInit {
   @Input() examId!: string;
   reviews: Review[] = [];
+  user: any = {};
 
   constructor(
     private reviewService: ExamReviewService,
     private dialog: MatDialog,
+    private authService: AuthService,
     private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
-    //this.loadReviews();
+    this.loadReviews();
+    this.user = this.authService.getUser() || {};
   }
 
   loadReviews(): void {
-    this.reviewService.getReviewsByExam(this.examId).subscribe({
+    this.reviewService.reviewsByExam(this.examId).subscribe({
       next: (reviews) => {
         this.reviews = reviews;
       },
@@ -65,4 +71,40 @@ export class ReviewListComponent implements OnInit {
       default: return '';
     }
   }
+
+  onEdit(existingReview: Review) {
+    const dialogRef = this.dialog.open(EditReviewDialogComponent, {
+      width: '700px',
+      data: { review: existingReview }
+    });
+
+    // Handle the result
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Refresh reviews list
+        this.loadReviews();
+      }
+    });
+  }
+
+  onReply(existingReview: Review) {
+    const dialogRef = this.dialog.open(ReplyDialogComponent, {
+      width: '700px',
+      data: { review: existingReview }
+    });
+
+    // Handle the result
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Refresh reviews list
+        this.loadReviews();
+      }
+    });
+  }
+
+  isUserSigned(review: Review){
+    this.user = this.authService.getUser() || {};
+    return this.user?.id === review.user.guid;
+  }
+
 }

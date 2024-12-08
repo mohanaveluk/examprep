@@ -15,7 +15,8 @@ export class DetailComponent {
   public warningMessage: string = ""
   public errorMessage: string = ""
   examId: string = "";
-  results: any[] = [];
+  historyResults: any[] = [];
+  isHistoryExist: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -27,6 +28,7 @@ export class DetailComponent {
 
   ngOnInit() {
     this.examId = this.route.snapshot.paramMap.get('id') || '0';
+    this.loadExam(this.examId);
     this.checkHistory(this.examId);
   }
 
@@ -68,13 +70,8 @@ export class DetailComponent {
 
   checkHistory(examId: string){
     this.examSessionService.resultList(examId).subscribe((results: any) => {
-      this.results = results.data.results;
-      if(results.data.results !== null && this.results.length){
-        this.router.navigate(['/exam/result-summary', this.examId]);
-      }
-      else{
-        this.loadExam(examId);
-      }
+      this.historyResults = results.data.results;
+      this.isHistoryExist = (this.historyResults !== null && this.historyResults.length > 0)
     });
   }
 
@@ -88,6 +85,12 @@ export class DetailComponent {
     });
 
     this.router.navigate(['/exam/question', examId]);
+  }
+
+  examHistory(){
+    if(this.historyResults !== null && this.historyResults.length > 0){
+      this.router.navigate(['/exam/result-summary', this.examId]);
+    }
   }
 
 }

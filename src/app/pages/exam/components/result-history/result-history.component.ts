@@ -5,41 +5,7 @@ import { ExamSessionService } from '../../../../core/services/exam-session.servi
 import { Color, ScaleType } from '@swimlane/ngx-charts';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmRetakeComponent } from '../confirm-retake/confirm-retake.component';
-
-interface ChartData {
-  name: string;
-  value: number;
-  color: string;
-}
-
-
-interface ExamResult {
-  sessionId: string;
-  exam: {
-    id: string;
-    title: string;
-    description: string;
-    duration: number;
-    passingScore: number;
-    category: {
-      cguid: string;
-      name: string;
-      description: string;
-    };
-  };
-  totalQuestions: number;
-  correctAnswers: number;
-  scorePercentage: number;
-  passed: boolean;
-  createdAt: string;
-}
-
-interface ResultsStats {
-  total: number;
-  averageScore: number;
-  passedCount: number;
-  failedCount: number;
-}
+import { ChartData, ExamResult, ResultsStats } from '../../../models/exam.model';
 
 
 @Component({
@@ -127,11 +93,12 @@ export class ResultHistoryComponent implements OnInit {
   }
 
   backToExams(): void {
-    this.router.navigate(['/exam/list']);
+    //this.router.navigate(['/exam/list']);
+    this.router.navigate(['/exam/overview', this.examId]);
   }
 
   retakeExam1() {
-    this.router.navigate(['/exam/take', this.examId]);
+    this.router.navigate(['/exam/overview', this.examId]);
   }
 
   retakeExam() {

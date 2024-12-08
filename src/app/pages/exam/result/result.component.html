@@ -4,8 +4,7 @@
         <div class="header-content">
           <div>
             <h1>{{examResult?.exam?.title || 'Exam Result'}}</h1>
-            <span>{{examResult?.passed ? 'You have passed the exam!' : 'Don\'t give up, try again!'}}</span>
-        </div>
+          </div>
           <div class="status-badge" [ngClass]="{'passed': examResult?.passed, 'failed': !examResult?.passed}">
             {{examResult?.passed ? 'PASSED' : 'FAILED'}}
           </div>
@@ -13,17 +12,27 @@
       </div>
   
       <mat-card-content>
-        <div class="score-overview">
-          <div class="score-circle" [ngClass]="{'passed': examResult?.passed, 'failed': !examResult?.passed}">
-            <div class="score-value">{{examResult?.scorePercentage | number:'1.2-2' || 0}}%</div>
-            <div class="score-label">Overall Score</div>
+        <div class="flex-content">
+          <div>
+            <h2>
+              <div>
+                <span>{{examResult?.passed ? 'You have passed the exam!' : 'Don\'t give up, try again!'}}</span>
+              </div>
+            </h2>
+            <div class="score-overview">
+              <p>{{examResult?.passed ?
+                'Great job on passing the exam! Your hard work has paid off.' :
+                'Don\'t be discouraged! Use this as a learning opportunity to improve.'}}</p>
+            </div>
+          </div>
+          <div class="score-overview">
+            <div class="score-circle" [ngClass]="{'passed': examResult?.passed, 'failed': !examResult?.passed}">
+              <div class="score-value">{{examResult?.scorePercentage | number:'1.2-2' || 0}}%</div>
+              <div class="score-label">Overall Score</div>
+            </div>
           </div>
         </div>
-        <div class="score-overview">
-            <p>{{examResult?.passed ? 
-                'Great job on passing the exam! Your hard work has paid off.' : 
-                'Don\'t be discouraged! Use this as a learning opportunity to improve.'}}</p>
-        </div>
+      
         <div class="section-scores" *ngIf="examResult?.sectionScores">
           <h2>Performance by Section</h2>
           <div class="section-grid">
@@ -44,7 +53,7 @@
             </mat-card>
           </div>
         </div>
-  
+      
         <div class="recommendations" *ngIf="examResult?.recommendations">
           <h2>Improvement Areas</h2>
           <div class="recommendations-grid">

@@ -16,16 +16,44 @@
     <mat-card-content>
       <div class="review-header">
         <div class="review-meta">
+          <div class="user-info">
+            <img *ngIf="review.user?.profileImage" 
+                 [src]="review.user.profileImage" 
+                 [alt]="review.user.name"
+                 class="user-avatar">
+            <mat-icon *ngIf="!review.user?.profileImage" class="default-avatar">account_circle</mat-icon>
+            <span class="user-name">{{review.user.name}}</span>
+          </div>
           <app-star-rating [rating]="review.rating" [readonly]="true"></app-star-rating>
           <mat-chip [color]="getSentimentColor(review.sentiment)" selected>
             {{review.sentiment}}
           </mat-chip>
           <span class="review-date">{{formatDate(review.createdAt)}}</span>
         </div>
+        <div>
+          <button mat-icon-button class="close-button" (click)="onEdit(review)" *ngIf="isUserSigned(review)"
+          #tooltip="matTooltip"
+              matTooltip="Edit" 
+              matTooltipHideDelay="1000"
+              matTooltipPosition="below" >
+            <mat-icon>edit_note</mat-icon>
+          </button>
+          <button mat-icon-button class="close-button" (click)="onReply(review)" 
+              *ngIf="!isUserSigned(review)" 
+              #tooltip="matTooltip"
+              matTooltip="Reply" 
+              matTooltipHideDelay="1000"
+              matTooltipPosition="below">
+            <mat-icon>reply</mat-icon>
+          </button>
+        </div>
       </div>
 
       <div class="review-content">
         {{review.comment}}
+      </div>
+
+      <div class="review-reply">
       </div>
 
       <div class="replies" *ngIf="review.replies?.length">

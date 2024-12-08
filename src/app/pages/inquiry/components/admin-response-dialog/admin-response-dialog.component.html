@@ -1,0 +1,58 @@
+<div class="dialog-container">
+    <div class="dialog-header">
+      <h2>Respond to Question</h2>
+      <button mat-icon-button (click)="onClose()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  
+    <mat-dialog-content>
+      <div class="question-details">
+        <h3>{{question.subject}}</h3>
+        <p class="question-content">{{question.content}}</p>
+        <div class="question-meta">
+          <span class="date">Asked on {{formatDate(question.createdAt)}}</span>
+          <mat-chip [color]="question.status === 'answered' ? 'primary' : 'warn'" selected>
+            {{question.status}}
+          </mat-chip>
+        </div>
+      </div>
+  
+      <div class="previous-responses" *ngIf="question.responses?.length">
+        <h3>Previous Responses</h3>
+        <div class="response" *ngFor="let response of question.responses">
+          <p>{{response.content}}</p>
+          <small>{{formatDate(response.createdAt)}}</small>
+        </div>
+      </div>
+  
+      <form [formGroup]="responseForm" (ngSubmit)="onSubmit()" class="response-form">
+        <mat-form-field appearance="fill">
+          <mat-label>Your Response</mat-label>
+          <textarea
+            matInput
+            formControlName="content"
+            rows="4"
+            placeholder="Type your response here...">
+          </textarea>
+          <mat-error *ngIf="responseForm.get('content')?.hasError('required')">
+            Response is required
+          </mat-error>
+          <mat-error *ngIf="responseForm.get('content')?.hasError('minlength')">
+            Response must be at least 10 characters
+          </mat-error>
+        </mat-form-field>
+      </form>
+    </mat-dialog-content>
+  
+    <mat-dialog-actions align="end">
+      <button mat-button (click)="onClose()">Cancel</button>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="onSubmit()"
+        [disabled]="!responseForm.valid">
+        Submit Response
+      </button>
+    </mat-dialog-actions>
+  </div>
