@@ -48,6 +48,73 @@
     margin-bottom: 16px;
   }
   
+  mat-expansion-panel {
+    margin-bottom: 16px;
+  }
+
+  .response-content {
+    padding: 16px 0;
+    color: #333;
+    line-height: 1.5;
+  }
+  
+  .follow-ups {
+    margin-top: 16px;
+  }
+  
+  .follow-ups h3 {
+    color: #333;
+    font-size: 1.1em;
+    margin-bottom: 12px;
+  }
+  
+  .follow-up-card {
+    margin: 8px 0;
+    background-color: #f8f9fa;
+  }
+  
+  .follow-up-content {
+    margin: 0 0 8px;
+    color: #333;
+  }
+  
+  .follow-up-date {
+    color: #666;
+    font-size: 0.9em;
+  }
+  
+  .follow-up-responses {
+    margin-top: 12px;
+    padding-left: 16px;
+    border-left: 2px solid #e0e0e0;
+  }
+  
+  .follow-up-response {
+    padding: 8px;
+    margin: 8px 0;
+    background-color: #fff;
+    border-radius: 4px;
+  }
+  
+  .response-date {
+    color: #666;
+    font-size: 0.9em;
+  }
+  
+  .add-follow-up {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #e0e0e0;
+  }
+  
+  .add-follow-up form,
+  .add-response form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  
   .response-card {
     margin-bottom: 16px;
     background-color: #f8f9fa;

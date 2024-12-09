@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ApiUrlBuilder } from '../../shared/utility/api-url-builder';
-import { ApiResponse, Exam, Question, RandomQuestionResponse, StartExam } from '../models/exam.model';
+import { Exam, Question, RandomQuestionResponse, StartExam } from '../models/exam.model';
+import { ApiResponse } from '../../shared/models/api-response.model';
 
 
 @Injectable({

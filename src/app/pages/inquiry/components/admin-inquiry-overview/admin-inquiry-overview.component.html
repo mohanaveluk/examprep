@@ -1,0 +1,163 @@
+<div class="admin-dashboard-container">
+    <div class="dashboard-header">
+      <h1>Admin Inquiry Dashboard</h1>
+      <div class="pending-alerts">
+        <mat-chip-set>
+          <mat-chip class = "custom-chip pending-chip" selected *ngIf="pendingFollowUps > 0">
+            <span><mat-icon>notification_important</mat-icon>
+            </span>
+            <span class="pending-tag">{{pendingFollowUps}} Pending Follow-ups</span>
+          </mat-chip>
+        </mat-chip-set>
+      </div>
+    </div>
+  
+    <div class="stats-grid">
+      <app-stat-card
+        title="Total Questions"
+        [count]="totalQuestions"
+        icon="question_answer"
+        color="primary">
+      </app-stat-card>
+  
+      <app-stat-card
+        title="Pending Responses"
+        [count]="pendingResponses"
+        icon="pending"
+        color="warn">
+      </app-stat-card>
+  
+      <app-stat-card
+        title="Pending Follow-ups"
+        [count]="pendingFollowUps"
+        icon="notification_important"
+        [color]="pendingFollowUps > 0 ? 'warn' : 'primary'">
+      </app-stat-card>
+    </div>
+  
+    <div class="content-area">
+      <mat-card class="subjects-card">
+        <mat-card-header>
+          <mat-card-title>Subjects</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-nav-list>
+            <a mat-list-item *ngFor="let subject of subjects" 
+               (click)="selectSubject(subject)"
+               [class.active]="selectedSubject === subject">
+              {{ subject }}
+              <span class="pending-badge" *ngIf="getSubjectPendingCount(subject) > 0">
+                {{ getSubjectPendingCount(subject) }}
+              </span>
+            </a>
+          </mat-nav-list>
+        </mat-card-content>
+      </mat-card>
+  
+      <div class="questions-list">
+        <mat-card *ngIf="selectedSubject">
+          <mat-card-header>
+            <mat-card-title>{{selectedSubject}}</mat-card-title>
+            <mat-card-subtitle>
+              {{filteredQuestionsBySubject[selectedSubject].length}} questions
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <mat-accordion>
+              <mat-expansion-panel *ngFor="let question of filteredQuestionsBySubject[selectedSubject]"
+                                 [ngClass]="{'has-pending-followup': hasPendingFollowUp(question)}">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <div class="question-header-content">
+                      {{question.subject}}
+                      <mat-icon *ngIf="hasPendingFollowUp(question)" 
+                               class="pending-icon" 
+                               matTooltip="Has pending follow-up questions"
+                               color="warn">
+                        priority_high
+                      </mat-icon>
+                    </div>
+                  </mat-panel-title>
+                  <mat-panel-description>
+                    <mat-chip [ngClass]="getStatusColor(question.status)" selected>
+                      {{question.status}}
+                    </mat-chip>
+                    <span class="date">{{formatDate(question.createdAt)}}</span>
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+  
+                <p class="question-content">{{question.content}}</p>
+  
+                <div class="responses" *ngIf="question.responses?.length">
+                  <h4>Responses & Follow-ups</h4>
+                  <mat-accordion class="responses-accordion">
+                    <mat-expansion-panel *ngFor="let response of question.responses" 
+                                       class="response-panel"
+                                       [ngClass]="{'has-pending-followup': hasPendingFollowUpInResponse(response)}">
+                      <mat-expansion-panel-header>
+                        <mat-panel-title>
+                          <div class="response-header-content">
+                            Response from {{response.user?.name || 'Staff'}}
+                            <mat-icon *ngIf="hasPendingFollowUpInResponse(response)" 
+                                     class="pending-icon"
+                                     matTooltip="Has pending follow-up questions"
+                                     color="warn">
+                              priority_high
+                            </mat-icon>
+                          </div>
+                        </mat-panel-title>
+                        <mat-panel-description>
+                          {{formatDate(response.createdAt)}}
+                        </mat-panel-description>
+                      </mat-expansion-panel-header>
+  
+                      <p>{{response.content}}</p>
+  
+                      <div class="follow-ups" *ngIf="response.followUps?.length">
+                        <h5>Follow-up Questions</h5>
+                        <div *ngFor="let followUp of response.followUps" 
+                             class="follow-up-item"
+                             [ngClass]="{'pending': !followUp.responses.length}">
+                          <div class="follow-up-question">
+                            <div class="follow-up-header">
+                              <p>{{followUp.content}}</p>
+                              <mat-chip *ngIf="!followUp.responses.length" 
+                                      class="pending-chip" 
+                                      selected>
+                                Pending Response
+                              </mat-chip>
+                            </div>
+                            <small>{{formatDate(followUp.createdAt)}}</small>
+                          </div>
+  
+                          <div class="follow-up-responses" *ngIf="followUp.responses?.length">
+                            <div *ngFor="let followUpResponse of followUp.responses" 
+                                 class="follow-up-response">
+                              <p>{{followUpResponse.content}}</p>
+                              <small>{{formatDate(followUpResponse.createdAt)}}</small>
+                            </div>
+                          </div>
+  
+                          <button mat-stroked-button color="primary" 
+                                  *ngIf="!followUp.responses?.length"
+                                  (click)="openResponseDialog(question, followUp)">
+                            Respond to Follow-up
+                          </button>
+                        </div>
+                      </div>
+                    </mat-expansion-panel>
+                  </mat-accordion>
+                </div>
+  
+                <mat-action-row>
+                  <button mat-stroked-button color="primary" (click)="openResponseDialog(question)">
+                    Respond
+                  </button>
+                </mat-action-row>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>

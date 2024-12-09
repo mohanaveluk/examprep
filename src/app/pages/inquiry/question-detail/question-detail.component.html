@@ -22,12 +22,69 @@
   
     <div class="responses" *ngIf="question.responses?.length">
       <h2>Responses</h2>
-      <mat-card *ngFor="let response of question.responses" class="response-card">
-        <mat-card-content>
-          <p>{{response.content}}</p>
-          <small>Responded on {{formatDate(response.createdAt)}}</small>
-        </mat-card-content>
-      </mat-card>
+      <mat-accordion>
+        <mat-expansion-panel *ngFor="let response of question.responses">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Response from {{response.user?.name || 'Staff'}}
+            </mat-panel-title>
+            <mat-panel-description>
+              {{formatDate(response.createdAt)}}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+  
+          <div class="response-content">
+            <p>{{response.content}}</p>
+          </div>
+  
+          <!-- Follow-ups for this response -->
+          <div class="follow-ups" *ngIf="response.followUps?.length">
+            <h3>Follow-up Questions</h3>
+            <mat-card *ngFor="let followUp of response.followUps" class="follow-up-card">
+              <mat-card-content>
+                <p class="follow-up-content">{{followUp.content}}</p>
+                <span class="follow-up-date">{{formatDate(followUp.createdAt)}}</span>
+  
+                <!-- Responses to follow-up -->
+                <div class="follow-up-responses" *ngIf="followUp.responses?.length">
+                  <div *ngFor="let followUpResponse of followUp.responses" class="follow-up-response">
+                    <p>{{followUpResponse.content}}</p>
+                    <span class="response-date">{{formatDate(followUpResponse.createdAt)}}</span>
+                  </div>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+  
+          <!-- Add Follow-up Form -->
+          <div class="add-follow-up">
+            <form [formGroup]="followUpForm" (ngSubmit)="onSubmitFollowUp(response.id)">
+              <mat-form-field appearance="fill">
+                <mat-label>Add a follow-up question</mat-label>
+                <textarea
+                  matInput
+                  formControlName="content"
+                  rows="3"
+                  placeholder="Type your follow-up question here">
+                </textarea>
+                <mat-error *ngIf="followUpForm.get('content')?.hasError('required')">
+                  Follow-up question is required
+                </mat-error>
+                <mat-error *ngIf="followUpForm.get('content')?.hasError('minlength')">
+                  Follow-up question must be at least 10 characters
+                </mat-error>
+              </mat-form-field>
+              <button
+                mat-raised-button
+                color="primary"
+                type="submit"
+                [disabled]="!followUpForm.valid">
+                Submit Follow-up
+              </button>
+            </form>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
     </div>
   
       <!-- Admin Response Section -->
@@ -39,7 +96,7 @@
   </div>
 
     <!-- Student Follow-up Section -->
-    <mat-card *ngIf="!isAdmin" class="add-response">
+    <!--<mat-card *ngIf="!isAdmin" class="add-response">
       <mat-card-header>
         <mat-card-title>Add Follow-up Question</mat-card-title>
       </mat-card-header>
@@ -69,5 +126,37 @@
           </button>
         </form>
       </mat-card-content>
+    </mat-card>-->
+    <mat-card class="add-response">
+      <mat-card-header>
+        <mat-card-title>Add Response</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="responseForm" (ngSubmit)="onSubmitResponse()">
+          <mat-form-field appearance="fill">
+            <mat-label>Your response</mat-label>
+            <textarea
+              matInput
+              formControlName="content"
+              rows="4"
+              placeholder="Type your response here">
+            </textarea>
+            <mat-error *ngIf="responseForm.get('content')?.hasError('required')">
+              Response is required
+            </mat-error>
+            <mat-error *ngIf="responseForm.get('content')?.hasError('minlength')">
+              Response must be at least 10 characters
+            </mat-error>
+          </mat-form-field>
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="!responseForm.valid">
+            Submit Response
+          </button>
+        </form>
+      </mat-card-content>
     </mat-card>
+
   </div>

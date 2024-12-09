@@ -12,7 +12,8 @@ export class QuestionDetailComponent {
   question: Question | null = null;
   responseForm: FormGroup;
   isAdmin = false; // This should be determined by your auth service
-
+  followUpForm!: FormGroup;
+  
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -22,6 +23,11 @@ export class QuestionDetailComponent {
     this.responseForm = this.fb.group({
       content: ['', [Validators.required, Validators.minLength(10)]]
     });
+
+    this.followUpForm = this.fb.group({
+      content: ['', [Validators.required, Validators.minLength(10)]]
+    });
+
     // Mock admin status - in real app, get from auth service
     //this.isAdmin = true; // For demonstration purposes
   }
@@ -59,6 +65,23 @@ export class QuestionDetailComponent {
     }
   }
 
+  onSubmitFollowUp(responseId: string) {
+    if (this.followUpForm.valid) {
+      const followUpDto = {
+        content: this.followUpForm.get('content')?.value,
+        responseId: responseId
+      };
+
+      this.inquiryService.addFollowUp(responseId, followUpDto).subscribe({
+        next: () => {
+          this.followUpForm.reset();
+          this.loadQuestion(this.question!.id);
+        },
+        error: (error) => console.error('Failed to add follow-up:', error)
+      });
+    }
+  }
+  
   formatDate(date: Date): string {
     return new Date(date).toLocaleDateString('en-US', {
       year: 'numeric',

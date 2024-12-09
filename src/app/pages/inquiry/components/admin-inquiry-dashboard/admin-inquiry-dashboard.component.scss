@@ -75,6 +75,73 @@
     background-color: #f5f5f5;
   }
   
+
+
+.responses-accordion {
+  margin-top: 16px;
+}
+
+.response-panel {
+  margin-bottom: 8px;
+  background-color: #f8f9fa;
+}
+
+.follow-ups {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #eee;
+}
+
+.follow-ups h5 {
+  color: #333;
+  margin: 0 0 12px 0;
+  font-size: 1em;
+}
+
+.follow-up-item {
+  margin: 16px 0;
+  padding: 12px;
+  background-color: #fff;
+  border-radius: 4px;
+  border-left: 3px solid #2196F3;
+}
+
+.follow-up-question {
+  margin-bottom: 8px;
+}
+
+.follow-up-question p {
+  margin: 0 0 4px 0;
+  color: #333;
+}
+
+.follow-up-question small {
+  color: #666;
+}
+
+.follow-up-responses {
+  margin-top: 12px;
+  padding-left: 16px;
+  border-left: 2px solid #e0e0e0;
+}
+
+.follow-up-response {
+  padding: 8px;
+  margin: 8px 0;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+
+.follow-up-response p {
+  margin: 0 0 4px 0;
+  color: #333;
+}
+
+.follow-up-response small {
+  color: #666;
+}
+
+
   .questions-list {
     flex: 1;
   }
@@ -120,6 +187,7 @@
     margin-left: 16px;
     color: #666;
     font-size: 0.9em;
+    margin-right: 2rem;
   }
   
   :host ::ng-deep .mat-expansion-panel-header-description {

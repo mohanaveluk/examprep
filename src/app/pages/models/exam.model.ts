@@ -1,11 +1,6 @@
 import { Category } from "../../shared/models/category.model";
 
-export interface ApiResponse<T> {
-  success: boolean;
-  message: string;
-  data?: T;
-  error?: string;
-}
+
 
 export interface Exam {
   category?: Category;

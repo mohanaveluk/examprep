@@ -24,7 +24,8 @@ export interface Response {
   questionId: string;
   content: string;
   createdAt: Date;
-  adminId: string;
+  user?: UserInfo;
+  followUps: FollowUp[];
 }
 
 export interface Stats {
@@ -35,6 +36,24 @@ export interface Stats {
   answered: number;
   pending: number;
 }
+
+export interface FollowUp {
+  id: string;
+  content: string;
+  status: string;
+  createdAt: Date;
+  responses: Response[];
+}
+
+export interface CreateFollowUpDto {
+  content: string;
+  responseId: string;
+}
+
+export interface CreateResponseDto {
+  content: string;
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -63,7 +82,8 @@ export class InquiryService {
           questionId: '1',
           content: 'The human heart is a muscular organ divided into four chambers: two upper atria and two lower ventricles...',
           createdAt: new Date('2024-11-15T11:00:00'),
-          adminId: 'admin1'
+          user: {},
+          followUps: []
         }
       ]
     },
@@ -100,7 +120,8 @@ export class InquiryService {
           questionId: '3',
           content: 'The nervous system transmits signals through electrical impulses called action potentials...',
           createdAt: new Date('2024-11-08T16:00:00'),
-          adminId: 'admin2'
+          user: {},
+          followUps: []
         }
       ]
     }
@@ -134,6 +155,22 @@ export class InquiryService {
     return this.http.post<Response>(endpoint, { content });
   }
 
+  addFollowUp(responseId: string, followUp: CreateFollowUpDto): Observable<FollowUp> {
+    const endpoint = this.apiUrlBuilder.buildApiUrl(`inquiries/responses/${responseId}/follow-up`);
+    return this.http.post<FollowUp>(
+      endpoint,
+      followUp
+    );
+  }
+
+  addResponseToFollowUp(followUpId: string, response: CreateResponseDto): Observable<Response> {
+    const endpoint = this.apiUrlBuilder.buildApiUrl(`inquiries/follow-up/${followUpId}/responses`);
+    return this.http.post<Response>(
+      endpoint,
+      response
+    );
+  }
+
   getStats(): Observable<Stats> {
     const endpoint = this.apiUrlBuilder.buildApiUrl(`inquiries/stats`);
     return this.http.get<Stats>(endpoint);
@@ -152,6 +189,8 @@ export class InquiryService {
     const endpoint = this.apiUrlBuilder.buildApiUrl(`inquiries/${questionId}/read`);
     return this.http.post<void>(endpoint, {});
   }
+
+ 
 
   /* static functions*/
 
@@ -197,7 +236,8 @@ export class InquiryService {
         questionId,
         content,
         createdAt: new Date(),
-        adminId: 'student1'
+        user: {},
+          followUps: []
       };
 
       if (!question.responses) {
@@ -213,7 +253,8 @@ export class InquiryService {
       questionId: '0',
       content: 'Failed to add response',
       createdAt: new Date(),
-      adminId: 'unknown'
+      user: {},
+          followUps: []
     }).pipe(delay(500));
   }
 
