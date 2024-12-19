@@ -1,0 +1,52 @@
+<div class="trial-exam-container">
+    <div class="header">
+      <h1>Trial Exam Management</h1>
+      <button mat-raised-button color="primary" (click)="openAddEditExam()">
+        <mat-icon>add</mat-icon>
+        Add New Exam
+      </button>
+    </div>
+  
+    <table mat-table [dataSource]="exams" class="mat-elevation-z8">
+      <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef>Title</th>
+        <td mat-cell *matCellDef="let exam">{{exam.title}}</td>
+      </ng-container>
+  
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef>Description</th>
+        <td mat-cell *matCellDef="let exam">{{exam.description}}</td>
+      </ng-container>
+  
+      <ng-container matColumnDef="totalQuestions">
+        <th mat-header-cell *matHeaderCellDef>Total Questions</th>
+        <td mat-cell *matCellDef="let exam">{{exam.totalQuestions}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="passingScore">
+        <th mat-header-cell *matHeaderCellDef>Passing Score</th>
+        <td mat-cell *matCellDef="let exam">{{exam.passingScore}}</td>
+      </ng-container>
+  
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let exam">
+          <button mat-icon-button color="primary" (click)="openQuestionDashboard(exam.id)"
+                  matTooltip="Manage Questions">
+            <mat-icon>question_answer</mat-icon>
+          </button>
+          <button mat-icon-button color="primary" (click)="openAddEditExam(exam)"
+                  matTooltip="Edit Exam">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteExam(exam)"
+                  matTooltip="Delete Exam">
+            <mat-icon>delete</mat-icon>
+          </button>          
+        </td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>

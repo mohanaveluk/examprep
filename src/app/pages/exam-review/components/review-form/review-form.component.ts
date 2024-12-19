@@ -2,17 +2,19 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ExamReviewService, Review } from '../../exam-review.service';
+import { greaterThanZeroValidator } from '../../../../shared/utility/greater-than-zero.validator';
 
 @Component({
   selector: 'app-review-form',
   templateUrl: './review-form.component.html',
-  styleUrls: ['./review-form.component.css']
+  styleUrls: ['./review-form.component.scss']
 })
 export class ReviewFormComponent  implements OnInit {
   @Input() examId!: string;
   @Input() initialReview?: Review;
   @Input() isEdit = false;
   @Output() reviewSubmitted = new EventEmitter<void>();
+  public submitted = false;
 
   reviewForm: FormGroup;
 
@@ -22,7 +24,7 @@ export class ReviewFormComponent  implements OnInit {
     private snackBar: MatSnackBar
   ) {
     this.reviewForm = this.fb.group({
-      rating: [0, [Validators.required, Validators.min(1), Validators.max(5)]],
+      rating: [0, [Validators.required, Validators.min(1), Validators.max(5), greaterThanZeroValidator()]],
       comment: ['', [Validators.required, Validators.minLength(10)]]
     });
   }
@@ -37,6 +39,13 @@ export class ReviewFormComponent  implements OnInit {
   }
 
   onSubmit(): void {
+    this.submitted = true;
+    if (this.reviewForm.invalid) {
+      this.markAllAsTouched();
+      return;
+    }
+    
+    this.submitted = false;
     if (this.reviewForm.valid) {
       const reviewData = {
         examId: this.examId,
@@ -86,4 +95,19 @@ export class ReviewFormComponent  implements OnInit {
       });*/
     }
   }
+
+  setRating(event: number){
+    this.reviewForm.get('rating')?.setValue(event);
+    this.submitted = false;
+  }
+
+  private markAllAsTouched() {
+    Object.keys(this.reviewForm.controls).forEach(field => {
+      const control = this.reviewForm.get(field);
+      if(!control?.valid){
+        control?.markAsTouched({ onlySelf: true });
+      }
+    });
+  }
 }
+

@@ -38,6 +38,11 @@ import { ResultHistoryComponent } from './components/result-history/result-histo
 import { ResultDetailsDialogComponent } from './components/result-details-dialog/result-details-dialog.component';
 import { ConfirmRetakeComponent } from './components/confirm-retake/confirm-retake.component';
 import { OverviewComponent } from './overview/overview.component';
+import { ModelQuestionComponent } from './model-question/model-question.component';
+import { ModelTestSummaryComponent } from './trial-exam/model-test-summary/model-test-summary.component';
+import { ModelTestListComponent } from './trial-exam/model-test-list/model-test-list.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 
 
 
@@ -58,7 +63,11 @@ import { OverviewComponent } from './overview/overview.component';
     ResultHistoryComponent,
     ResultDetailsDialogComponent,
     ConfirmRetakeComponent,
-    OverviewComponent
+    OverviewComponent,
+    ModelQuestionComponent,
+    ModelTestSummaryComponent,
+    ModelTestListComponent,
+
   ],
   imports: [
     CommonModule,
@@ -82,6 +91,8 @@ import { OverviewComponent } from './overview/overview.component';
     MatChipsModule,
     MatExpansionModule,
     NgxChartsModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
     SharedModule
   ]
 })

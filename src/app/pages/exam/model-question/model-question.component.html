@@ -1,0 +1,133 @@
+<div class="model-question-container" *ngIf="currentQuestion">
+  <!--Show exam title-->
+  <div class="exam-header" *ngIf="exam">
+    <h1 class="exam-title">Model Test: {{ exam.title }}</h1>
+  </div>
+  <!-- Show questions section when not showing summary -->
+  <div *ngIf="!showSummary && currentQuestion">
+  
+  <div class="question-header">
+    <h3>Question {{ currentIndex + 1 }} of {{ totalQuestions }}</h3>
+    <div class="progress-bar">
+        <!-- Progress Bar -->
+        <mat-progress-bar
+          mode="determinate"
+          [value]="progressPercentage"
+          class="progress-bar">
+        </mat-progress-bar>
+    </div>
+  </div>
+    
+  
+    <!-- Question Status -->
+    <div *ngIf="isSubmitted" class="result-status"
+        [ngClass]="{'correct-status': questionResult?.isCorrect, 
+                    'incorrect-status': !questionResult?.isCorrect}">
+      <mat-icon>{{questionResult?.isCorrect ? 'check_circle' : 'cancel'}}</mat-icon>
+      <span>{{questionResult?.isCorrect ? 'Correct!' : 'Incorrect'}}</span>
+    </div>
+  
+    <!-- Question Card -->
+    <mat-card class="question-card">
+      <mat-card-header>
+        <mat-card-title>
+          Question {{currentIndex + 1}} of {{totalQuestions}}
+        </mat-card-title>
+        <mat-card-subtitle>
+          {{currentQuestion.type === 'multiple' ? 
+            'Select up to ' + currentQuestion.maxSelections + ' options' : 
+            'Select one option'}}
+        </mat-card-subtitle>
+      </mat-card-header>
+  
+      <mat-card-content>
+        <!-- Question Text -->
+        <p class="question-text">{{currentQuestion.text}}</p>
+  
+        <!-- Options -->
+        <div class="options-container">
+          <ng-container [ngSwitch]="currentQuestion.type">
+            <!-- Single Choice -->
+            <mat-radio-group *ngSwitchCase="'single'" 
+                            [(ngModel)]="selectedAnswers[0]"
+                            [disabled]="isSubmitted">
+              <mat-radio-button *ngFor="let option of currentQuestion.options"
+                              [value]="option.id"
+                              [ngClass]="getOptionClass(option.id)"
+                              class="option-item">
+                {{option.text}}
+              </mat-radio-button>
+            </mat-radio-group>
+  
+            <!-- Multiple Choice -->
+            <div *ngSwitchCase="'multiple'" class="multiple-choice">
+              <mat-checkbox *ngFor="let option of currentQuestion.options"
+                          [checked]="isOptionSelected(option.id)"
+                          (change)="onOptionSelect(option.id)"
+                          [disabled]="isSubmitted"
+                          [ngClass]="getOptionClass(option.id)"
+                          class="option-item">
+                {{option.text}}
+              </mat-checkbox>
+            </div>
+
+            <mat-radio-group *ngSwitchCase="'true-false'" 
+                            [(ngModel)]="selectedAnswers[0]"
+                            [disabled]="isSubmitted">
+              <mat-radio-button *ngFor="let option of currentQuestion.options"
+                              [value]="option.id"
+                              [ngClass]="getOptionClass(option.id)"
+                              class="option-item">
+                {{option.text}}
+              </mat-radio-button>
+            </mat-radio-group>
+
+          </ng-container>
+        </div>
+  
+        <!-- Explanation (shown after submission) -->
+        <div *ngIf="isSubmitted" class="explanation-section">
+          <h3>Explanation</h3>
+          <p>{{questionResult?.explanation}}</p>
+        </div>
+      </mat-card-content>
+  
+      <mat-card-actions align="end">
+        <button mat-raised-button
+                color="primary"
+                *ngIf="!isCompleted"
+                (click)="onSubmit()"
+                [disabled]="isSubmitted || selectedAnswers.length === 0">
+          Submit
+        </button>
+        <button mat-raised-button
+                color="accent"
+                *ngIf="isSubmitted && !isCompleted"
+                (click)="next()">
+          Next Question
+        </button>
+        <button mat-raised-button
+                color="accent"
+                *ngIf="isCompleted"
+                (click)="summary()">
+          Summary
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+  <!-- Show test summary when completed -->
+  <app-model-test-summary 
+    *ngIf="showSummary && testSummary"
+    [summary]="testSummary">
+  </app-model-test-summary>
+</div>
+<!-- Error State -->
+<div class="error-card" *ngIf="error">
+  <div class="error-state">
+    <mat-icon color="warn">error</mat-icon>
+    <p>{{error}}</p>
+    <button mat-raised-button color="primary" (click)="tryAgain()">
+      Try Later
+    </button>
+  </div>
+</div>

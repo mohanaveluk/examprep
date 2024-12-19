@@ -23,6 +23,9 @@ import { AdminInquiryDashboardComponent } from './components/admin-inquiry-dashb
 import { MatListModule } from '@angular/material/list';
 import { AdminResponseDialogComponent } from './components/admin-response-dialog/admin-response-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { AdminInquiryOverviewComponent } from './components/admin-inquiry-overview/admin-inquiry-overview.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserModule } from '@angular/platform-browser';
 
 
 
@@ -36,6 +39,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     AdminResponseComponent,
     AdminInquiryDashboardComponent,
     AdminResponseDialogComponent,
+    AdminInquiryOverviewComponent,
     
   ],
   imports: [

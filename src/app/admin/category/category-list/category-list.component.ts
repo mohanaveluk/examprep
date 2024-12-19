@@ -4,6 +4,7 @@ import { CategoryService } from '../services/category.service';
 import { Category } from '../../../shared/models/category.model';
 import { CategoryDialogComponent } from '../category-dialog/category-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { HeaderService } from '../../services/header.service';
 
 @Component({
   selector: 'app-category-list',
@@ -16,11 +17,13 @@ export class CategoryListComponent implements OnInit {
 
   constructor(
     private categoryService: CategoryService,
+    private headerService: HeaderService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
+    this.headerService.setTitle("Admin - Category");
     this.loadCategories();
   }
 

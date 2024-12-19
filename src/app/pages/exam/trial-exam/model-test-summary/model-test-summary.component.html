@@ -1,0 +1,79 @@
+<div class="summary-container">
+    <mat-card class="summary-card">
+      <mat-card-header>
+        <mat-card-title>Test Summary: {{summary.examTitle}}</mat-card-title>
+        <mat-card-subtitle>
+          Time taken: {{formatTime(summary.timeTaken)}}
+        </mat-card-subtitle>
+      </mat-card-header>
+  
+      <mat-card-content>
+        <!-- Overall Score -->
+        <div class="score-section">
+          <div class="score-circle" [ngClass]="scoreColor">
+            <div class="score-value">{{testTotalScore}}%</div>
+            <div class="score-label">{{isPassing ? 'Passed' : 'Needs Improvement'}}</div>
+          </div>
+          <div class="score-details">
+            <div class="detail-item">
+              <span class="label">Total Questions:</span>
+              <span class="value">{{summary.totalQuestions}}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Correct Answers:</span>
+              <span class="value">{{summary.correctAnswers}}</span>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Section Scores -->
+        <div class="sections-grid">
+          <mat-card *ngFor="let section of summary.sectionScores" class="section-card">
+            <mat-card-header>
+              <mat-card-title>{{section.name}}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <mat-progress-bar
+                mode="determinate"
+                [value]="section.score"
+                [color]="section.score >= 50 ? 'primary' : 'warn'">
+              </mat-progress-bar>
+              <div class="section-details">
+                <span>{{section.score | number:'1.2-2' || 0}}%</span>
+                <span>{{section.correctAnswers}}/{{section.totalQuestions}}</span>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+  
+        <!-- Recommendations -->
+        <mat-card class="recommendations-card" *ngIf="!isPassing">
+          <mat-card-header>
+            <mat-card-title>
+              <mat-icon color="primary">lightbulb</mat-icon>
+              Recommendations
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <ul>
+              <li>Practice more sample questions to improve your understanding</li>
+              <li>Review the topics where you scored less than 50%</li>
+              <li>Consider subscribing to access our full question bank</li>
+              <li>Take advantage of our detailed explanations and study materials</li>
+            </ul>
+          </mat-card-content>
+        </mat-card>
+      </mat-card-content>
+  
+      <mat-card-actions align="end">
+        <button mat-button color="primary" (click)="tryAgain()">
+          <mat-icon>replay</mat-icon>
+          Try Another Test
+        </button>
+        <button mat-raised-button color="primary" (click)="viewPlans()">
+          <mat-icon>stars</mat-icon>
+          View Premium Plans
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>

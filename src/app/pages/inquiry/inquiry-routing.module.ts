@@ -5,6 +5,7 @@ import { InquiryDashboardComponent } from './inquiry-dashboard/inquiry-dashboard
 import { AuthGuard } from '../auth/auth.guard';
 import { QuestionDetailComponent } from './question-detail/question-detail.component';
 import { AdminInquiryDashboardComponent } from './components/admin-inquiry-dashboard/admin-inquiry-dashboard.component';
+import { AdminInquiryOverviewComponent } from './components/admin-inquiry-overview/admin-inquiry-overview.component';
 
 const routes: Routes = [
   { 

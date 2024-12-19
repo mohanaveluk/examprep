@@ -1,0 +1,34 @@
+  // Model Test Section
+  .model-test-section {
+    padding: 60px 20px;
+    text-align: center;
+  }
+  
+  .model-test-card {
+    max-width: 400px;
+    margin: 0 auto;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    
+    &:hover {
+      transform: scale(1.02);
+    }
+    
+    .model-icon {
+      font-size: 64px;
+      height: 64px;
+      width: 64px;
+      margin-bottom: 20px;
+      color: #1976d2;
+    }
+    
+    h3 {
+      margin: 0 0 12px;
+      color: #333;
+    }
+    
+    p {
+      margin: 0 0 20px;
+      color: #666;
+    }
+  }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { InquiryService, Question } from '../../inquiry.service';
+import { InquiryService, Question, FollowUp } from '../../inquiry.service';
 import { AdminResponseDialogComponent } from '../admin-response-dialog/admin-response-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -83,9 +83,9 @@ export class AdminInquiryDashboardComponent implements OnInit {
     this.router.navigate(['/inquiry/list', questionId]);
   }
 
-  openResponseDialog(question: Question) {
+  openResponseDialog(question: Question, followUp?: FollowUp) {
     const dialogRef = this.dialog.open(AdminResponseDialogComponent, {
-      data: question,
+      data: {question, followUp},
       width: '800px',
       maxHeight: '90vh',
       disableClose: true

@@ -1,0 +1,108 @@
+<div class="dialog-container">
+    <h2 mat-dialog-title>{{isEditing ? 'Edit' : 'Add'}} Exam</h2>
+  
+    <form [formGroup]="examForm" (ngSubmit)="onSubmit()">
+      <mat-dialog-content>
+        <mat-form-field appearance="fill">
+          <mat-label>Title</mat-label>
+          <input matInput formControlName="title" placeholder="Enter exam title">
+          <mat-error *ngIf="examForm.get('title')?.hasError('required')">
+            Title is required
+          </mat-error>
+          <mat-error *ngIf="examForm.get('title')?.hasError('minlength')">
+            Title must be at least 3 characters
+          </mat-error>
+        </mat-form-field>
+  
+        <mat-form-field appearance="fill">
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description" rows="3"
+                    placeholder="Enter exam description"></textarea>
+          <mat-error *ngIf="examForm.get('description')?.hasError('required')">
+            Description is required
+          </mat-error>
+          <mat-error *ngIf="examForm.get('description')?.hasError('minlength')">
+            Description must be at least 10 characters
+          </mat-error>
+        </mat-form-field>
+  
+        <mat-form-field appearance="fill">
+          <mat-label>Subject</mat-label>
+          <input matInput formControlName="subject" placeholder="Enter exam subject">
+          <mat-error *ngIf="examForm.get('subject')?.hasError('required')">
+            Subject is required
+          </mat-error>
+          <mat-error *ngIf="examForm.get('subject')?.hasError('minlength')">
+            Subject must be at least 3 characters
+          </mat-error>
+        </mat-form-field>
+
+        <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>Total Questions</mat-label>
+            <input matInput type="number" formControlName="totalQuestions">
+            <mat-error *ngIf="examForm.get('totalQuestions')?.hasError('required')">
+              Total questions is required
+            </mat-error>
+            <mat-error *ngIf="examForm.get('totalQuestions')?.hasError('min')">
+              Must have at least 1 question
+            </mat-error>
+          </mat-form-field>
+  
+          <mat-form-field appearance="fill">
+            <mat-label>Passing Score (%)</mat-label>
+            <input matInput type="number" formControlName="passingScore">
+            <mat-error *ngIf="examForm.get('passingScore')?.hasError('required')">
+              Passing score is required
+            </mat-error>
+            <mat-error *ngIf="examForm.get('passingScore')?.hasError('min') || 
+                             examForm.get('passingScore')?.hasError('max')">
+              Score must be between 0 and 100
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+      <!-- File Upload Section -->
+      <div class="file-upload-section">
+        <h3>Upload Questions</h3>
+        <div class="upload-buttons">
+          <button type="button" mat-stroked-button color="primary" (click)="downloadTemplate('csv'); $event.stopPropagation()">
+            <mat-icon>download</mat-icon>
+            Download CSV Template
+          </button>
+          <button type="button" mat-stroked-button color="primary" (click)="downloadTemplate('excel'); $event.stopPropagation()">
+            <mat-icon>download</mat-icon>
+            Download Excel Template
+          </button>
+        </div>
+
+        <div class="file-input-container">
+          <input type="file" #fileInput hidden (change)="onFileSelected($event)"
+                 accept=".csv,.xlsx,.xls" (click)="$event.stopPropagation()">
+          <button type="button" mat-raised-button color="primary" (click)="openFileInput($event)">
+            <mat-icon>upload_file</mat-icon>
+            Choose File
+          </button>
+          <span class="file-name" *ngIf="selectedFile">
+            {{selectedFile.name}}
+            <button type="button" mat-icon-button color="warn" (click)="removeFile($event)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </span>
+        </div>
+
+        <mat-error *ngIf="fileError" class="file-error">
+          {{fileError}}
+        </mat-error>
+      </div>
+      </mat-dialog-content>
+  
+      <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Cancel</button>
+        <button mat-raised-button color="primary" type="submit"
+                [disabled]="!examForm.valid">
+          {{isEditing ? 'Update' : 'Create'}}
+        </button>
+      </mat-dialog-actions>
+    </form>
+  </div>

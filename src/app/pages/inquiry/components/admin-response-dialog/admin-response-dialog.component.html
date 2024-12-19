@@ -1,6 +1,6 @@
 <div class="dialog-container">
     <div class="dialog-header">
-      <h2>Respond to Question</h2>
+      <h2>{{isFollowUpResponse ? 'Respond to Follow-up' : 'Respond to Question'}}</h2>
       <button mat-icon-button (click)="onClose()">
         <mat-icon>close</mat-icon>
       </button>
@@ -8,19 +8,27 @@
   
     <mat-dialog-content>
       <div class="question-details">
-        <h3>{{question.subject}}</h3>
-        <p class="question-content">{{question.content}}</p>
+        <h3>{{data.question.subject}}</h3>
+        <p class="question-content">{{data.question.content}}</p>
         <div class="question-meta">
-          <span class="date">Asked on {{formatDate(question.createdAt)}}</span>
-          <mat-chip [color]="question.status === 'answered' ? 'primary' : 'warn'" selected>
-            {{question.status}}
+          <span class="date">Asked on {{formatDate(data.question.createdAt)}}</span>
+          <mat-chip [ngClass]="data.question.status === 'answered' ? 'answered-chip' : 'pending-chip'" selected>
+            {{data.question.status}}
           </mat-chip>
         </div>
       </div>
   
-      <div class="previous-responses" *ngIf="question.responses?.length">
+      <div class="follow-up-details" *ngIf="isFollowUpResponse">
+        <h3>Follow-up Question</h3>
+        <div class="follow-up-content">
+          <p>{{data.followUp?.content}}</p>
+          <small>{{formatDate(data.followUp?.createdAt!)}}</small>
+        </div>
+      </div>
+
+      <div class="previous-responses" *ngIf="data.question.responses?.length && !isFollowUpResponse">
         <h3>Previous Responses</h3>
-        <div class="response" *ngFor="let response of question.responses">
+        <div class="response" *ngFor="let response of data.question.responses">
           <p>{{response.content}}</p>
           <small>{{formatDate(response.createdAt)}}</small>
         </div>

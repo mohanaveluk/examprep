@@ -11,6 +11,8 @@ export class ListComponent {
   public exams: any[] = [];
   public warningMessage: string = ""
   public errorMessage: string = ""
+  loading = true;
+  error: string | null = null;
 
   constructor(private examService: ExamService, private alertService: AlertService) {}
 
@@ -21,9 +23,15 @@ export class ListComponent {
   }
 
   ngOnInit() {
+    this.loadExams();
+  }
+
+  loadExams(): void {
     this.warningMessage = "";
+    this.loading = true;
     this.examService.getAvailableExams().subscribe({
       next: (exams: any) => {
+        this.loading = false;
         if(exams.success){
           this.exams = exams.data,
           this.exams.forEach((item: { categoryText: any; category: { name: any; }; }) => {
@@ -36,10 +44,16 @@ export class ListComponent {
         }
       },
       error: (error) => {
+        this.error = 'Failed to load exams. Please try again later.';
+        this.loading = false;
         console.error('Failed to load exams:', error);
       }
     });
   }
 
-
+  getProgressColor(passingScore: number): string {
+    if (passingScore >= 80) return 'primary';
+    if (passingScore >= 60) return 'accent';
+    return 'warn';
+  }
 }

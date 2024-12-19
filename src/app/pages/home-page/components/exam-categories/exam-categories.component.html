@@ -1,0 +1,25 @@
+<section class="categories-section">
+    <h2>Explore Exam Categories</h2>
+    <div class="categories-grid">
+      <mat-card *ngFor="let category of categories" 
+                class="category-card animate-box"
+                (click)="onCategoryClick(category.route)">
+        <mat-card-content>
+          <mat-icon class="category-icon">{{category.icon}}</mat-icon>
+          <h3>{{category.title}}</h3>
+          <p>{{category.description}}</p>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- <mat-card class="category-card animate-box" (click)="onStartTest()">
+      <mat-card-content>
+        <mat-icon class="category-icon">quiz</mat-icon>
+        <h3>Free Model Test</h3>
+        <p>Try a 10-question model test to experience our platform</p>
+        <button mat-stroked-button color="primary">
+          Start Practice Test
+        </button>
+      </mat-card-content>
+    </mat-card> -->
+    </div>
+  </section>

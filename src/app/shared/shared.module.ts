@@ -26,6 +26,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { StatCardComponent } from '../pages/inquiry/components/stat-card/stat-card.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { TruncatePipe } from './utility/truncate.pipe';
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     Nav2Component,
     AlertComponent,
     SessionExpiredDialogComponent,
-    StatCardComponent
+    StatCardComponent,
+    TruncatePipe
   ],
   imports: [
     CommonModule,
@@ -75,7 +77,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     FooterComponent,
     Nav2Component,
     AlertComponent,
-    StatCardComponent
+    StatCardComponent,
+    TruncatePipe
   ]
 })
 export class SharedModule { }
