@@ -1,0 +1,95 @@
+<div class="model-test-container">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <h1>Practice Medical Entrance Exams</h1>
+        <p>Enhance your preparation with our comprehensive model tests designed by experts</p>
+      </div>
+    </section>
+  
+    <!-- Features Section -->
+    <section class="features-section">
+      <div class="feature-card">
+        <mat-icon>timer</mat-icon>
+        <h3>Timed Tests</h3>
+        <p>Simulate real exam conditions</p>
+      </div>
+      <div class="feature-card">
+        <mat-icon>analytics</mat-icon>
+        <h3>Detailed Analysis</h3>
+        <p>Get comprehensive performance insights</p>
+      </div>
+      <div class="feature-card">
+        <mat-icon>school</mat-icon>
+        <h3>Expert Content</h3>
+        <p>Questions crafted by medical professionals</p>
+      </div>
+    </section>
+  
+    <!-- Exams Section -->
+    <section class="exams-section">
+      <h2>Available Model Tests</h2>
+      
+      <!-- Loading State -->
+      <div class="loading-state" *ngIf="loading">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Loading available tests...</p>
+      </div>
+  
+      <!-- Error State -->
+      <div class="error-state" *ngIf="error">
+        <mat-icon color="warn">error</mat-icon>
+        <p>{{error}}</p>
+        <button mat-raised-button color="primary" (click)="loadExams()">
+          Try Again
+        </button>
+      </div>
+  
+      <!-- Exams Grid -->
+      <div class="exams-grid" *ngIf="!loading && !error">
+        <mat-card *ngFor="let exam of exams" class="exam-card" [class.inactive]="!exam.is_active">
+          <mat-card-header>
+            <mat-card-title>{{exam.title}}</mat-card-title>
+            <mat-card-subtitle>{{exam.subject}}</mat-card-subtitle>
+          </mat-card-header>
+  
+          <mat-card-content>
+            <p class="description">{{exam.description}}</p>
+            
+            <div class="exam-stats">
+              <div class="stat-item">
+                <mat-icon>question_answer</mat-icon>
+                <span>{{exam.totalQuestions}} Questions</span>
+              </div>
+              <div class="stat-item">
+                <mat-icon>grade</mat-icon>
+                <span>{{exam.passingScore}}% to Pass</span>
+              </div>
+            </div>
+  
+            <mat-progress-bar
+              [color]="getProgressColor(exam.passingScore)"
+              mode="determinate"
+              [value]="exam.passingScore">
+            </mat-progress-bar>
+          </mat-card-content>
+  
+          <mat-card-actions align="end">
+            <button 
+              mat-raised-button 
+              color="primary"
+              [disabled]="!exam.is_active"
+              (click)="selectExam(exam.id)">
+              Select Test
+            </button>
+          </mat-card-actions>
+  
+          <mat-card-footer *ngIf="!exam.is_active">
+            <div class="inactive-badge">
+              Currently Unavailable
+            </div>
+          </mat-card-footer>
+        </mat-card>
+      </div>
+    </section>
+  </div>

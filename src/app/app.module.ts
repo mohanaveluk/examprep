@@ -34,6 +34,9 @@ import { PagesComponent } from './pages/pages.component';
 import { MatCard, MatCardModule } from '@angular/material/card';
 import { AlertComponent } from './shared/components/alert/alert.component';
 import { CoreModule } from './core/core.module';
+import { LandingPageComponent } from './pages/landing-page/landing-page.component';
+import { HomePageModule } from './pages/home-page/home-page.module';
+//import { TruncatePipe } from './shared/utility/truncate.pipe';
 
 @NgModule({
   declarations: [
@@ -42,7 +45,9 @@ import { CoreModule } from './core/core.module';
     ContactUsComponent,
     AboutComponent,
     FooterComponent,
-    PagesComponent
+    PagesComponent,
+    LandingPageComponent,
+    //TruncatePipe
   ],
   imports: [
     BrowserModule,
@@ -73,7 +78,8 @@ import { CoreModule } from './core/core.module';
     InquiryModule,
     TestHistoryModule,
     PricingModule,
-    AdminModule
+    AdminModule,
+    HomePageModule
   ],
   providers: [
     provideAnimationsAsync()

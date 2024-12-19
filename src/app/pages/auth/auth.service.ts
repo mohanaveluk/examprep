@@ -1,22 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, delay, Observable, of, tap } from 'rxjs';
+import { BehaviorSubject, catchError, delay, Observable, of, tap, throwError } from 'rxjs';
 import { ApiUrlBuilder } from '../../shared/utility/api-url-builder';
 import { TokenService } from '../../core/services/token.service';
-export interface UserModel{
-  id: string,
-  email: string,
-  firstName: string,
-  lastName?: string,
-  role: string
-}
+import { AuthResponse, LoginRequest, RefreshTokenRequest, RefreshTokenResponse, UserModel } from '../../shared/models/auth.model';
+import { Router } from '@angular/router';
 
-export interface UserResponse{
-  status: boolean,
-  message: string,
-  access_token: string,
-  user: UserModel
-}
 
 @Injectable({
   providedIn: 'root'
@@ -24,24 +13,43 @@ export interface UserResponse{
 export class AuthService {
   AUTH_TOKEN = 'lrpd_opr';
   private loggedIn = new BehaviorSubject<boolean>(this.hasToken());
+  private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
+  isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
+
   private userName!: string;
   private user!: UserModel;
   private isAuthenticated = false;
-  
-  private apiUrl = 'http://localhost:3000/api/auth'; // Replace with your API URL
+  public redirectUrl: string | null = null;
 
-  constructor(private http: HttpClient, private apiUrlBuilder: ApiUrlBuilder, private tokenService: TokenService) {
+  constructor(
+    private http: HttpClient, 
+    private apiUrlBuilder: ApiUrlBuilder, 
+    private tokenService: TokenService,
+    private router: Router
+  ) {
+    this.isAuthenticatedSubject.next(this.tokenService.hasValidAccessToken());
     this.userName = localStorage.getItem('userName') || '';
     const userobj  = localStorage?.getItem('user');
     this.user = userobj !== null ? JSON.parse(userobj) : {};
   }
 
-  register(register: any): Observable<any> {
+  register(register: any): Observable<AuthResponse> {
     const createApi = this.apiUrlBuilder.buildApiUrl('auth/register');
-    return this.http.post(`${createApi}`, register);
+    return this.http.post<AuthResponse>(`${createApi}`, register).pipe(
+      tap(response => this.handleAuthResponse(response)),
+      catchError(error => throwError(() => error))
+    );
   }
 
-  login(credentials: { email: string; password: string }): Observable<any> {
+  login(request: LoginRequest): Observable<AuthResponse> {
+    const createApi = this.apiUrlBuilder.buildApiUrl('auth/login');
+    return this.http.post<AuthResponse>(createApi, request).pipe(
+      tap(response => this.handleAuthResponse(response)),
+      catchError(error => throwError(() => error))
+    );
+  }
+
+  login_prev(credentials: { email: string; password: string }): Observable<AuthResponse> {
     const createApi = this.apiUrlBuilder.buildApiUrl('auth/login');
     return this.http.post(`${createApi}`, credentials).pipe(
       tap((response: any) => {
@@ -55,6 +63,7 @@ export class AuthService {
       })
     );
   }
+
 
   login2(email: string, password: string, credentials: { email: string; password: string; }): Observable<boolean> {
     // Simulate API call
@@ -78,16 +87,39 @@ export class AuthService {
   }
 
 
-  logout(): void {
-    this.isAuthenticated = false;
-    localStorage.removeItem(this.AUTH_TOKEN);
-    localStorage.removeItem('userName');
-    localStorage.removeItem('user');
-    this.tokenService.removeToken();
-    this.loggedIn.next(false);
-    this.userName = "";
+  logout(): Observable<any> {
+    const createApi = this.apiUrlBuilder.buildApiUrl('auth/logout');
+
+    return this.http.post<string>(createApi, {}).pipe(
+      tap(() => {
+        this.tokenService.removeTokens();
+        this.isAuthenticatedSubject.next(false);
+        this.isAuthenticated = false;
+        this.loggedIn.next(false);
+        this.userName = "";
+        this.router.navigate(['/auth/login']);
+      }),
+      catchError(error => throwError(() => console.log(error)))
+    );
   }
 
+  refreshToken(): Observable<RefreshTokenResponse> {
+    const refreshToken = this.tokenService.getRefreshToken();
+    if (!refreshToken) {
+      return throwError(() => new Error('No refresh token available'));
+    }
+
+    const request: RefreshTokenRequest = { refreshToken };
+    const createApi = this.apiUrlBuilder.buildApiUrl('token/refresh');
+    return this.http.post<RefreshTokenResponse>(createApi, request).pipe(
+      tap(response => {
+        this.tokenService.setAccessToken(response.access_token);
+        this.isAuthenticatedSubject.next(true);
+      }),
+      catchError(error => throwError(() => console.log(error)))
+    );
+  }
+  
   isLoggedIn(): boolean {
     this.loggedIn.next(false);
     
@@ -112,4 +144,14 @@ export class AuthService {
     return !!localStorage.getItem(this.AUTH_TOKEN);
   }
 
+  private handleAuthResponse(response: AuthResponse): void {
+    if (response.access_token && response.refresh_token) {
+      this.tokenService.setTokens(response.access_token, response.refresh_token);
+      localStorage.setItem('user', JSON.stringify(response.user));
+      this.userName = `${response?.user?.firstName} ${response?.user?.lastName}`;
+      localStorage.setItem('userName', this.userName);
+      this.isAuthenticatedSubject.next(true);
+      this.loggedIn.next(true);
+    }
+  }
 }

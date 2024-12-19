@@ -6,12 +6,14 @@ import { QuestionPageComponent } from './question-page/question-page.component';
 import { QuestionOptionComponent } from './question-option/question-option.component';
 import { CategoryListComponent } from '../category/category-list/category-list.component';
 import { ExamUploadComponent } from './exam-upload/exam-upload.component';
+import { TrialExamComponent } from './trial-exam/trial-exam.component';
 
 
 
 const routes: Routes = [
   { path: 'category', component: CategoryListComponent },
   { path: 'list', component: ExamlistComponent },
+  { path: 'modelexam', component: TrialExamComponent },
   { path: 'update', component: ExamPageComponent },
   { path: 'question/:examId', component: QuestionOptionComponent },
   { path: 'examupload', component: ExamUploadComponent }

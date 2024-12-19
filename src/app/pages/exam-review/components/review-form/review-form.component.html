@@ -1,11 +1,11 @@
 <form [formGroup]="reviewForm" (ngSubmit)="onSubmit()" class="review-form">
   <div class="rating-field">
-    <label class="rating-label">Rating</label>
+    <label class="rating-label">Rating*</label>
     <app-star-rating
       [rating]="reviewForm.get('rating')?.value"
-      (ratingChange)="reviewForm.get('rating')?.setValue($event)">
+      (ratingChange)="setRating($event)" required><!--reviewForm.get('rating')?.setValue($event)-->
     </app-star-rating>
-    <mat-error *ngIf="reviewForm.get('rating')?.hasError('required') && reviewForm.get('rating')?.touched">
+    <mat-error class="rating-error" *ngIf="(!reviewForm.get('rating')?.valid && submitted)">
       Please provide a rating
     </mat-error>
   </div>
@@ -18,10 +18,10 @@
       rows="4"
       placeholder="Share your experience with this exam...">
     </textarea>
-    <mat-error *ngIf="reviewForm.get('comment')?.hasError('required')">
+    <mat-error  class="comment-error" *ngIf="reviewForm.get('comment')?.hasError('required')">
       Review comment is required
     </mat-error>
-    <mat-error *ngIf="reviewForm.get('comment')?.hasError('minlength')">
+    <mat-error class="comment-error" *ngIf="reviewForm.get('comment')?.hasError('minlength')">
       Review must be at least 10 characters long
     </mat-error>
   </mat-form-field>
@@ -31,7 +31,7 @@
       mat-raised-button
       color="primary"
       type="submit"
-      [disabled]="!reviewForm.valid">
+      > <!--[disabled]="!reviewForm.valid"-->
       Submit Review
     </button>
   </div>

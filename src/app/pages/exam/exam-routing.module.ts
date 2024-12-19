@@ -7,11 +7,15 @@ import { SummaryComponent } from './summary/summary.component';
 import { ResultComponent } from './result/result.component';
 import { ResultHistoryComponent } from './components/result-history/result-history.component';
 import { OverviewComponent } from './overview/overview.component';
+import { ModelQuestionComponent } from './model-question/model-question.component';
+import { ModelTestListComponent } from './trial-exam/model-test-list/model-test-list.component';
 
 
 const routes: Routes = [
   { path: 'list', component: ListComponent },
   { path: 'take/:id', component: DetailComponent },
+  { path: 'trial', component: ModelTestListComponent },
+  { path: 'trial/:examId', component: ModelQuestionComponent },
   { path: 'overview/:id', component: OverviewComponent },
   { path: 'question/:id', component: QuestionComponent },
   { path: 'result-summary/:examId', component: ResultHistoryComponent },

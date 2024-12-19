@@ -57,44 +57,45 @@
     <mat-card class="question-card" *ngIf="currentQuestion">
         <mat-card-content class="scrollable-content">
             <p class="question-text">{{ currentQuestion.question }} - {{currentQuestion.id}}</p>
+            <div class="options-container">
+                <div [ngSwitch]="currentQuestion.type">
+                    <!-- Single Choice -->
+                    <mat-radio-group *ngSwitchCase="'single'" [value]="selectedAnswers[currentIndex]"
+                        (change)="onSingleAnswerChange($event.value)">
+                        <mat-radio-button 
+                            *ngFor="let option of currentQuestion.options" 
+                            [value]="option.id" 
+                            [checked]="selectedAnswers[currentIndex] === option.id"
+                            class="option-radio">
+                            {{ option.text }}
+                        </mat-radio-button>
+                    </mat-radio-group>
 
-            <div [ngSwitch]="currentQuestion.type">
-                <!-- Single Choice -->
-                <mat-radio-group *ngSwitchCase="'single'" [value]="selectedAnswers[currentIndex]"
-                    (change)="onSingleAnswerChange($event.value)">
-                    <mat-radio-button 
-                        *ngFor="let option of currentQuestion.options" 
-                        [value]="option.id" 
-                        [checked]="selectedAnswers[currentIndex] === option.id"
-                        class="option-radio">
-                        {{ option.text }}
-                    </mat-radio-button>
-                </mat-radio-group>
+                    <!-- Multiple Choice -->
+                    <div *ngSwitchCase="'multiple'" class="multiple-choice">
+                        <mat-checkbox *ngFor="let option of currentQuestion.options" [checked]="isOptionSelected(option.id)"
+                            (change)="onMultipleAnswerChange(option.id, $event.checked)" class="option-checkbox">
+                            {{ option.text }}
+                        </mat-checkbox>
+                    </div>
 
-                <!-- Multiple Choice -->
-                <div *ngSwitchCase="'multiple'" class="multiple-choice">
-                    <mat-checkbox *ngFor="let option of currentQuestion.options" [checked]="isOptionSelected(option.id)"
-                        (change)="onMultipleAnswerChange(option.id, $event.checked)" class="option-checkbox">
-                        {{ option.text }}
-                    </mat-checkbox>
+                    <!-- True/False -->
+                    <app-true-false-question
+                    *ngSwitchCase="'true-false'"
+                    [question]="currentQuestion"
+                    [selectedAnswer]="+getSelectedAnswer(currentIndex)"
+                    (answerChange)="onSingleAnswerChange($event)">
+                    </app-true-false-question>
+
+                    <!-- Ordering -->
+                    <app-ordering-question
+                        *ngSwitchCase="'ranking'"
+                        [question]="currentQuestion"
+                        [selectedAnswer]="getSelectedAnswerForOrdering(currentIndex)"
+                        (answerChange)="onOrderingAnswerChange($event)">
+                    </app-ordering-question>
+                
                 </div>
-
-                <!-- True/False -->
-                <app-true-false-question
-                *ngSwitchCase="'true-false'"
-                [question]="currentQuestion"
-                [selectedAnswer]="+getSelectedAnswer(currentIndex)"
-                (answerChange)="onSingleAnswerChange($event)">
-            </app-true-false-question>
-
-            <!-- Ordering -->
-            <app-ordering-question
-                *ngSwitchCase="'ranking'"
-                [question]="currentQuestion"
-                [selectedAnswer]="getSelectedAnswerForOrdering(currentIndex)"
-                (answerChange)="onOrderingAnswerChange($event)">
-            </app-ordering-question>
-            
             </div>
         </mat-card-content>
     </mat-card>

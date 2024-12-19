@@ -23,14 +23,7 @@ const routes: Routes = [
     component: AdminInquiryDashboardComponent,
     canActivate: [AuthGuard]
     // In real app, add additional admin role guard
-  },
-  {
-    path: 'admin/overview',
-    component: AdminInquiryOverviewComponent,
-    canActivate: [AuthGuard]
-    // In real app, add additional admin role guard
   }
-
 ];
 
 @NgModule({

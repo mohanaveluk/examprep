@@ -30,9 +30,10 @@ export interface StartExam {
 export interface Question {
   id: number;
   text: string;
-  type: 'single' | 'multiple';
+  type: 'single' | 'multiple' | 'true-false';
   options: OptionResponse[];
   maxSelections?: number;
+  subject?: string;
 }
 
 export interface RandomQuestionResponse {
@@ -107,4 +108,27 @@ export interface ResultsStats {
   averageScore: number;
   passedCount: number;
   failedCount: number;
+}
+
+export interface QuestionResult {
+  isCorrect: boolean;
+  correctAnswers: number[];
+  explanation: string;
+}
+
+
+export interface ModelExamResponse {
+  success: boolean;
+  message: string;
+  data: Exam[];
+}
+
+export interface ModelExam {
+  id: string;
+  title: string;
+  description: string;
+  subject: string;
+  totalQuestions: number;
+  passingScore: number;
+  is_active: boolean;
 }

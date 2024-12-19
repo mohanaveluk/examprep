@@ -7,37 +7,39 @@ import {
   HttpErrorResponse
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { TokenService } from '../services/token.service';
 import { SessionExpiredDialogComponent } from '../../shared/components/session-expired-dialog/session-expired-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { AuthService } from '../../pages/auth/auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
+  private isRefreshing = false;
+
+  
   constructor(
     private tokenService: TokenService,
+    private authService: AuthService,
     private router: Router,
     private dialog: MatDialog
   ) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    const token = this.tokenService.getToken();
+    const accessToken = this.tokenService.getToken();
 
-    if (token) {
-      request = request.clone({
-        setHeaders: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+    if (accessToken) {
+      request = this.addToken(request, accessToken);
     }
 
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
-        if (error.status === 401) {
+        if (error.status === 401 && !this.isRefreshing) {
+          return this.handle401Error(request, next);
           // Check if dialog is not already open
-          if (!this.dialog.openDialogs.length) {
-            this.tokenService.removeToken();
+          /*if (!this.dialog.openDialogs.length) {
+            this.tokenService.removeTokens();
             const dialogRef = this.dialog.open(SessionExpiredDialogComponent, {
               width: '400px',
               disableClose: true
@@ -50,11 +52,38 @@ export class AuthInterceptor implements HttpInterceptor {
                 this.router.navigate(['/']);
               }
             });
-          }
+          }*/
         }
         return throwError(() => error);
       })
     );
+  }
+
+  private addToken(request: HttpRequest<any>, token: string): HttpRequest<any> {
+    return request.clone({
+      setHeaders: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+  }
+
+  private handle401Error(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    if (!this.isRefreshing) {
+      this.isRefreshing = true;
+
+      return this.authService.refreshToken().pipe(
+        switchMap(response => {
+          this.isRefreshing = false;
+          return next.handle(this.addToken(request, response.access_token));
+        }),
+        catchError(error => {
+          this.isRefreshing = false;
+          this.tokenService.removeTokens();
+          return throwError(() => error);
+        })
+      );
+    }
+    return next.handle(request);
   }
 
 

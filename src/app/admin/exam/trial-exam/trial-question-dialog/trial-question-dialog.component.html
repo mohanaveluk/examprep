@@ -1,0 +1,99 @@
+<div class="dialog-container">
+    <h2 mat-dialog-title>{{isEditing ? 'Edit' : 'Add'}} Question</h2>
+  
+    <form [formGroup]="questionForm" (ngSubmit)="onSubmit()">
+      <mat-dialog-content>
+        <mat-form-field appearance="fill">
+          <mat-label>Question Text</mat-label>
+          <textarea matInput formControlName="text" rows="3"
+                    placeholder="Enter your question"></textarea>
+          <mat-error *ngIf="questionForm.get('text')?.hasError('required')">
+            Question text is required
+          </mat-error>
+        </mat-form-field>
+  
+        <mat-form-field appearance="fill">
+          <mat-label>Question Type</mat-label>
+          <mat-select formControlName="type" (selectionChange)="onTypeChange($event.value)">
+            <mat-option *ngFor="let type of questionTypes" [value]="type.value">
+              {{type.label}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+  
+        <div class="options-section">
+          <div class="options-header">
+            <h3>Options</h3>
+            <button mat-mini-fab color="primary" type="button" 
+                    (click)="addOption()" 
+                    [disabled]="options.length >= 5 || questionForm.get('type')?.value === 'true-false'">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+  
+          <div formArrayName="options" class="options-list">
+            <div *ngFor="let option of options?.controls; let i=index" 
+                 [formGroupName]="i" class="option-item">
+              <mat-form-field appearance="fill">
+                <mat-label>Option {{i + 1}}</mat-label>
+                <input matInput formControlName="text">
+              </mat-form-field>
+  
+              <ng-container [ngSwitch]="questionForm.get('type')?.value">
+                <mat-radio-button *ngSwitchCase="'single'"
+                                 [checked]="option.get('isCorrect')?.value"
+                                 (change)="onSingleOptionSelect(option)">
+                  Correct
+                </mat-radio-button>
+  
+                <mat-checkbox *ngSwitchCase="'multiple'" 
+                              [checked]="option.get('isCorrect')?.value"
+                              (change)="onMultipleOptionSelect(option, $event.checked)">
+                  Correct
+                </mat-checkbox>
+  
+                <mat-radio-button *ngSwitchCase="'true-false'"
+                                 [checked]="option.get('isCorrect')?.value"
+                                 (change)="onSingleOptionSelect(option)">
+                  Correct
+                </mat-radio-button>
+              </ng-container>
+  
+              <button mat-icon-button color="warn" type="button"
+                      (click)="removeOption(i)"
+                      *ngIf="questionForm.get('type')?.value !== 'true-false'">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+  
+        <mat-form-field appearance="fill">
+          <mat-label>Subject</mat-label>
+          <input matInput formControlName="subject" 
+                    placeholder="Assign subject for the question">
+          <mat-error *ngIf="questionForm.get('subject')?.hasError('required')">
+            Subject is required
+          </mat-error>
+        </mat-form-field>
+        
+        <mat-form-field appearance="fill">
+          <mat-label>Explanation</mat-label>
+          <textarea matInput formControlName="explanation" rows="3"
+                    placeholder="Explain the correct answer"></textarea>
+          <mat-error *ngIf="questionForm.get('explanation')?.hasError('required')">
+            Explanation is required
+          </mat-error>
+        </mat-form-field>
+
+      </mat-dialog-content>
+  
+      <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Cancel</button>
+        <button mat-raised-button color="primary" type="submit"
+                [disabled]="!questionForm.valid || options.length === 0">
+          {{isEditing ? 'Update' : 'Save'}} Question
+        </button>
+      </mat-dialog-actions>
+    </form>
+  </div>

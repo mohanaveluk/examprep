@@ -59,8 +59,10 @@ export class Nav2Component {
     return initials.toUpperCase();
   }
 
-  logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/auth/login']);
+  logout()  {
+    this.authService.logout().subscribe((response) => {
+      console.log(response.message);
+      this.router.navigate(['/auth/login']);
+  });
   }
 }

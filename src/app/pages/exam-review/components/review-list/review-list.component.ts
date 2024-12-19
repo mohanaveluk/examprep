@@ -45,7 +45,7 @@ export class ReviewListComponent implements OnInit {
 
   openReviewDialog(): void {
     const dialogRef = this.dialog.open(ReviewDialogComponent, {
-      width: '700px',
+      width: '800px',
       data: { examId: this.examId }
     });
 
@@ -103,7 +103,6 @@ export class ReviewListComponent implements OnInit {
   }
 
   isUserSigned(review: Review){
-    this.user = this.authService.getUser() || {};
     return this.user?.id === review.user.guid;
   }
 

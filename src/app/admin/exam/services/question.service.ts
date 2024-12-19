@@ -4,6 +4,7 @@ import { Observable, catchError, throwError } from 'rxjs';
 import { Question, QuestionResponse } from '../models/question.model';
 import { environment } from '../../../../environments/environment';
 import { ApiUrlBuilder } from '../../../shared/utility/api-url-builder';
+import { CommonService } from '../../../shared/services/common.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,7 @@ export class QuestionService {
   constructor(
     private http: HttpClient,     
     private apiUrlBuilder: ApiUrlBuilder,
+    private commonService: CommonService
   ) {}
 
   getQuestions(examId: string): Observable<Question[]> {

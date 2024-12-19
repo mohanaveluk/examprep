@@ -4,12 +4,20 @@ import { AuthGuard } from './pages/auth/auth.guard';
 import { ContactUsComponent } from './pages/contact-us/contact-us.component';
 import { AboutComponent } from './pages/about/about.component';
 import { PagesComponent } from './pages/pages.component';
+import { LandingPageComponent } from './pages/landing-page/landing-page.component';
+import { HomePageComponent } from './pages/home-page/home-page.component';
 
 
 const routes: Routes = [
   {
     path: "", component: PagesComponent, children: [
-      { path: '', redirectTo: '/auth/login', pathMatch: 'full' },
+      { path: '', component: LandingPageComponent },
+      { path: 'home', component: HomePageComponent },
+      {
+        path: 'home1',
+        loadChildren: () => import('./pages/home-page/home-page.module').then((m) => m.HomePageModule),
+      },
+      { path: 'login', redirectTo: '/auth/login', pathMatch: 'full' },
       {
         path: 'auth',
         loadChildren: () => import('./pages/auth/auth.module').then((m) => m.AuthModule),

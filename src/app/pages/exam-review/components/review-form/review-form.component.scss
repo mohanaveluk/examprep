@@ -21,3 +21,13 @@ mat-form-field {
   justify-content: flex-end;
   margin-top: 16px;
 }
+
+mat-error.comment-error, .mat-mdc-form-field-error-wrapper{
+  margin-left: -16px !important;
+  padding: 0 -16px !important;
+  font-size: 12px;
+}
+
+mat-error.rating-error {
+  font-size: 12px !important;
+}

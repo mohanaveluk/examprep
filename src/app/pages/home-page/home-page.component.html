@@ -1,0 +1,12 @@
+<div class="landing-container">
+  <app-hero-section (startModelTest)="navigateToModelExam()">
+  </app-hero-section>
+
+  <app-exam-categories (categorySelected)="navigateToExam($event)">
+  </app-exam-categories>
+
+  <app-model-test-card (startTest)="navigateToModelExam()">
+  </app-model-test-card>
+
+  <app-features-section></app-features-section>
+</div>

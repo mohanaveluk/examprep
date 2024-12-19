@@ -7,7 +7,7 @@ import { MatDialogRef } from '@angular/material/dialog';
   <div style="padding: 10px 15px 15px 0px;">
     <h2 mat-dialog-title>Test Paused</h2>
     <mat-dialog-content>
-      <p>The test has been paused due to inactivity.</p>
+      <p>The test has been paused.</p>
     </mat-dialog-content>
     <mat-dialog-actions align="end">
       <button mat-raised-button color="primary" [mat-dialog-close]="'resume'">

@@ -37,6 +37,10 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CategoryListComponent } from '../category/category-list/category-list.component';
 import { CategoryDialogComponent } from '../category/category-dialog/category-dialog.component';
 import { ExamUploadComponent } from './exam-upload/exam-upload.component';
+import { TrialExamComponent } from './trial-exam/trial-exam.component';
+import { TrialExamDialogComponent } from './trial-exam/trial-exam-dialog/trial-exam-dialog.component';
+import { TrialQuestionComponent } from './trial-exam/trial-question/trial-question.component';
+import { TrialQuestionDialogComponent } from './trial-exam/trial-question-dialog/trial-question-dialog.component';
 
 
 
@@ -52,7 +56,11 @@ import { ExamUploadComponent } from './exam-upload/exam-upload.component';
     ExamDialogComponent,
     CategoryListComponent,
     CategoryDialogComponent,
-    ExamUploadComponent
+    ExamUploadComponent,
+    TrialExamComponent,
+    TrialExamDialogComponent,
+    TrialQuestionComponent,
+    TrialQuestionDialogComponent
   ],
   imports: [
     CommonModule,

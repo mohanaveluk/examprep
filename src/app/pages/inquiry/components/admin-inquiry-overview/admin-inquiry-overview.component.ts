@@ -3,6 +3,7 @@ import { FollowUp, InquiryService, Question, Response } from '../../inquiry.serv
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { AdminResponseDialogComponent } from '../admin-response-dialog/admin-response-dialog.component';
+import { HeaderService } from '../../../../admin/services/header.service';
 
 interface QuestionsBySubject {
   [subject: string]: Question[];
@@ -25,11 +26,13 @@ export class AdminInquiryOverviewComponent {
 
   constructor(
     private inquiryService: InquiryService,
+    private headerService: HeaderService,
     private router: Router,
     private dialog: MatDialog
   ) {}
 
   ngOnInit() {
+    this.headerService.setTitle("Admin - Inquiry");
     this.loadQuestions();
   }
 

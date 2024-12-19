@@ -19,3 +19,20 @@ export interface ExamData {
   questions: ExamQuestion[];
 }
 
+
+
+export interface CreateExamDto {
+  title: string;
+  description: string;
+  subject: string;
+  totalQuestions: number;
+  passingScore: number;
+}
+
+export interface UpdateExamDto {
+  title?: string;
+  description?: string;
+  subject?: string;
+  totalQuestions?: number;
+  passingScore?: number;
+}
