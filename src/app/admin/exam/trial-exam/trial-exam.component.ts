@@ -14,7 +14,7 @@ import { HeaderService } from '../../services/header.service';
 })
 export class TrialExamComponent implements OnInit {
   exams: any[] = [];
-  displayedColumns: string[] = ['title', 'description', 'totalQuestions', 'passingScore', 'actions'];
+  displayedColumns: string[] = ['number', 'title', 'description', 'totalQuestions', 'passingScore', 'actions'];
 
   constructor(
     private examService: ExamService,

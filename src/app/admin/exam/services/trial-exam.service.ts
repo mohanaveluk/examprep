@@ -31,12 +31,12 @@ export class ModelExamService {
 
   createExam(examData: CreateExamDto, questions: QuestionTemplate[]): Observable<ModelExam> {
     const createApi = this.apiUrlBuilder.buildApiUrl(`te_exam`);
-    return this.http.post<ModelExam>(createApi, examData);
+    return this.http.post<ModelExam>(createApi, { exam: examData, questions });
   }
 
   updateExam(id: string, examData: UpdateExamDto, questions: QuestionTemplate[]): Observable<ModelExam> {
     const createApi = this.apiUrlBuilder.buildApiUrl(`te_exam/${id}`);
-    return this.http.put<ModelExam>(createApi, examData);
+    return this.http.put<ModelExam>(createApi, { exam: examData, questions });
   }
 
   getExam(id: string): Observable<ModelExam> {

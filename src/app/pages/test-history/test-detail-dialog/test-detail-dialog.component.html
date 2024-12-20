@@ -11,19 +11,19 @@
 
 <div class="dialog-content">
   <div class="header">
-    <h2>{{data.examTitle}}</h2>
+    <h2>{{data?.exam?.title}}</h2>
     <div class="header-info">
-      <span class="date">Date: {{formatDate(data.createdAt)}}</span>
       <mat-chip [ngClass]="getStatusColor(data.passed)">
         <span class="status-failed">{{data.passed ? 'Passed' : 'Failed'}}</span>
       </mat-chip>
+      <span class="date">Date: {{formatDate(data.createdAt)}}</span>
     </div>
   </div>
 
-  <div class="score-section">
-    <div class="flex-content">
+  <section class="report-section">
+    <div class="report-card">
       <div class="chart-container">
-        <h2>Result</h2>
+        <h2>Result</h2><br>
         <ngx-charts-pie-chart 
           [results]="chartData" 
           [scheme]="colorScheme" 
@@ -32,15 +32,18 @@
           [doughnut]="true">
         </ngx-charts-pie-chart>
       </div>
+    </div>
+    <div class="report-card">
       <div class="score-overview">
         <div class="score-circle" [ngClass]="{'passed': data?.passed, 'failed': !data?.passed}">
           <div class="score-value">{{data?.scorePercentage | number:'1.2-2' || 0}}%</div>
           <div class="score-label">Overall Score</div>
         </div>
-      </div>
+      </div>      
     </div>
-    
+  </section>
 
+  <div class="score-section" *ngIf="data.sectionScores">
     <div *ngFor="let section of data.sectionScores" class="section-score">
       <h4>{{section.name}}</h4>
       <div>Score: {{section.score}}%</div>
@@ -48,6 +51,14 @@
     </div>
   </div>
 
+  <div class="card-actions">
+    <button mat-button (click)="closeDialog()">
+      Close
+    </button>
+    <button mat-raised-button color="primary" (click)="openDetails(data)">
+      View Details
+    </button>
+  </div>
   <!--<div class="recommendations">
     <h3>Recommendations</h3>
     <ul>

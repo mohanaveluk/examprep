@@ -348,18 +348,37 @@
   }
 
   .mat-mdc-chip-correct{
-    background-color: #00dd00  !important;
+    background-color: #e6f4ea !important;
+    border: 1px #d1f1da solid !important;
+    width: 85px;
+    
     .mat-mdc-chip-action-label {
       color: #ffffff;
+    }
+    span.mdc-evolution-chip__cell {
+      flex-basis: 85% !important;
     }
   }
 
   .mat-mdc-chip-incorrect{
-    background-color: #ffe8eb !important;
+    background-color: #fff5f5 !important;
+    border: 1px #f8e3e3 solid !important;
+    width: 85px;
   }
 
   .flex-content{
     display: flex;
     justify-content: space-around;
     align-items: center;
+  }
+
+  ::ng-deep .mat-mdc-chip-correct span.mat-mdc-chip-action-label {
+    color: #188038 !important;
+    font-weight: 500 !important;
+    margin-left: 5px;
+  }
+  
+  ::ng-deep .mat-mdc-chip-incorrect span.mat-mdc-chip-action-label {
+    color: #7a0029 !important;
+    font-weight: 500 !important;
   }

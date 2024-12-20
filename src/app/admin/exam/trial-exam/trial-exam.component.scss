@@ -1,6 +1,6 @@
 .trial-exam-container {
     padding: 24px;
-    max-width: 1200px;
+    /*max-width: 1200px;*/
     margin: 0 auto;
   
     .header {
@@ -18,7 +18,7 @@
   
     table {
       width: 100%;
-  
+      padding: 20px 5px;
       .mat-column-actions {
         width: 200px;
         text-align: center;
