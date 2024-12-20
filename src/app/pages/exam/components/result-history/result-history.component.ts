@@ -79,9 +79,10 @@ export class ResultHistoryComponent implements OnInit {
 
   openDetails(result: ExamResult) {
     this.dialog.open(ResultDetailsDialogComponent, {
-      width: '800px',
+      width: '1000px',
       data: {
         sessionId: result.sessionId,
+        examId: result.exam.id,
         examTitle: result.exam.title,
         totalQuestions: result.totalQuestions,
         correctAnswers: result.correctAnswers,
@@ -93,8 +94,8 @@ export class ResultHistoryComponent implements OnInit {
   }
 
   backToExams(): void {
-    //this.router.navigate(['/exam/list']);
-    this.router.navigate(['/exam/overview', this.examId]);
+    this.router.navigate(['/exam/list']);
+    //this.router.navigate(['/exam/overview', this.examId]);
   }
 
   retakeExam1() {

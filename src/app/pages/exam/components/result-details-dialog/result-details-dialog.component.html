@@ -7,45 +7,52 @@
       Score: {{ data.scorePercentage }}% | Status: 
       
       <mat-chip [color]="data.passed ? 'primary' : 'warn'" selected>
-        {{ data.passed ? 'Pass' : 'Fail' }}
+        {{ data.passed ? 'Passed' : 'Failed' }}
       </mat-chip>
     </div>
   </div>
 
   <div class="questions-list">
-    <div class="question-item" *ngFor="let question of data.questions; let i = index">
-      <div class="question-header">
-        <span class="question-number">Question {{ i + 1 }}</span>
-        <mat-chip [color]="getChipColor(question.isCorrect)" selected>
-          {{ getAnswerStatus(question) }}
-        </mat-chip>
-      </div>
+    <mat-accordion>
+      <mat-expansion-panel class="question-item" *ngFor="let question of examResult?.questions; let i = index"  (opened)="onPanelOpened(question)">
+        <mat-expansion-panel-header>
+          <mat-panel-title>Question {{i+1}}</mat-panel-title>
+          <mat-panel-description>
+            <!-- <span>{{question.type}}</span> -->
+            <mat-chip [ngClass]="getQuestionStatusColor(question.isCorrect)" selected>
+              {{question.isCorrect ? 'Correct' : 'Incorrect'}}
+            </mat-chip>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <p class="question-text">{{question.question}}</p>
 
-      <div class="question-text">
-        {{ question.question }}
-      </div>
-
-      <div class="answers-section">
-        <h4>Your Answer:</h4>
-        <ul class="answer-list">
-          <li *ngFor="let option of question.selectedOptions">
-            <mat-icon [class.correct]="question.isCorrect" 
-                      [class.incorrect]="!question.isCorrect">
-              {{ question.isCorrect ? 'check_circle' : 'cancel' }}
-            </mat-icon>
-            {{ option }}
-          </li>
-        </ul>
-
-        <h4 *ngIf="!question.isCorrect">Correct Answer:</h4>
-        <ul class="answer-list" *ngIf="!question.isCorrect">
-          <li *ngFor="let option of question.correctOptions">
-            <mat-icon class="correct">check_circle</mat-icon>
-            {{ option }}
-          </li>
-        </ul>
-      </div>
-    </div>
+        <div class="answers-section">
+          <h4>Your Answer:</h4>
+          <ul class="answer-list">
+            <li *ngFor="let option of qOptions" class="answer-item">
+              <div class="option-content">
+                <mat-icon [class.correct]="isOptionMatched(option.id)" [class.incorrect]="!isOptionMatched(option.id)" *ngIf="question.type !== 'multiple'">
+                  {{ isOptionMatched(option.id) ? 'radio_button_checked' : 'radio_button_unchecked' }}
+                </mat-icon>
+                <mat-icon class="material-icons-outlined" [class.correct]="isOptionMatched(option.id)" [class.incorrect]="!isOptionMatched(option.id)" *ngIf="question.type === 'multiple'">
+                  {{ isOptionMatched(option.id) ? 'check_box' : 'check_box_outline_blank' }}
+                </mat-icon>
+                <span class="option-text">{{ option.text }}</span>
+              </div>
+              <mat-icon *ngIf="(question.type !== 'ranking') && isCorrectAnswerMatched(option.id)" class="end-icon material-icons-outlined">check_circle</mat-icon>
+              <span *ngIf="(question.type === 'ranking')" class="rorder"><div class="circle-icon">{{correctAnswerOrder(option.id)}}</div></span>
+            </li>
+          </ul>
+          <h4 *ngIf="!question.isCorrect">Correct Answer:</h4>
+          <ul class="answer-list" *ngIf="!question.isCorrect">
+            <li *ngFor="let option of sortedCops">
+              <mat-icon class="correct material-icons-outlined">check_circle</mat-icon>
+              {{ option.text }}
+            </li>
+          </ul>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
   </div>
 </mat-dialog-content>
 

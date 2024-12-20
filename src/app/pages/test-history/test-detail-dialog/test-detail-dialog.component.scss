@@ -6,13 +6,16 @@
   }
   
 .dialog-content {
-    padding: 2rem;
+    padding: 1.5rem;
+    h3{
+      letter-spacing: 1px;
+    }
   }
   
   .header {
     background-color: #f5f5f5;
     padding: 16px;
-    margin: -24px -24px 24px -24px;
+    margin: -10px 0px 24px 0px;
   }
   
   .header h2 {
@@ -142,7 +145,6 @@
     height: 250px;
     margin: 16px 0;
     display: flex;
-    margin-left: -100px;
     align-items: center; 
 
     h2 {
@@ -157,8 +159,8 @@
   }
 
   .status-failed{
-    font-weight: 500;
-    font-size: 15pt;
+    font-weight: 600;
+    font-size: 12pt;
     color: #f44336;
     span.mdc-evolution-chip__text-label.mat-mdc-chip-action-label {
       font-weight: 500 !important;
@@ -176,9 +178,32 @@
     display: flex;
     flex-direction: column;
     justify-content: center; /* Vertically center the legend items */
-    width: 350px; /* Set the desired width for the legend */
+    width: 400px; /* Set the desired width for the legend */
   }
   
   ::ng-deep .legend-wrap ul.legend-labels {
     width: 100px !important;
+  }
+
+  .report-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto 40px;
+    .report-card {
+      background: #f7f7f7;
+      padding: 24px;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+  }
+
+  .card-actions {
+    padding: 16px;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
   }

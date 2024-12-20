@@ -19,8 +19,8 @@
   }
   
   .score-circle {
-    width: 150px;
-    height: 150px;
+    width: 175px;
+    height: 175px;
     border-radius: 50%;
     display: flex;
     flex-direction: column;
@@ -58,7 +58,7 @@
   
     .detail-item {
       display: flex;
-      justify-content: space-between;
+      justify-content: space-around; /*space-between;*/
       margin: 8px 0;
       font-size: 1.1em;
   
@@ -69,6 +69,7 @@
       .value {
         font-weight: 500;
         color: #333;
+        padding: 0 20px;
       }
     }
   }
@@ -127,6 +128,11 @@
     }
   }
   
+  .mat-mdc-card-content {
+    display: block;
+    padding: 5px 16px 50px 16px;
+  }
+
   mat-card-actions {
     padding: 16px;
     display: flex;

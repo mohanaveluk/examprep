@@ -1,8 +1,9 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TestResult } from '../test-history.service';
-import { ChartData } from '../../models/exam.model';
+import { ChartData, ExamResult } from '../../models/exam.model';
 import { Color, ScaleType } from '@swimlane/ngx-charts';
+import { ResultDetailsDialogComponent } from '../../exam/components/result-details-dialog/result-details-dialog.component';
 
 @Component({
   selector: 'app-test-detail-dialog',
@@ -18,7 +19,11 @@ export class TestDetailDialogComponent {
     domain: ['#4CAF50', '#f5a066'  ] //'#F44336',
   };
   
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<TestDetailDialogComponent>) {
+  constructor(
+    private dialog: MatDialog,
+    @Inject(MAT_DIALOG_DATA) public data: any, 
+    public dialogRef: MatDialogRef<TestDetailDialogComponent>
+  ) {
     this.chartData = this.generateChartData(data.correctAnswers, data.totalQuestions);
   }
 
@@ -33,6 +38,22 @@ export class TestDetailDialogComponent {
 
   closeDialog(): void {
     this.dialogRef.close();
+  }
+  
+  openDetails(result: ExamResult){
+    this.dialog.open(ResultDetailsDialogComponent, {
+      width: '1000px',
+      data: {
+        sessionId: result.sessionId,
+        examId: result.exam.id,
+        examTitle: result.exam.title,
+        totalQuestions: result.totalQuestions,
+        correctAnswers: result.correctAnswers,
+        scorePercentage: result.scorePercentage,
+        passed: result.passed,
+        createdAt: result.createdAt
+      }
+    });
   }
   
   private generateChartData(correct: number, total: number): ChartData[] {
