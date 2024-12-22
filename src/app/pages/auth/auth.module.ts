@@ -11,13 +11,27 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { AuthRoutingModule } from './auth-routing.module';
+import { UserProfileComponent } from './user-profile/user-profile.component';
+import { ProfileImageComponent } from './user-profile/components/profile-image/profile-image.component';
+import { SocialLoginComponent } from './login/components/social-login/social-login.component';
+import { OtcLoginComponent } from './login/components/otc-login/otc-login.component';
+import { MatIconModule } from '@angular/material/icon';
+import { RequestResetComponent } from './request-reset/request-reset.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 
 @NgModule({
   declarations: [
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    UserProfileComponent,
+    ProfileImageComponent,
+    SocialLoginComponent,
+    OtcLoginComponent,
+    RequestResetComponent,
+    ResetPasswordComponent
   ],
   imports: [
     CommonModule,
@@ -26,7 +40,9 @@ import { AuthRoutingModule } from './auth-routing.module';
     MatCardModule,
     MatMenuModule,
     MatFormFieldModule,
-    MatInputModule,   
+    MatInputModule,  
+    MatIconModule, 
+    MatProgressSpinnerModule,
     FormsModule, 
     ReactiveFormsModule,
     AuthRoutingModule

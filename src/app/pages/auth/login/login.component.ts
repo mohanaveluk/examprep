@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '../auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService, SocialAuthResponse } from '../auth.service';
 import { LoginRequest } from '../../../shared/models/auth.model';
 
 @Component({
@@ -10,17 +11,20 @@ import { LoginRequest } from '../../../shared/models/auth.model';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-
+  
   public email = ''
   public password = ''
   loginForm: FormGroup;
+  hidePassword = true;
   errorMessage = null;
+  showOtcLogin = false;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private snackBar: MatSnackBar
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -46,6 +50,49 @@ export class LoginComponent {
       });
     }
   }
+
+  onSocialLogin(provider: string): void {
+    this.authService.socialLogin(provider).then((observable) => {
+      observable.subscribe({
+        next: (response: SocialAuthResponse) => {
+          console.log('Login successful:', response);
+          this.router.navigate(['/exam/list']);
+        },
+        error: (error) => {
+          console.error('Login failed:', error);
+          this.snackBar.open(`${provider} login failed: ${error.message}`, 'Close');
+        }
+      });
+    }).catch((error) => {
+      console.error('Error initiating social login:', error);
+      // Handle error in initiating social login
+    });
+  }
+
+  onSendOtc(mobile: string): void {
+    this.authService.sendOtc(mobile).subscribe({
+      next: () => {
+        this.snackBar.open('One-time code sent to your mobile number', 'Close');
+      },
+      error: (error: { message: any; }) => {
+        this.snackBar.open(`Failed to send code: ${error.message}`, 'Close');
+      }
+    });
+  }
+
+  onVerifyOtc(data: {mobile: string, code: string}): void {
+    this.authService.verifyOtc(data.mobile, data.code).subscribe({
+      next: () => this.router.navigate(['/exam/list']),
+      error: (error: { message: any; }) => {
+        this.snackBar.open(`Verification failed: ${error.message}`, 'Close');
+      }
+    });
+  }
+
+  toggleOtcLogin(): void {
+    this.showOtcLogin = !this.showOtcLogin;
+  }
+
 
   /*onSubmit1() {
     this.authService.login(this.email, this.password).subscribe(response => {

@@ -8,7 +8,7 @@
   
   mat-card {
     width: 100%;
-    max-width: 400px;
+    max-width: 450px;
     padding: 20px;
   }
   
@@ -22,13 +22,68 @@
     width: 100%;
   }
   
-  button[type="submit"] {
+  button1[type="submit"] {
     margin-top: 16px;
   }
   
-  .error-message {
+  .error-message1 {
     padding: 5px 2px 0px 20px;
     font-weight: 500;
     color: red;
     margin-bottom: 20px;
   }
+
+
+.error-message {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+.divider {
+  text-align: center;
+  margin: 24px 0;
+  position: relative;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: calc(50% - 30px);
+    height: 1px;
+    background-color: #e0e0e0;
+  }
+
+  &::before {
+    left: 0;
+  }
+
+  &::after {
+    right: 0;
+  }
+
+  span {
+    background-color: white;
+    padding: 0 16px;
+    color: #757575;
+  }
+}
+
+.form-actions {
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+mat-card-content {
+  padding-top: 20px !important;
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: center;
+}
