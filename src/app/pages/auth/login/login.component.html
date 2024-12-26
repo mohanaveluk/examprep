@@ -1,5 +1,5 @@
   <div class="login-container">
-    <mat-card>
+    <mat-card  *ngIf="!showVerification">
       <mat-card-header>
         <mat-card-title>Login</mat-card-title>
       </mat-card-header>
@@ -12,8 +12,11 @@
         <div class="divider">
           <span>or</span>
         </div>-->
-        
-        <div [ngSwitch]="showOtcLogin">
+        <div *ngIf="loading" class="loading-spinner">
+          <mat-spinner diameter="40"></mat-spinner>
+        </div>
+
+        <div [ngSwitch]="showOtcLogin" *ngIf="!loading">
         
           <form *ngSwitchCase="false" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
             <mat-form-field appearance="fill">
@@ -58,11 +61,18 @@
           {{ showOtcLogin ? 'Login with Email' : 'Login with Mobile' }}
         </button> -->
       </mat-card-content>
-      <div class="divider">
+      <div class="divider" *ngIf="!loading">
         <span>or</span>
       </div>
       <mat-card-actions>
-        <a mat-button routerLink="/auth/register">Don't have an account? Register</a>
+        <a *ngIf="!loading" mat-button routerLink="/auth/register">Don't have an account? Register</a>
       </mat-card-actions>
     </mat-card>
+
+    <!-- Email Verification -->
+    <app-email-verification
+      *ngIf="showVerification"
+      [email]="unverifiedEmail"
+      (verified)="onVerified()">
+    </app-email-verification>    
   </div>

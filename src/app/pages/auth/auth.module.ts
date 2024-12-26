@@ -19,6 +19,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { RequestResetComponent } from './request-reset/request-reset.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ProfileUpdateSuccessComponent } from './user-profile/components/profile-update-success/profile-update-success.component';
+import { EmailVerificationComponent } from './components/email-verification/email-verification.component';
+import { SharedModule } from '../../shared/shared.module';
 
 
 
@@ -31,7 +34,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     SocialLoginComponent,
     OtcLoginComponent,
     RequestResetComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    ProfileUpdateSuccessComponent,
+    EmailVerificationComponent
   ],
   imports: [
     CommonModule,
@@ -45,7 +50,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatProgressSpinnerModule,
     FormsModule, 
     ReactiveFormsModule,
-    AuthRoutingModule
+    AuthRoutingModule,
+    SharedModule
   ]
 })
 export class AuthModule { }

@@ -9,11 +9,12 @@ import { ProfileService } from './services/profile.service';
   templateUrl: './user-profile.component.html',
   styleUrl: './user-profile.component.scss'
 })
-export class UserProfileComponent {
+export class UserProfileComponent implements OnInit {
   profileForm: FormGroup;
   profile: UserProfile | null = null;
   loading = true;
   saving = false;
+  showSuccessMessage = false;
 
   constructor(
     private fb: FormBuilder,
@@ -49,11 +50,15 @@ export class UserProfileComponent {
     });
   }
 
+  editProfile(): void {
+    this.showSuccessMessage = false;
+  }
+  
   onImageSelected(file: File): void {
     this.profileService.uploadProfileImage(file).subscribe({
       next: (response) => {
         if (this.profile) {
-          this.profile.profileImage = response.url;
+          this.profile.profileImage = response.imageUrl;
         }
         this.snackBar.open('Profile image updated', 'Close', { duration: 3000 });
       },
@@ -77,6 +82,7 @@ export class UserProfileComponent {
       this.profileService.updateProfile(updates).subscribe({
         next: (profile) => {
           this.profile = profile;
+          this.showSuccessMessage = true; // Show success message
           this.snackBar.open('Profile updated successfully', 'Close', { duration: 3000 });
           this.saving = false;
         },

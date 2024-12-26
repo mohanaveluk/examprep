@@ -27,6 +27,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { StatCardComponent } from '../pages/inquiry/components/stat-card/stat-card.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { TruncatePipe } from './utility/truncate.pipe';
+import { LoadingOverlayComponent } from './components/loading-overlay/loading-overlay.component';
+import { MatProgressSpinner, MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 @NgModule({
@@ -37,7 +39,8 @@ import { TruncatePipe } from './utility/truncate.pipe';
     AlertComponent,
     SessionExpiredDialogComponent,
     StatCardComponent,
-    TruncatePipe
+    TruncatePipe,
+    LoadingOverlayComponent
   ],
   imports: [
     CommonModule,
@@ -70,6 +73,7 @@ import { TruncatePipe } from './utility/truncate.pipe';
     MatDialogModule,
     MatIconModule,
     MatDialogModule,
+    MatProgressSpinnerModule,
     NgxChartsModule,
   ],
   exports: [
@@ -78,7 +82,8 @@ import { TruncatePipe } from './utility/truncate.pipe';
     Nav2Component,
     AlertComponent,
     StatCardComponent,
-    TruncatePipe
+    TruncatePipe,
+    LoadingOverlayComponent
   ]
 })
 export class SharedModule { }

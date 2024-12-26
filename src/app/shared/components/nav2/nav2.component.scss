@@ -20,6 +20,11 @@
     flex: 1 1 auto;
   }
   
+  .user-menu-button {
+    padding: 0 8px;
+    height: 40px;
+  }
+
   .user-avatar {
     width: 40px;
     height: 40px;
@@ -35,6 +40,41 @@
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.6);
   }
   
+  .user-avatar-image {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-top: 11px;
+  }
+  
+  .user-menu-header {
+    padding: 16px;
+    min-width: 200px;
+  }
+  
+  .user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .user-name {
+    color: #333;
+    font-weight: 500;
+    text-decoration: none;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  
+  .user-email {
+    color: #666;
+    font-size: 0.9em;
+  }
+
+
   .nav-menu {
     display: flex;
     align-items: center;

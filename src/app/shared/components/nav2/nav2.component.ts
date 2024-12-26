@@ -1,23 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { async, Observable } from 'rxjs';
+import { async, Observable, Subscription } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { AuthService } from '../../../pages/auth/auth.service';
 import { Router } from '@angular/router';
+import { ProfileService } from '../../../pages/auth/user-profile/services/profile.service';
 @Component({
   selector: 'app-nav2',
   templateUrl: './nav2.component.html',
   styleUrl: './nav2.component.scss'
 })
-export class Nav2Component {
+export class Nav2Component implements OnInit, OnDestroy{
   isUserLoggedIn = false;
   userName!: string;
   isHandset$: Observable<boolean>;
+  userEmail = '';
   userInitials: string = '';
-
+  userAvatar: string | null = null;
+  private profileSubscription?: Subscription;
+  
   constructor(
     private breakpointObserver: BreakpointObserver,
     private authService: AuthService,
+    private profileService: ProfileService,
     private router: Router
   ) {
     this.isHandset$ = this.breakpointObserver.observe(Breakpoints.Handset)
@@ -30,7 +35,7 @@ export class Nav2Component {
 
   ngOnInit() {
     // Mock user email for demo - in real app, get from auth service
-    this.updateUserInitials('John Doe');
+    //this.updateUserInitials();
     this.authService.isUserLoggedIn().subscribe(isLoggedIn => {
       this.isUserLoggedIn = isLoggedIn;
       if (isLoggedIn) {
@@ -38,10 +43,31 @@ export class Nav2Component {
         this.userInitials = this.getUserInitials(this.userName);
       }
     });
+
+    this.loadUserProfile();
+    // Subscribe to profile updates
+    this.profileSubscription = this.profileService.profileUpdated$.subscribe(() => {
+      this.loadUserProfile();
+    });
   }
 
-  updateUserInitials(name: string) {
-    this.userInitials = name
+  ngOnDestroy() {
+    if (this.profileSubscription) {
+      this.profileSubscription.unsubscribe();
+    }
+  }
+
+  private loadUserProfile() {
+    this.profileService.getProfile().subscribe(profile => {
+      this.userName = `${profile.first_name} ${profile.last_name}`;
+      this.userEmail = profile.email;
+      this.userAvatar = profile.profileImage;
+      this.updateUserInitials();
+    });
+  }
+
+  updateUserInitials() {
+    this.userInitials = this.userName
       .split(' ')
       .map(n => n[0])
       .join('')

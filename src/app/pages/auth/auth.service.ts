@@ -62,6 +62,22 @@ export class AuthService {
     );
   }
 
+  verifyEmail(emailCode: any): Observable<any> {
+    const createApi = this.apiUrlBuilder.buildApiUrl('auth/verify-email');
+    return this.http.post<any>(`${createApi}`, emailCode).pipe(
+      tap(response => this.handleAuthResponse(response)),
+      catchError(error => throwError(() => error))
+    );
+  }
+
+  resendVerificationCode(email: string): Observable<any> {
+    const createApi = this.apiUrlBuilder.buildApiUrl('auth/resendotc');
+    return this.http.post<any>(`${createApi}`, {email}).pipe(
+      tap(response => this.handleAuthResponse(response)),
+      catchError(error => throwError(() => error))
+    );
+  }
+
   login(request: LoginRequest): Observable<AuthResponse> {
     const createApi = this.apiUrlBuilder.buildApiUrl('auth/login');
     return this.http.post<AuthResponse>(createApi, request).pipe(

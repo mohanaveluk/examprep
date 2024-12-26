@@ -104,10 +104,18 @@
         <!-- User Menu -->
         <div *ngIf="isLoggedIn">
           <button mat-button [matMenuTriggerFor]="userMenu">
-            <div class="user-avatar">{{userInitials}}</div>
+            <div class="user-avatar" *ngIf="!userAvatar">{{userInitials}}</div>
+            <img *ngIf="userAvatar" [src]="userAvatar" [alt]="userName" class="user-avatar-image">
           </button>
           <mat-menu #userMenu="matMenu">
-            <div class="p-menu">Name: {{userName}}</div>
+            <!-- <div class="p-menu">Name: {{userName}}</div> -->
+            <div class="user-menu-header">
+              <div class="user-info">
+                <a routerLink="/auth/profile" class="user-name">{{userName}}</a>
+                <div class="user-email">{{userEmail}}</div>
+              </div>
+            </div>
+            <mat-divider></mat-divider>            
             <hr/>
             <button mat-menu-item routerLink="/pricing/account">
               <mat-icon>account_circle</mat-icon>

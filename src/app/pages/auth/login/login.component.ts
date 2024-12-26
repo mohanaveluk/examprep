@@ -15,6 +15,10 @@ export class LoginComponent {
   public email = ''
   public password = ''
   loginForm: FormGroup;
+  showVerification = false;
+  unverifiedEmail = '';
+  
+  loading = false;
   hidePassword = true;
   errorMessage = null;
   showOtcLogin = false;
@@ -34,21 +38,45 @@ export class LoginComponent {
   
   onSubmit() {
     if (this.loginForm.valid) {
+      this.loading = true;
       const loginRequest: LoginRequest  = {email: this.loginForm.value.email, password: this.loginForm.value.password};
       this.authService.login(this.loginForm.value).subscribe( {
         next: (response) => {
           const redirectUrl = this.authService.redirectUrl || '/exam/list'; // Default to home if no redirect URL
           this.router.navigateByUrl(redirectUrl);
           this.authService.redirectUrl = null; // Clear redirectUrl
+          this.loading = false;
           //this.router.navigate(['/exam/list']);
           console.log(response);
         },
         error: (error) => {
+          this.loading = false;
           this.errorMessage = error?.error?.message || 'An error occurred during login';
           console.error('Login failed:', error);
+
+          if (error.error.message.includes('verify your email')) {
+            this.unverifiedEmail = this.loginForm.get('email')?.value;
+            this.showVerification = true;
+            this.snackBar.open(error.error.message || 'Verify your email', 'Close', {
+              duration: 5000
+            });
+          } else {
+            this.snackBar.open(error.error.message || 'Login failed', 'Close', {
+              duration: 5000
+            });
+          }
         }
       });
     }
+  }
+
+  onVerified(): void {
+    this.snackBar.open('Email verified successfully! Please login.', 'Close', {
+      duration: 3000
+    });
+    this.errorMessage = null;
+    this.showVerification = false;
+    this.loginForm.reset();
   }
 
   onSocialLogin(provider: string): void {

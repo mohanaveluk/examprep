@@ -1,6 +1,6 @@
   <div class="login-container">
     
-    <mat-card>
+    <mat-card *ngIf="!showVerification">
       <mat-card-header>
         <mat-card-title>Register</mat-card-title>
       </mat-card-header>
@@ -9,6 +9,10 @@
       </div>
   
       <mat-card-content>
+        <div *ngIf="loading" class="loading-spinner">
+          <mat-spinner diameter="40"></mat-spinner>
+        </div>
+        <ng-container *ngIf="!loading">
         <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
             <mat-form-field appearance="fill">
               <mat-label>First Name</mat-label>
@@ -58,9 +62,17 @@
             Login
           </button>
         </form>
+        </ng-container>
       </mat-card-content>
       <mat-card-actions>
-        <a mat-button routerLink="/auth/login">Already have an account? Login</a>
+        <a *ngIf="!loading" mat-button routerLink="/auth/login">Already have an account? Login</a>
       </mat-card-actions>
     </mat-card>
+
+    <!-- Email Verification -->
+    <app-email-verification
+      *ngIf="showVerification"
+      [email]="registeredEmail"
+      (verified)="onVerified()">
+    </app-email-verification>
   </div>
