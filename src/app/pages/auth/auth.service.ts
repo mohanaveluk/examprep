@@ -6,6 +6,27 @@ import { TokenService } from '../../core/services/token.service';
 import { AuthResponse, LoginRequest, RefreshTokenRequest, RefreshTokenResponse, UserModel } from '../../shared/models/auth.model';
 import { Router } from '@angular/router';
 
+// Add these interfaces inside the file
+export interface SocialAuthResponse {
+  access_token: string;
+  refresh_token: string;
+  user: UserModel;
+  source: string;
+  operator: string;
+  lift: string;
+  subscribe: string;
+}
+
+interface OtcResponse {
+  success: boolean;
+  message: string;
+}
+
+interface ValidateOtcRequest {
+  mobile: string;
+  code: string;
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +57,22 @@ export class AuthService {
   register(register: any): Observable<AuthResponse> {
     const createApi = this.apiUrlBuilder.buildApiUrl('auth/register');
     return this.http.post<AuthResponse>(`${createApi}`, register).pipe(
+      tap(response => this.handleAuthResponse(response)),
+      catchError(error => throwError(() => error))
+    );
+  }
+
+  verifyEmail(emailCode: any): Observable<any> {
+    const createApi = this.apiUrlBuilder.buildApiUrl('auth/verify-email');
+    return this.http.post<any>(`${createApi}`, emailCode).pipe(
+      tap(response => this.handleAuthResponse(response)),
+      catchError(error => throwError(() => error))
+    );
+  }
+
+  resendVerificationCode(email: string): Observable<any> {
+    const createApi = this.apiUrlBuilder.buildApiUrl('auth/resendotc');
+    return this.http.post<any>(`${createApi}`, {email}).pipe(
       tap(response => this.handleAuthResponse(response)),
       catchError(error => throwError(() => error))
     );
@@ -139,6 +176,110 @@ export class AuthService {
   getUser(): any {
     return localStorage.getItem('user') !== null ? JSON.parse(localStorage.getItem('user')!) : {id: ""};
   }
+
+
+  /**
+   * Handles social login authentication
+   * @param provider The social auth provider ('google' | 'facebook' | 'apple')
+   * @returns Observable of auth response
+   */
+  async socialLogin(provider: string): Promise<Observable<SocialAuthResponse>> {
+    const createApi = this.apiUrlBuilder.buildApiUrl(`auth/${provider}`);
+    
+    // Initialize the appropriate social auth SDK based on provider
+    switch (provider) {
+      case 'google':
+        return await this.handleGoogleAuth(createApi);
+      case 'facebook':
+        return await this.handleFacebookAuth(createApi);
+      case 'apple':
+        return await this.handleAppleAuth(createApi);
+      default:
+        return throwError(() => new Error('Invalid provider'));
+    }
+  }
+
+  /**
+   * Sends OTC to provided mobile number
+   * @param mobile The mobile number to send OTC to
+   * @returns Observable of OTC response
+   */
+  sendOtc(mobile: string): Observable<OtcResponse> {
+    const createApi = this.apiUrlBuilder.buildApiUrl('auth/mobile/send-otc');
+    return this.http.post<OtcResponse>(createApi, { mobile }).pipe(
+      catchError(error => throwError(() => error))
+    );
+  }
+
+  /**
+   * Verifies OTC code for mobile number
+   * @param mobile The mobile number
+   * @param code The OTC code to verify
+   * @returns Observable of auth response
+   */
+  verifyOtc(mobile: string, code: string): Observable<AuthResponse> {
+    const createApi = this.apiUrlBuilder.buildApiUrl('auth/mobile/validate');
+    const payload: ValidateOtcRequest = { mobile, code };
+    
+    return this.http.post<AuthResponse>(createApi, payload).pipe(
+      tap(response => this.handleAuthResponse(response)),
+      catchError(error => throwError(() => error))
+    );
+  }
+
+  // Private helper methods for social auth
+  private async handleGoogleAuth(apiUrl: string): Promise<Observable<SocialAuthResponse>> {
+    try {
+      // Initialize Google Auth - In real app, use proper Google Sign-In SDK
+      const googleUser = await this.initGoogleAuth();
+      return this.http.post<SocialAuthResponse>(apiUrl, {
+        token: googleUser.credential
+      });
+    } catch (error) {
+      return throwError(() => error);
+    }
+  }
+
+  private async handleFacebookAuth(apiUrl: string): Promise<Observable<SocialAuthResponse>> {
+    try {
+      // Initialize Facebook Auth - In real app, use proper Facebook SDK
+      const fbResponse = await this.initFacebookAuth();
+      return this.http.post<SocialAuthResponse>(apiUrl, {
+        token: fbResponse.accessToken
+      });
+    } catch (error) {
+      return throwError(() => error);
+    }
+  }
+
+  private async handleAppleAuth(apiUrl: string): Promise<Observable<SocialAuthResponse>> {
+    try {
+      // Initialize Apple Auth - In real app, use proper Apple Sign-In SDK
+      const appleResponse = await this.initAppleAuth();
+      return this.http.post<SocialAuthResponse>(apiUrl, {
+        token: appleResponse.authorization.code
+      });
+    } catch (error) {
+      return throwError(() => error);
+    }
+  }
+
+  // Note: These methods would need to be implemented with actual SDK integration
+  private async initGoogleAuth(): Promise<any> {
+    // Implement Google Sign-In SDK initialization
+    throw new Error('Google Auth not implemented');
+  }
+
+  private async initFacebookAuth(): Promise<any> {
+    // Implement Facebook SDK initialization
+    throw new Error('Facebook Auth not implemented');
+  }
+
+  private async initAppleAuth(): Promise<any> {
+    // Implement Apple Sign-In SDK initialization
+    throw new Error('Apple Auth not implemented');
+  }
+
 
   private hasToken(): boolean {
     return !!localStorage.getItem(this.AUTH_TOKEN);

@@ -11,13 +11,32 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { AuthRoutingModule } from './auth-routing.module';
+import { UserProfileComponent } from './user-profile/user-profile.component';
+import { ProfileImageComponent } from './user-profile/components/profile-image/profile-image.component';
+import { SocialLoginComponent } from './login/components/social-login/social-login.component';
+import { OtcLoginComponent } from './login/components/otc-login/otc-login.component';
+import { MatIconModule } from '@angular/material/icon';
+import { RequestResetComponent } from './request-reset/request-reset.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ProfileUpdateSuccessComponent } from './user-profile/components/profile-update-success/profile-update-success.component';
+import { EmailVerificationComponent } from './components/email-verification/email-verification.component';
+import { SharedModule } from '../../shared/shared.module';
 
 
 
 @NgModule({
   declarations: [
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    UserProfileComponent,
+    ProfileImageComponent,
+    SocialLoginComponent,
+    OtcLoginComponent,
+    RequestResetComponent,
+    ResetPasswordComponent,
+    ProfileUpdateSuccessComponent,
+    EmailVerificationComponent
   ],
   imports: [
     CommonModule,
@@ -26,10 +45,13 @@ import { AuthRoutingModule } from './auth-routing.module';
     MatCardModule,
     MatMenuModule,
     MatFormFieldModule,
-    MatInputModule,   
+    MatInputModule,  
+    MatIconModule, 
+    MatProgressSpinnerModule,
     FormsModule, 
     ReactiveFormsModule,
-    AuthRoutingModule
+    AuthRoutingModule,
+    SharedModule
   ]
 })
 export class AuthModule { }
