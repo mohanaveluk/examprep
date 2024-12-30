@@ -1,0 +1,95 @@
+<div class="dialog-content">
+    <h2 mat-dialog-title>Add User to Groups</h2>
+  
+    <mat-dialog-content>
+      <div class="loading-spinner" *ngIf="loading">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+  
+      <form [formGroup]="form" *ngIf="!loading">
+
+        <!-- Searchable User Select -->
+      <mat-form-field appearance="fill" class="user-select">
+        <mat-label>Search and Select User</mat-label>
+        <mat-select formControlName="userId" [matTooltip]="getSelectedUserDetails()">
+          <mat-select-trigger>
+            <div class="selected-user" *ngIf="selectedUser">
+              <div class="user-info">
+                <span class="user-name">{{selectedUser.firstName}} {{selectedUser.lastName}}</span>
+                <span class="user-email">{{selectedUser.email}}</span>
+              </div>
+            </div>
+          </mat-select-trigger>
+          
+          <div class="search-box">
+            <mat-form-field appearance="outline">
+              <mat-label>Search Users</mat-label>
+              <input matInput type="text" [formControl]="searchControl" 
+                     (keyup)="filterUsers($event)" placeholder="Search by name or email">
+              <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <mat-option *ngFor="let user of filteredUsers" [value]="user.uguid">
+            <div class="user-option">
+              <div class="user-avatar">{{getUserInitials(user)}}</div>
+              <div class="user-details">
+                <span class="user-name">{{user.firstName}} {{user.lastName}}</span>
+                <span class="user-email">{{user.email}}</span>
+              </div>
+            </div>
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.get('userId')?.hasError('required')">
+          Please select a user
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Groups Multi-select -->
+      <mat-form-field appearance="fill">
+        <mat-label>Select Groups</mat-label>
+        <mat-select formControlName="groupIds" multiple>
+          <mat-option *ngFor="let group of groups" [value]="group.id">
+            {{group.name}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.get('groupIds')?.hasError('required')">
+          Please select at least one group
+        </mat-error>
+      </mat-form-field>
+
+        <!--<mat-form-field appearance="fill">
+          <mat-label>Select User</mat-label>
+          <mat-selection-list formControlName="userId">
+            <mat-list-option *ngFor="let user of users" [value]="user.id">
+              {{user.email}}
+            </mat-list-option>
+          </mat-selection-list>
+          <mat-error *ngIf="form.get('userId')?.hasError('required')">
+            Please select a user
+          </mat-error>
+        </mat-form-field>
+  
+        <mat-form-field appearance="fill">
+          <mat-label>Select Groups</mat-label>
+          <mat-selection-list formControlName="groupIds" multiple>
+            <mat-list-option *ngFor="let group of groups" [value]="group.id">
+              {{group.name}}
+            </mat-list-option>
+          </mat-selection-list>
+          <mat-error *ngIf="form.get('groupIds')?.hasError('required')">
+            Please select at least one group
+          </mat-error>
+        </mat-form-field>-->
+      </form>
+    </mat-dialog-content>
+  
+    <mat-dialog-actions align="end">
+      <button mat-button (click)="onCancel()">Cancel</button>
+      <button mat-raised-button color="primary" 
+              (click)="onSubmit()"
+              [disabled]="!form.valid || loading">
+        Add to Groups
+      </button>
+    </mat-dialog-actions>
+  </div>

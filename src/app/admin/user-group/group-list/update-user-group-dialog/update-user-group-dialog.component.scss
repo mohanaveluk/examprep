@@ -1,0 +1,90 @@
+.dialog-content {
+    min-width: 500px;
+    max-width: 600px;
+  }
+  
+  .loading-spinner {
+    display: flex;
+    justify-content: center;
+    padding: 24px;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px 0;
+  }
+  
+  mat-form-field {
+    width: 100%;
+  }
+  
+  .search-box {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    padding: 8px;
+    z-index: 1;
+  
+    mat-form-field {
+      margin: 0;
+    }
+  }
+  
+  .user-option, .group-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+  }
+  
+  .user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    color: #666;
+  }
+  
+  .user-details, .group-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .user-name, .group-name {
+    font-weight: 500;
+  }
+  
+  .user-email, .group-description {
+    font-size: 0.9em;
+    color: #666;
+  }
+  
+  .selected-group {
+    font-weight: 500;
+  }
+  
+  .mat-mdc-select-trigger, mat-select-trigger {
+    padding: 0 16px !important;
+  }
+
+  .mat-mdc-select-value{
+    width: 95% !important;
+  }
+
+  mat-dialog-actions {
+    padding: 30px 16px;
+    margin-bottom: 0;
+  }
+  
+  ::ng-deep {
+    .mat-mdc-select-panel {
+      max-height: 400px !important;
+    }
+  }

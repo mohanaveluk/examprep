@@ -40,3 +40,19 @@ export interface LoginRequest {
     access_token: string,
     user: UserModel
   }
+
+  export interface UserModelResponse{
+    guid: string,
+    email: string,
+    firstName: string,
+    lastName?: string,
+    major?: string,
+    mobile?: string,
+    profileImage?: string,
+  }
+
+  export interface UserDetailApiResponse{
+    status: boolean,
+    message: string,
+    users: UserModelResponse[]
+  }

@@ -1,0 +1,82 @@
+<div class="dialog-content">
+    <h2 mat-dialog-title>{{data?.group ? 'Update' : 'Add'}} Users to Group</h2>
+  
+    <mat-dialog-content>
+      <div class="loading-spinner" *ngIf="loading">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+  
+      <form [formGroup]="form" *ngIf="!loading">
+        <!-- Group Select -->
+        <mat-form-field appearance="fill" class="group-select">
+          <mat-label>Select Group</mat-label>
+          <mat-select formControlName="groupId" [matTooltip]="getSelectedGroupDetails()"
+                     [disabled]="!!data?.group">
+            <mat-select-trigger>
+              <div class="selected-group" *ngIf="form.get('groupId')?.value as groupId">
+                {{ groupName(groupId) }}
+              </div>
+            </mat-select-trigger>
+            
+            <div class="search-box">
+              <mat-form-field appearance="outline">
+                <mat-label>Search Groups</mat-label>
+                <input matInput type="text" [formControl]="groupSearchControl" 
+                       placeholder="Search by name or description">
+                <mat-icon matSuffix>search</mat-icon>
+              </mat-form-field>
+            </div>
+  
+            <mat-option *ngFor="let group of filteredGroups" [value]="group.id">
+              <div class="group-option">
+                <div class="group-details">
+                  <span class="group-name">{{group.name}}</span>
+                  <span class="group-description">{{group.description}}</span>
+                </div>
+              </div>
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.get('groupId')?.hasError('required')">
+            Please select a group
+          </mat-error>
+        </mat-form-field>
+  
+        <!-- Users Multi-select -->
+        <mat-form-field appearance="fill">
+          <mat-label>Select Users</mat-label>
+          <mat-select formControlName="userIds" multiple>
+            <div class="search-box">
+              <mat-form-field appearance="outline">
+                <mat-label>Search Users</mat-label>
+                <input matInput type="text" [formControl]="userSearchControl" 
+                       placeholder="Search by name or email">
+                <mat-icon matSuffix>search</mat-icon>
+              </mat-form-field>
+            </div>
+  
+            <mat-option *ngFor="let user of filteredUsers" [value]="user.uguid">
+              <div class="user-option">
+                <div class="user-avatar">{{getUserInitials(user)}}</div>
+                <div class="user-details">
+                  <span class="user-name">{{user.firstName}}- {{user.lastName}}</span>
+                  <span class="user-email">{{user.email}}</span>
+                </div>
+              </div>
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.get('userIds')?.hasError('required')">
+            Please select at least one user
+          </mat-error>
+        </mat-form-field>
+      </form>
+    </mat-dialog-content>
+  
+    <mat-dialog-actions align="end">
+      <button mat-button (click)="onCancel()">Cancel</button>
+      <button mat-raised-button color="primary" 
+              (click)="onSubmit()"
+              [disabled]="!form.valid || loading">
+        {{data?.group ? 'Update' : 'Add'}} Users
+      </button>
+    </mat-dialog-actions>
+  </div>
