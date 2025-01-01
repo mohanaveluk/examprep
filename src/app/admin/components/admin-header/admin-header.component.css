@@ -40,7 +40,7 @@
   height: 32px;
   border-radius: 50%;
   object-fit: cover;
-  margin-top: 11px;
+  margin:-4px -4px
 }
 
 .user-menu-header {

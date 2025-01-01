@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -10,7 +10,7 @@ import { LoginRequest } from '../../../shared/models/auth.model';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent {
+export class LoginComponent  implements OnInit{
   
   public email = ''
   public password = ''
@@ -36,6 +36,13 @@ export class LoginComponent {
     });
   }
   
+  ngOnInit() {
+    // Check if user is already logged in
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['/']);
+    }
+  }
+
   onSubmit() {
     if (this.loginForm.valid) {
       this.loading = true;
