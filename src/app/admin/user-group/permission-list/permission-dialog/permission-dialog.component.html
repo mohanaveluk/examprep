@@ -1,0 +1,40 @@
+<h2 mat-dialog-title>{{isEditing ? 'Edit' : 'Add'}} Resource Permissions</h2>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <mat-dialog-content>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Resource Name</mat-label>
+      <input matInput formControlName="resource" placeholder="Enter resource name">
+      <mat-error *ngIf="form.get('resource')?.hasError('required')">
+        Resource name is required
+      </mat-error>
+    </mat-form-field>
+
+    <div class="actions-section" formArrayName="actions">
+      <h3>Actions</h3>
+      
+      <div *ngFor="let action of actions.controls; let i=index" 
+           [formGroupName]="i" 
+           class="action-item">
+        <mat-checkbox formControlName="selected"
+                     (change)="onActionChange(i)">
+          {{action.get('name')?.value}}
+        </mat-checkbox>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>Description</mat-label>
+          <input matInput formControlName="description"
+                 [placeholder]="'Description for ' + action.get('name')?.value">
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-raised-button color="primary" type="submit"
+            [disabled]="!form.valid">
+      {{isEditing ? 'Update' : 'Create'}}
+    </button>
+  </mat-dialog-actions>
+</form>

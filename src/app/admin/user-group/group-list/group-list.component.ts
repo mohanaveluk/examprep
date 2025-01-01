@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { RbacService } from '../../../pages/auth/rbac.service';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { UpdateUserGroupDialogComponent } from './update-user-group-dialog/update-user-group-dialog.component';
+import { HeaderService } from '../../services/header.service';
 
 @Component({
   selector: 'app-group-list',
@@ -21,11 +22,13 @@ export class GroupListComponent  implements OnInit{
 
   constructor(
     private groupService: RbacService,
+    private headerService: HeaderService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
+    this.headerService.setTitle("Admin - Group Management");
     this.loadGroups();
   }
 

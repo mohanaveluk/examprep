@@ -4,6 +4,8 @@ import { Observable, of } from 'rxjs';
 import { map, shareReplay, tap } from 'rxjs/operators';
 import { Group, Permission } from '../../shared/models/group.model';
 import { ApiUrlBuilder } from '../../shared/utility/api-url-builder';
+import { CreatePermissionDto } from '../../shared/models/permission/create-permission.dto';
+import { UpdatePermissionDto } from '../../shared/models/permission/update-permission.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -79,11 +81,33 @@ export class RbacService {
         return this.http.get<Group[]>(requestApi);
     }
 
+    getMyGroups(): Observable<Group[]> {
+        const requestApi = this.apiUrlBuilder.buildApiUrl(`users/groups`);
+        return this.http.get<Group[]>(requestApi);
+    }
+
     getAllGroupsWithUsers(): Observable<Group[]> {
         const requestApi = this.apiUrlBuilder.buildApiUrl(`groups/with-users`);
         return this.http.get<Group[]>(requestApi);
     }
 
+    clearResourcePermissionsCache(): void {
+        this.permissionsCache$ = undefined;
+    }
+
+    createPermission(dto: CreatePermissionDto): Observable<Permission[]> {
+        const requestApi = this.apiUrlBuilder.buildApiUrl(`permissions`);
+        return this.http.post<Permission[]>(requestApi, dto).pipe(
+            tap(() => this.clearResourcePermissionsCache())
+        );
+    }
+
+    updatePermission(resource: string, dto: UpdatePermissionDto): Observable<Permission[]> {
+        const requestApi = this.apiUrlBuilder.buildApiUrl(`permissions/${resource}`);
+        return this.http.put<Permission[]>(requestApi, dto).pipe(
+            tap(() => this.clearResourcePermissionsCache())
+        );
+    }
 
     getPermissions(): Observable<Permission[]> {
         const requestApi = this.apiUrlBuilder.buildApiUrl(`permissions`);
@@ -94,4 +118,16 @@ export class RbacService {
         }
         return this.permissionsCache$;
     }
+
+    getPermissionsByResource(resource: string): Observable<Permission[]> {
+        const requestApi = this.apiUrlBuilder.buildApiUrl(`permissions/${resource}`);
+        return this.http.get<Permission[]>(requestApi);
+    }
+
+    deletePermission(resource: string): Observable<void> {
+        const requestApi = this.apiUrlBuilder.buildApiUrl(`permissions/${resource}`);
+        return this.http.delete<void>(requestApi).pipe(
+            tap(() => this.clearResourcePermissionsCache())
+        );
+      }
 }

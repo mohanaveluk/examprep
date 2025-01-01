@@ -15,16 +15,16 @@ const routes: Routes = [
   { path: 'request-reset', component: RequestResetComponent },
   { path: 'reset', component: ResetPasswordComponent },
   { path: 'profile', component: UserProfileComponent, canActivate: [AuthGuard] },
-  {
-    path: 'access-groups',
-    component: AccessGroupComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'user-groups',
-    component: GroupListComponent,
-    canActivate: [AuthGuard]
-  }
+  // {
+  //   path: 'access-groups',
+  //   component: AccessGroupComponent,
+  //   canActivate: [AuthGuard]
+  // },
+  // {
+  //   path: 'user-groups',
+  //   component: GroupListComponent,
+  //   canActivate: [AuthGuard]
+  // }
 ];
 
 @NgModule({

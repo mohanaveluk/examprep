@@ -6,24 +6,36 @@
   <span>{{headerService.title$ | async}}</span>
   
   <div class="spacer"></div>
+  <div *ngIf="isLoggedIn">
+    <button mat-icon-button [matMenuTriggerFor]="profileMenu">
+      <div class="user-avatar" *ngIf="!userAvatar">{{userInitials}}</div>
+      <img *ngIf="userAvatar" [src]="userAvatar" [alt]="userName" class="user-avatar-image">
+    </button>
   
-  <button mat-icon-button [matMenuTriggerFor]="profileMenu">
-    <mat-icon>account_circle</mat-icon>
-  </button>
-  
-  <mat-menu #profileMenu="matMenu">
-    <button mat-menu-item>
-      <mat-icon>person</mat-icon>
-      <span>Profile</span>
-    </button>
-    <button mat-menu-item>
-      <mat-icon>settings</mat-icon>
-      <span>Settings</span>
-    </button>
-    <mat-divider></mat-divider>
-    <button mat-menu-item>
-      <mat-icon>exit_to_app</mat-icon>
-      <span>Logout</span>
-    </button>
-  </mat-menu>
+    <mat-menu #profileMenu="matMenu">
+      <div class="user-menu-header">
+        <div class="user-info">
+          <a routerLink="/auth/profile" class="user-name">{{userName}}</a>
+          <div class="user-email">{{userEmail}}</div>
+        </div>
+      </div>
+      <mat-divider></mat-divider>            
+      
+
+      <!-- <button mat-menu-item>
+        <mat-icon>person</mat-icon>
+        <span>Profile</span>
+      </button>
+      <button mat-menu-item>
+        <mat-icon>settings</mat-icon>
+        <span>Settings</span>
+      </button> -->
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>exit_to_app</mat-icon>
+        <span>Logout</span>
+      </button>
+    </mat-menu>
+  </div>
+  <a mat-button routerLink="/auth/login" *ngIf="!isLoggedIn">Login</a>
 </mat-toolbar>

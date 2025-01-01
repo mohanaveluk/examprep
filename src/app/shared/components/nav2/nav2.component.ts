@@ -85,10 +85,10 @@ export class Nav2Component implements OnInit, OnDestroy{
     return initials.toUpperCase();
   }
 
-  logout()  {
+  logout() {
     this.authService.logout().subscribe((response) => {
       console.log(response.message);
       this.router.navigate(['/auth/login']);
-  });
+    });
   }
 }

@@ -28,12 +28,24 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { GroupListComponent } from './group-list/group-list.component';
 import { UpdateUserGroupDialogComponent } from './group-list/update-user-group-dialog/update-user-group-dialog.component';
 import { UserGroupRoutingModule } from './usergroup-routing.module';
+import { UserGroupsViewComponent } from './user-groups-view/user-groups-view.component';
+import { GroupDetailsDialogComponent } from './user-groups-view/group-details-dialog/group-details-dialog.component';
+import { AccessGroupComponent } from './access-group/access-group.component';
+import { GroupDialogComponent } from './access-group/group-dialog/group-dialog.component';
+import { PermissionListComponent } from './permission-list/permission-list.component';
+import { PermissionDialogComponent } from './permission-list/permission-dialog/permission-dialog.component';
 
 
 @NgModule({
     declarations: [
         GroupListComponent,
         UpdateUserGroupDialogComponent,
+        UserGroupsViewComponent,
+        GroupDetailsDialogComponent,
+        AccessGroupComponent,
+        GroupDialogComponent,
+        PermissionListComponent,
+        PermissionDialogComponent,
     ],
     imports: [
       CommonModule,
@@ -60,6 +72,7 @@ import { UserGroupRoutingModule } from './usergroup-routing.module';
       MatSortModule,
       MatPaginatorModule,
       MatDialogModule,
+      MatChipsModule,
       MatProgressSpinnerModule,
       UserGroupRoutingModule
     ],
