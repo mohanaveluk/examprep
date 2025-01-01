@@ -6,6 +6,8 @@ import { RequestResetComponent } from './request-reset/request-reset.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { AuthGuard } from './auth.guard';
+import { AccessGroupComponent } from './components/access-group/access-group.component';
+import { GroupListComponent } from './components/group-list/group-list.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -13,7 +15,16 @@ const routes: Routes = [
   { path: 'request-reset', component: RequestResetComponent },
   { path: 'reset', component: ResetPasswordComponent },
   { path: 'profile', component: UserProfileComponent, canActivate: [AuthGuard] },
-
+  // {
+  //   path: 'access-groups',
+  //   component: AccessGroupComponent,
+  //   canActivate: [AuthGuard]
+  // },
+  // {
+  //   path: 'user-groups',
+  //   component: GroupListComponent,
+  //   canActivate: [AuthGuard]
+  // }
 ];
 
 @NgModule({

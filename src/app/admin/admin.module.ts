@@ -25,6 +25,12 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialogModule } from '@angular/material/dialog';
+// import { GroupListComponent } from './user-group/group-list/group-list.component';
+// import { UpdateUserGroupDialogComponent } from './user-group/group-list/update-user-group-dialog/update-user-group-dialog.component';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
+import { UserGroupModule } from './user-group/usergroup.module';
 
 @NgModule({
   declarations: [
@@ -33,6 +39,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     AdminHeaderComponent,
     AdminSidenavComponent,
     AdminFooterComponent,
+    // GroupListComponent,
+    // UpdateUserGroupDialogComponent,
 
   ],
   imports: [
@@ -54,7 +62,11 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatSortModule,
     MatPaginatorModule,
     MatDialogModule,
-    ExamListModule
+    MatChipsModule,
+    MatSelectModule,
+    MatOptionModule,
+    ExamListModule,
+    UserGroupModule
   ],
 })
 export class AdminModule { }

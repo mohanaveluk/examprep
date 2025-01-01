@@ -29,6 +29,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { TruncatePipe } from './utility/truncate.pipe';
 import { LoadingOverlayComponent } from './components/loading-overlay/loading-overlay.component';
 import { MatProgressSpinner, MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 
 
 @NgModule({
@@ -40,7 +41,8 @@ import { MatProgressSpinner, MatProgressSpinnerModule } from '@angular/material/
     SessionExpiredDialogComponent,
     StatCardComponent,
     TruncatePipe,
-    LoadingOverlayComponent
+    LoadingOverlayComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     CommonModule,

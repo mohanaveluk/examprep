@@ -1,0 +1,52 @@
+.dialog-content {
+    min-width: 600px;
+    max-width: 800px;
+  }
+  
+  .dialog-subtitle {
+    color: #666;
+    margin: -8px 0 16px;
+  }
+  
+  .permissions-container {
+    margin: 16px 0;
+  }
+  
+  mat-expansion-panel {
+    margin-bottom: 16px;
+  }
+  
+  table {
+    width: 100%;
+    margin: 16px 0;
+  }
+
+
+  .mat-column-action {
+    width: 120px;
+  }
+  
+  mat-chip {
+    font-size: 0.9em;
+  }
+  
+  ::ng-deep {
+    .mat-expansion-panel-header-description {
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .mat-mdc-cell {
+        padding: 16px 16px !important;
+    }
+  }
+
+  .dialog-subtitle {
+      color: #666;
+      margin: -8px 25px 16px;
+  }
+
+  mat-dialog-actions {
+    margin-top: 16px;
+    padding: 16px 16px;
+  }

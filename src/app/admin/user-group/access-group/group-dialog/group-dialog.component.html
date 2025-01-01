@@ -1,0 +1,45 @@
+<div class="dialog-container">
+    <h2 mat-dialog-title>{{isEditing ? 'Edit' : 'Create'}} Group</h2>
+  
+    <form [formGroup]="groupForm" (ngSubmit)="onSubmit()">
+      <mat-dialog-content>
+        <mat-form-field appearance="outline">
+          <mat-label>Group Name</mat-label>
+          <input matInput formControlName="name" placeholder="Enter group name">
+          <mat-error *ngIf="groupForm.get('name')?.hasError('required')">
+            Group name is required
+          </mat-error>
+        </mat-form-field>
+  
+        <mat-form-field appearance="outline">
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description" rows="3"
+                    placeholder="Enter group description"></textarea>
+          <mat-error *ngIf="groupForm.get('description')?.hasError('required')">
+            Description is required
+          </mat-error>
+        </mat-form-field>
+  
+        <div class="permissions-section" *ngIf="availablePermissions !== null && availablePermissions.length > 0">
+          <h3>Permissions</h3>
+          <mat-selection-list #permissionList *ngIf="!loading" (selectionChange)="updatePermissions(permissionList.selectedOptions.selected)">
+            <mat-list-option *ngFor="let permission of availablePermissions"
+                            [value]="permission.id"
+                            [selected]="isPermissionSelected(permission.id)"
+                            ><!--(selectedChange)="onPermissionChange(permission.id, $event)">-->
+              {{permission.resource}} - {{permission.action}}
+              <small>({{permission.description}}) - {{isPermissionSelected(permission.id)}}</small>
+            </mat-list-option>
+          </mat-selection-list>
+        </div>
+      </mat-dialog-content>
+  
+      <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Cancel</button>
+        <button mat-raised-button color="primary" type="submit"
+                [disabled]="!groupForm.valid">
+          {{isEditing ? 'Update' : 'Create'}} Group
+        </button>
+      </mat-dialog-actions>
+    </form>
+  </div>

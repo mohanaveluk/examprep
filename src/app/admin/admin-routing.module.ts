@@ -22,6 +22,10 @@ const routes: Routes = [
         path: 'exam',
         loadChildren: () => import('./exam/examlist.module').then(m => m.ExamListModule)
       },
+      {
+        path: 'group',
+        loadChildren: () => import('./user-group/usergroup.module').then(m => m.UserGroupModule)
+      },
     ]
   }
 ];

@@ -1,0 +1,32 @@
+:host {
+    display: block;
+    padding: 24px;
+  }
+  
+  .full-width {
+    width: 100%;
+  }
+  
+  .actions-section {
+    margin: 24px 0;
+  
+    h3 {
+      margin: 0 0 16px;
+      color: #333;
+    }
+  }
+  
+  .action-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+  
+    mat-checkbox {
+      min-width: 100px;
+    }
+  
+    mat-form-field {
+      flex: 1;
+    }
+  }

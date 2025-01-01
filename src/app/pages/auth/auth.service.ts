@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, delay, Observable, of, tap, throwError } from 'rxjs';
 import { ApiUrlBuilder } from '../../shared/utility/api-url-builder';
 import { TokenService } from '../../core/services/token.service';
-import { AuthResponse, LoginRequest, RefreshTokenRequest, RefreshTokenResponse, UserModel } from '../../shared/models/auth.model';
+import { AuthResponse, LoginRequest, RefreshTokenRequest, RefreshTokenResponse, UserDetailApiResponse, UserModel } from '../../shared/models/auth.model';
 import { Router } from '@angular/router';
 
 // Add these interfaces inside the file
@@ -58,6 +58,14 @@ export class AuthService {
     const createApi = this.apiUrlBuilder.buildApiUrl('auth/register');
     return this.http.post<AuthResponse>(`${createApi}`, register).pipe(
       tap(response => this.handleAuthResponse(response)),
+      catchError(error => throwError(() => error))
+    );
+  }
+
+  //getAllUsers
+  getAllUsers(): Observable<UserDetailApiResponse>{
+    const requestApi = this.apiUrlBuilder.buildApiUrl('auth');
+    return this.http.get<UserDetailApiResponse>(requestApi).pipe(
       catchError(error => throwError(() => error))
     );
   }
