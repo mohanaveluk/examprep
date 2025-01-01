@@ -8,9 +8,10 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { AuthGuard } from './auth.guard';
 import { AccessGroupComponent } from './components/access-group/access-group.component';
 import { GroupListComponent } from './components/group-list/group-list.component';
+import { AuthLoginGuard } from './auth-login.guard';
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent },
+  { path: 'login', component: LoginComponent, canActivate: [AuthLoginGuard]},
   { path: 'register', component: RegisterComponent },
   { path: 'request-reset', component: RequestResetComponent },
   { path: 'reset', component: ResetPasswordComponent },
