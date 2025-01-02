@@ -20,7 +20,7 @@
   
       <ng-container matColumnDef="description">
         <th mat-header-cell *matHeaderCellDef>Description</th>
-        <td mat-cell *matCellDef="let exam">{{exam.description}}</td>
+        <td mat-cell *matCellDef="let exam">{{exam.description | truncate: 200}}</td>
       </ng-container>
   
       <ng-container matColumnDef="totalQuestions">
