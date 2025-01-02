@@ -41,6 +41,7 @@ import { TrialExamComponent } from './trial-exam/trial-exam.component';
 import { TrialExamDialogComponent } from './trial-exam/trial-exam-dialog/trial-exam-dialog.component';
 import { TrialQuestionComponent } from './trial-exam/trial-question/trial-question.component';
 import { TrialQuestionDialogComponent } from './trial-exam/trial-question-dialog/trial-question-dialog.component';
+import { SharedModule } from '../../shared/shared.module';
 
 
 
@@ -89,7 +90,8 @@ import { TrialQuestionDialogComponent } from './trial-exam/trial-question-dialog
     MatDialogModule,
     MatProgressSpinnerModule,
     DragDropModule,
-    ExamListRoutingModule
+    ExamListRoutingModule,
+    SharedModule
   ],
   
 })

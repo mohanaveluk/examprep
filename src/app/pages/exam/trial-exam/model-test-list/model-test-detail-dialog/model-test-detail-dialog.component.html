@@ -1,0 +1,36 @@
+<div class="dialog-header">
+    <h2>Test Details</h2>
+    <button mat-icon-button (click)="onClose()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  
+  <mat-dialog-content>
+    <div class="detail-section">
+      <h3>{{exam.title}}</h3>
+      
+      <div class="detail-item">
+        <span class="label">Subject:</span>
+        <span class="value">{{exam.subject}}</span>
+      </div>
+  
+      <div class="detail-item">
+        <span class="label">Description:</span>
+        <p class="value description">{{exam.description}}</p>
+      </div>
+  
+      <div class="detail-item">
+        <span class="label">Total Questions:</span>
+        <span class="value">{{exam.totalQuestions}}</span>
+      </div>
+  
+      <div class="detail-item">
+        <span class="label">Passing Score:</span>
+        <span class="value">{{exam.passingScore}}%</span>
+      </div>
+    </div>
+  </mat-dialog-content>
+  
+  <mat-dialog-actions align="end" style="display: flex;gap: 16px;">
+    <button mat-raised-button color="primary" (click)="onClose()">Close</button>
+  </mat-dialog-actions>

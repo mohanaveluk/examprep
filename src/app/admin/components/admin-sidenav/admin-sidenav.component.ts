@@ -15,6 +15,7 @@ export class AdminSidenavComponent {
     { icon: 'dashboard', label: 'Dashboard', route: '/admin/dashboard' },
     { icon: 'people', label: 'Users', route: '/admin/users' },
     { icon: 'assignment', label: 'Exams', route: '/admin/exam/list' },
+    { icon: 'model_training', label: 'Model Exams', route: '/admin/exam/modelexam' },
     { icon: 'question_answer', label: 'Inquiries', route: '/admin/inquiry-overview' },
     { icon: 'payments', label: 'Payments', route: '/admin/payments' },
     { icon: 'category', label: 'Category', route: '/admin/exam/category' },
