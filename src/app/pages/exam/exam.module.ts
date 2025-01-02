@@ -42,6 +42,7 @@ import { ModelQuestionComponent } from './model-question/model-question.componen
 import { ModelTestSummaryComponent } from './trial-exam/model-test-summary/model-test-summary.component';
 import { ModelTestListComponent } from './trial-exam/model-test-list/model-test-list.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ModelTestDetailDialogComponent } from './trial-exam/model-test-list/model-test-detail-dialog/model-test-detail-dialog.component';
 
 
 
@@ -67,6 +68,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     ModelQuestionComponent,
     ModelTestSummaryComponent,
     ModelTestListComponent,
+    ModelTestDetailDialogComponent,
 
   ],
   imports: [
