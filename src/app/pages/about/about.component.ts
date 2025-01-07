@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrl: './about.component.scss'
 })
 export class AboutComponent {
-
+  // Component is primarily template-driven
+  // No additional logic needed at this time
 }
