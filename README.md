@@ -25,3 +25,11 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+
+###Refer the https://www.youtube.com/watch?v=O-rnuP3h4u8 link to update the docker.prod file and follow the steps to deploy
+have the nginx.conf file placed in the root of the application
+update Dockerfile.prod file
+run the below command locally and make sure the container runs and works fine
+docker build -t exam-app-dev -f Dockerfile.prod .
+docker run -d -p 8081:80 exam-app-dev
