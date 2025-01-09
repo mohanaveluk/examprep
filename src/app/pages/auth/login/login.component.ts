@@ -58,7 +58,7 @@ export class LoginComponent  implements OnInit{
         },
         error: (error) => {
           this.loading = false;
-          this.errorMessage = error?.error?.message || 'An error occurred during login';
+          this.errorMessage = error.error.message || 'An error occurred during login';
           console.error('Login failed:', error);
 
           if (error.error.message.includes('verify your email')) {
