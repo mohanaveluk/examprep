@@ -101,7 +101,7 @@ export class PermissionListComponent implements OnInit {
             this.loadPermissions();
           },
           error: (error) => {
-            if(error?.error?.message?.includes("referenced in group permissions")){
+            if(error.error.message.includes("referenced in group permissions")){
               this.snackBar.open('Failed to delete permissions as it is being used in one or more groups ', 'Close', { duration: 3000 });
             }
             else{

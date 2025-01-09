@@ -58,17 +58,17 @@ export class LoginComponent  implements OnInit{
         },
         error: (error) => {
           this.loading = false;
-          this.errorMessage = error?.error?.message || 'An error occurred during login';
+          this.errorMessage = error.error.message || 'An error occurred during login';
           console.error('Login failed:', error);
 
-          if (error?.error?.message?.includes('verify your email')) {
+          if (error.error.message.includes('verify your email')) {
             this.unverifiedEmail = this.loginForm.get('email')?.value;
             this.showVerification = true;
-            this.snackBar.open(error?.error?.message || 'Verify your email', 'Close', {
+            this.snackBar.open(error.error.message || 'Verify your email', 'Close', {
               duration: 5000
             });
           } else {
-            this.snackBar.open(error?.error?.message || 'Login failed', 'Close', {
+            this.snackBar.open(error.error.message || 'Login failed', 'Close', {
               duration: 5000
             });
           }
