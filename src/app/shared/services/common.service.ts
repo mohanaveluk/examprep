@@ -86,4 +86,8 @@ export class CommonService {
     return (error: HttpErrorResponse) => 
       this.handleError(error, customErrorMessages, showSnackBar);
   }
+
+  isNullOrEmpty(value: any){
+    return value === null || value === undefined || value === '' ;
+  }
 }
