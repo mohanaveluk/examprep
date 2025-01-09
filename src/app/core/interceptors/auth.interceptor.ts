@@ -13,6 +13,7 @@ import { TokenService } from '../services/token.service';
 import { SessionExpiredDialogComponent } from '../../shared/components/session-expired-dialog/session-expired-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '../../pages/auth/auth.service';
+import { CommonService } from '../../shared/services/common.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -22,6 +23,7 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(
     private tokenService: TokenService,
     private authService: AuthService,
+    private commonService: CommonService,
     private router: Router,
     private dialog: MatDialog
   ) {}
@@ -35,7 +37,11 @@ export class AuthInterceptor implements HttpInterceptor {
 
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
-        if(error !=null && error.error !=null && error.error.message.includes("Password is incorrect") || error.error.message.includes("Invalid User Id") || error.error.message.includes("verification code has been sent")){
+        if(this.commonService.isNullOrEmpty(error) || (this.commonService.isNullOrEmpty(error) && this.commonService.isNullOrEmpty(error.error))){
+          return throwError(() => "invalid user");
+        }
+
+        if(error.error.message.includes("Password is incorrect") || error.error.message.includes("Invalid User Id") || error.error.message.includes("verification code has been sent")){
           return throwError(() => error);
         }
         if (error.status === 401 && !this.isRefreshing) {
