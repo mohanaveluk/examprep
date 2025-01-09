@@ -1,0 +1,7 @@
+{
+    "/api": {
+      "target": "https://medprep-nest-api-384784314380.us-central1.run.app",
+      "secure": false,
+      "changeOrigin": true
+    }
+}
