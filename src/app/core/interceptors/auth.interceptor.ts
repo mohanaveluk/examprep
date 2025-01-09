@@ -35,7 +35,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
-        if(error.error.message.includes("Password is incorrect") || error.error.message.includes("Invalid User Id") || error.error.message.includes("verification code has been sent")){
+        if(error !=null && error.error !=null && error.error.message.includes("Password is incorrect") || error.error.message.includes("Invalid User Id") || error.error.message.includes("verification code has been sent")){
           return throwError(() => error);
         }
         if (error.status === 401 && !this.isRefreshing) {
