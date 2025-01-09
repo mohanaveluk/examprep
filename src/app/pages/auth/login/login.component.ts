@@ -61,7 +61,7 @@ export class LoginComponent  implements OnInit{
           this.errorMessage = error.error.message || 'An error occurred during login';
           console.error('Login failed:', error);
 
-          if (error.error.message.includes('verify your email')) {
+          if (error !=null && error.error !=null && error.error.message.includes('verify your email')) {
             this.unverifiedEmail = this.loginForm.get('email')?.value;
             this.showVerification = true;
             this.snackBar.open(error.error.message || 'Verify your email', 'Close', {
