@@ -128,4 +128,10 @@ export class AdminInquiryOverviewComponent {
       }
     });
   }
+
+  createFirstInquiry() {
+    this.router.navigate(['/inquiry/list'], { 
+      queryParams: { showAskQuestion: true } 
+    });
+  }
 }
