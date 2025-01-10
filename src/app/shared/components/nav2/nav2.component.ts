@@ -39,12 +39,12 @@ export class Nav2Component implements OnInit, OnDestroy{
     this.authService.isUserLoggedIn().subscribe(isLoggedIn => {
       this.isUserLoggedIn = isLoggedIn;
       if (isLoggedIn) {
+        this.loadUserProfile();
         this.userName = this.authService.getUserName();
         this.userInitials = this.getUserInitials(this.userName);
       }
     });
 
-    this.loadUserProfile();
     // Subscribe to profile updates
     this.profileSubscription = this.profileService.profileUpdated$.subscribe(() => {
       this.loadUserProfile();
