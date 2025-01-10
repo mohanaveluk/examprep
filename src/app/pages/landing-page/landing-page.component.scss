@@ -5,7 +5,12 @@
   
   // Hero Section
   .hero-section {
-    background: linear-gradient(135deg, #1976d2, #64b5f6);
+    /*background: linear-gradient(135deg, #1976d2, #64b5f6);*/
+    background: linear-gradient(rgba(25, 118, 210, 0.8), rgba(100, 181, 246, 0.8)), url('/assets/images/students-banner.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    
     color: white;
     padding: 100px 20px;
     text-align: center;
