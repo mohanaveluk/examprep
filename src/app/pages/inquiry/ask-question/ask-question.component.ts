@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { InquiryService } from '../inquiry.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-ask-question',
@@ -15,7 +16,8 @@ export class AskQuestionComponent {
 
   constructor(
     private fb: FormBuilder,
-    private inquiryService: InquiryService
+    private inquiryService: InquiryService,
+    private router: Router
   ) {
     this.questionForm = this.fb.group({
       subject: ['', [Validators.required, Validators.minLength(5)]],
@@ -36,6 +38,13 @@ export class AskQuestionComponent {
   }
 
   onCancel() {
+    // Remove the query parameter when canceling
+    this.router.navigate([], {
+      queryParams: {
+        showAskQuestion: null
+      },
+      queryParamsHandling: 'merge'
+    });
     this.cancelled.emit();
     this.questionForm.reset();
   }
