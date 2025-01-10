@@ -1,13 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { InquiryService, Question, Stats } from '../inquiry.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-inquiry-dashboard',
   templateUrl: './inquiry-dashboard.component.html',
   styleUrl: './inquiry-dashboard.component.scss'
 })
-export class InquiryDashboardComponent {
+export class InquiryDashboardComponent implements OnInit {
   stats: Stats | null = null;
   questions: Question[] = [];
   showAskQuestion = false;
@@ -26,13 +27,19 @@ export class InquiryDashboardComponent {
 
   constructor(
     private inquiryService: InquiryService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
     this.loadStats();
     this.loadQuestions();
     this.subscribeToNotifications();
+
+    // Handle query parameter
+    this.route.queryParams.subscribe(params => {
+      this.showAskQuestion = params['showAskQuestion'] === 'true';
+    });
   }
 
   private loadStats() {
