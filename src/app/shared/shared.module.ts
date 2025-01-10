@@ -30,6 +30,7 @@ import { TruncatePipe } from './utility/truncate.pipe';
 import { LoadingOverlayComponent } from './components/loading-overlay/loading-overlay.component';
 import { MatProgressSpinner, MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { FaqComponent } from './components/faq/faq.component';
 
 
 @NgModule({
@@ -42,7 +43,8 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
     StatCardComponent,
     TruncatePipe,
     LoadingOverlayComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    FaqComponent
   ],
   imports: [
     CommonModule,

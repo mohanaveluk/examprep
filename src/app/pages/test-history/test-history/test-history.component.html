@@ -2,6 +2,16 @@
     <div class="header">
       <h1>Test History</h1>
     </div>
+
+    <div class="empty-state" *ngIf="!dataSource.data.length">
+      <mat-icon class="empty-icon">history_edu</mat-icon>
+      <h2>No Test History Available</h2>
+      <p>You haven't taken any tests yet. Start your learning journey by taking a test!</p>
+      <button mat-raised-button color="primary" routerLink="/exam/list">
+        <mat-icon>play_circle</mat-icon>
+        Take Your First Test
+      </button>
+    </div>
     
     <div *ngFor="let category of examCategories">
       
