@@ -125,6 +125,79 @@
   margin-top: 20px;
 }
 
+
+.empty-state {
+  text-align: center;
+  padding: 48px 20px;
+  margin: 24px auto;
+  /*max-width: 600px;*/
+  /*background: linear-gradient(135deg, #f3e5f5, #e1bee7);*/
+  background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.empty-icon {
+  font-size: 72px;
+  width: 72px;
+  height: 72px;
+  /*color: #7b1fa2;*/
+  color: #1976d2;
+  margin-bottom: 24px;
+  animation: scaleIn 0.5s ease-out;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.empty-state h2 {
+  /*color: #4a148c;*/
+  color: #1976d2;
+  margin: 0 0 16px;
+  font-size: 1.8em;
+  font-weight: 500;
+}
+
+.empty-state p {
+  color: #555;
+  margin: 0 0 32px;
+  font-size: 1.1em;
+  line-height: 1.5;
+  max-width: 400px;
+  margin: 0 auto 32px;
+}
+
+.empty-state-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.empty-state-actions button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 24px;
+}
+
 .exam-card {
   height: 100%;
   display: flex;

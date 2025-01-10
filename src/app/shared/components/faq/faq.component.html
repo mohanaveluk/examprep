@@ -1,0 +1,37 @@
+<div class="faq-container">
+    <div class="faq-header">
+      <h1>Frequently Asked Questions</h1>
+      <p>Find answers to common questions about our platform and services</p>
+    </div>
+  
+    <div class="category-tabs">
+      <button mat-button *ngFor="let category of categories"
+              [class.active]="category === selectedCategory"
+              (click)="setCategory(category)">
+        {{category}}
+      </button>
+    </div>
+  
+    <mat-accordion class="faq-accordion" multi>
+      <mat-expansion-panel *ngFor="let item of filterByCategory(selectedCategory)"
+                          class="faq-panel">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon [color]="'primary'">{{item.icon}}</mat-icon>
+            {{item.question}}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+  
+        <div class="faq-answer">
+          <p>{{item.answer}}</p>
+        </div>
+  
+        <mat-action-row>
+          <button mat-button color="primary" [routerLink]="['/contact']">
+            Still have questions?
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+        </mat-action-row>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>

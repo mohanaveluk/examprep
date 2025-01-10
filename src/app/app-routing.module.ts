@@ -6,6 +6,7 @@ import { AboutComponent } from './pages/about/about.component';
 import { PagesComponent } from './pages/pages.component';
 import { LandingPageComponent } from './pages/landing-page/landing-page.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
+import { FaqComponent } from './shared/components/faq/faq.component';
 
 
 const routes: Routes = [
@@ -41,7 +42,8 @@ const routes: Routes = [
         loadChildren: () => import('./pages/pricing/pricing.module').then(m => m.PricingModule)
       },
       { path: 'contact', component: ContactUsComponent },
-      { path: 'about', component: AboutComponent }
+      { path: 'about', component: AboutComponent },
+      { path: 'faq', component: FaqComponent }
 
     ]
   },
