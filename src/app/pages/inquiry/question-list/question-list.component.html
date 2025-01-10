@@ -1,7 +1,26 @@
 <div class="question-list">
-    <h2 *ngIf="questions.length === 0">No questions yet</h2>
   
-    <mat-accordion>
+    <div class="empty-state" *ngIf="questions.length === 0">
+      <div class="empty-state-content">
+        <div class="empty-icon">
+          <mat-icon>question_answer</mat-icon>
+        </div>
+        <h2>Yet to Create Inquiry</h2>
+        <p>Start a conversation by asking your first question!</p>
+        <div class="action-buttons">
+          <button mat-raised-button color="primary" (click)="createFirstInquiry()">
+            <mat-icon>add</mat-icon>
+            Ask a Question
+          </button>
+          <button mat-stroked-button color="primary" routerLink="/faq">
+            <mat-icon>help</mat-icon>
+            View FAQs
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <mat-accordion *ngIf="questions.length > 0">
       <mat-expansion-panel *ngFor="let question of questions">
         <mat-expansion-panel-header>
           <mat-panel-title>

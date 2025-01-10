@@ -31,4 +31,10 @@ export class QuestionListComponent {
     this.router.navigate(['/inquiry/list', questionId]);
     this.questionSelected.emit();
   }
+
+  createFirstInquiry() {
+    this.router.navigate(['/inquiry/list'], { 
+      queryParams: { showAskQuestion: true } 
+    });
+  }
 }
