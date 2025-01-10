@@ -41,10 +41,14 @@ export class AuthInterceptor implements HttpInterceptor {
           return throwError(() => "invalid user");
         }
 
-        if(error.error.message.includes("Password is incorrect") || error.error.message.includes("Invalid User Id") || error.error.message.includes("verification code has been sent")){
+        if(error.status === 0)
+        {
+          return throwError(() => "Looks like API service is unavailable");
+        }
+        else if(error.error.message?.includes("Password is incorrect") || error.error.message?.includes("Invalid User Id") || error.error.message?.includes("verification code has been sent")){
           return throwError(() => error);
         }
-        if (error.status === 401 && !this.isRefreshing) {
+        else if (error.status === 401 && !this.isRefreshing) {
           return this.handle401Error(request, next);
           // Check if dialog is not already open
           /*if (!this.dialog.openDialogs.length) {
