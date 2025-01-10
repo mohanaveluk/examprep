@@ -7,6 +7,21 @@
       </button>
     </div>
   
+        
+    <div class="empty-state" *ngIf="!groups.length">
+      <mat-icon class="empty-icon">school</mat-icon>
+      <h2>No access group is available</h2>
+      <p>We're currently preparing more tests for you. Please check back later!</p>
+      <div class="empty-state-actions">
+      <button mat-raised-button color="primary" (click)="openGroupDialog()">
+          <mat-icon>stars</mat-icon>
+          Create Group
+      </button>
+      
+      </div>
+  </div>
+
+
     <div class="loading-spinner" *ngIf="loading">
       <mat-spinner diameter="40"></mat-spinner>
     </div>
