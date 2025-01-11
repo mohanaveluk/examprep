@@ -37,6 +37,13 @@
         </td>
       </ng-container>
   
+      <!-- No Data Row -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell rowh" colspan="4">
+          No resource found
+        </td>
+      </tr>
+      
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
