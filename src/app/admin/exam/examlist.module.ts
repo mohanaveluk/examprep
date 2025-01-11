@@ -42,6 +42,7 @@ import { TrialExamDialogComponent } from './trial-exam/trial-exam-dialog/trial-e
 import { TrialQuestionComponent } from './trial-exam/trial-question/trial-question.component';
 import { TrialQuestionDialogComponent } from './trial-exam/trial-question-dialog/trial-question-dialog.component';
 import { SharedModule } from '../../shared/shared.module';
+import { QuestionEditDialogComponent } from './question-option/question-edit-dialog/question-edit-dialog.component';
 
 
 
@@ -61,7 +62,8 @@ import { SharedModule } from '../../shared/shared.module';
     TrialExamComponent,
     TrialExamDialogComponent,
     TrialQuestionComponent,
-    TrialQuestionDialogComponent
+    TrialQuestionDialogComponent,
+    QuestionEditDialogComponent
   ],
   imports: [
     CommonModule,

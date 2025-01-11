@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { Question } from '../models/question.model';
 import { QuestionViewDialogComponent } from '../question-view-dialog/question-view-dialog.component';
 import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl, ValidationErrors, FormControl } from '@angular/forms';
@@ -8,8 +8,9 @@ import { QuestionService } from '../services/question.service';
 import { MatExpansionPanel } from '@angular/material/expansion';
 import { HeaderService } from '../../services/header.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { FormManagementService } from '../../../shared/services/form-management.service';
+import { QuestionEditDialogComponent } from './question-edit-dialog/question-edit-dialog.component';
 
 @Component({
   selector: 'app-question-option',
@@ -18,6 +19,7 @@ import { FormManagementService } from '../../../shared/services/form-management.
 })
 export class QuestionOptionComponent  implements OnInit {
   @ViewChild(MatExpansionPanel) expansionPanel!: MatExpansionPanel;
+  @ViewChild('questionInput') questionInput!: ElementRef;
 
   examId: string="";
   examTitle: string = ""
@@ -34,11 +36,12 @@ export class QuestionOptionComponent  implements OnInit {
   constructor(
     private headerService: HeaderService,
     private route: ActivatedRoute,
+    private router: Router,
     public fb: FormBuilder,
     private dialog: MatDialog,
     private questionService: QuestionService,
     private formManagementService: FormManagementService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
   ) {
     this.questionForm = this.createForm();
     this.setupFormValidation();
@@ -64,6 +67,12 @@ export class QuestionOptionComponent  implements OnInit {
     this.loadQuestions(this.examId);
     this.questionForm.patchValue({
       type: 'single'
+    });
+
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        window.scrollTo(0, 0);
+      }
     });
     /*this.filteredQuestions = [
       {
@@ -677,13 +686,14 @@ export class QuestionOptionComponent  implements OnInit {
     this.expansionPanel.open();
   }
 
-  editQuestion(item: Question): void {
+  editQuestion(item: Question): void { //original
     this.qguid = item.qguid!;
     this.currentEditId = item.id;
     this.isSubmitted = false;
     this.questionForm.reset();
     this.loading = true;
     console.log(this.qguid);
+    
 
     this.questionService.getQuestion(this.qguid)
       .subscribe({
@@ -762,8 +772,41 @@ export class QuestionOptionComponent  implements OnInit {
       });
 
     this.expansionPanel.open();
+    this.questionInput.nativeElement.focus();
+    document.documentElement.scrollTop = 0;
+    this.scrollToTop();
   }
 
+  scrollToTop() {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }
+
+  editQuestion_new(question: Question): void {
+    const dialogRef = this.dialog.open(QuestionEditDialogComponent, {
+      width: '600px',
+      data: { question }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loading = true;
+        this.questionService.updateQuestion(this.examId, question.qguid!, result)
+          .subscribe({
+            next: (updatedQuestion) => {
+              const index = this.questions.findIndex(q => q.id === question.id);
+              if (index !== -1) {
+                this.questions[index] = updatedQuestion;
+                this.updateFilteredQuestions();
+              }
+              this.showSuccess('Question updated successfully');
+            },
+            error: (error) => this.showError('Failed to update question'),
+            complete: () => this.loading = false
+          });
+      }
+    });
+  }
 
   cancelEdit(): void {
     this.currentEditId = null;
