@@ -13,7 +13,7 @@
   <form [formGroup]="questionForm" (ngSubmit)="onSubmit()">
     <mat-form-field appearance="fill" class="full-width">
       <mat-label>Question</mat-label>
-      <input matInput formControlName="question">
+      <input matInput formControlName="question" #questionInput>
       <mat-error *ngIf="isSubmitted && questionForm.get('question')?.errors?.['required']">
         Question is required
       </mat-error>

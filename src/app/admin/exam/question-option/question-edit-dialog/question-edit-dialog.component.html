@@ -1,0 +1,50 @@
+<h2 mat-dialog-title>{{data.question ? 'Edit Question' : 'Add Question'}}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="questionForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Question</mat-label>
+      <input matInput formControlName="question" required>
+    </mat-form-field>
+
+    <div class="type-selection">
+      <mat-radio-group formControlName="type">
+        <mat-radio-button value="single-choice">Single Choice</mat-radio-button>
+        <mat-radio-button value="multiple-choice">Multiple Choice</mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <div class="options-container" formArrayName="options">
+      <div *ngFor="let option of options.controls; let i = index" class="option-row">
+        <mat-form-field appearance="fill">
+          <mat-label>Option {{i + 1}}</mat-label>
+          <input matInput [formControlName]="i">
+        </mat-form-field>
+
+        <ng-container *ngIf="questionForm.get('type')?.value === 'single-choice'">
+          <mat-radio-button 
+            [value]="i"
+            [checked]="correctAnswers.value.includes(i)"
+            (change)="correctAnswers.clear(); correctAnswers.push(fb.control(i))">
+          </mat-radio-button>
+        </ng-container>
+
+        <ng-container *ngIf="questionForm.get('type')?.value === 'multiple-choice'">
+          <mat-checkbox
+            [checked]="correctAnswers.value.includes(i)"
+            (change)="correctAnswers.value.includes(i) ? 
+              correctAnswers.removeAt(correctAnswers.value.indexOf(i)) : 
+              correctAnswers.push(fb.control(i))">
+          </mat-checkbox>
+        </ng-container>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()">
+    {{data.question ? 'Update' : 'Submit'}}
+  </button>
+</mat-dialog-actions>

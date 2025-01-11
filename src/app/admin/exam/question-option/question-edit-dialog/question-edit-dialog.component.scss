@@ -1,0 +1,32 @@
+.full-width {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+  
+  .type-selection {
+    margin-bottom: 1rem;
+  
+    mat-radio-button {
+      margin-right: 1rem;
+    }
+  }
+  
+  .options-container {
+    margin-bottom: 1rem;
+  
+    .option-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.5rem;
+  
+      mat-form-field {
+        flex: 1;
+      }
+    }
+  }
+  
+  mat-dialog-content {
+    min-width: 500px;
+    max-height: 80vh;
+  }
