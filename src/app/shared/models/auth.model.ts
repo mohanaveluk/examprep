@@ -56,3 +56,30 @@ export interface LoginRequest {
     message: string,
     users: UserModelResponse[]
   }
+
+  export interface User {
+    id: number;
+    uguid: string;
+    first_name: string,
+    last_name: string,
+    email: string;
+    //role: 'admin' | 'user' | 'manager' | 'doctor' | 'prvider';
+    mobile: string;
+    major: string;
+    profileImage: string;
+    is_active: number;
+    role_id: string;
+    createdAt: string;
+    isEmailVerified: boolean;
+    isDeleted: boolean;
+    lastLogin: Date;
+    role: Role
+    
+  }
+
+
+  export interface Role{
+    id: number;
+    name: string;
+    rguid: string;
+  }

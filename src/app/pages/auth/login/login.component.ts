@@ -20,7 +20,7 @@ export class LoginComponent  implements OnInit{
   
   loading = false;
   hidePassword = true;
-  errorMessage = null;
+  errorMessage: string | null = null;
   showOtcLogin = false;
 
   constructor(
@@ -58,8 +58,13 @@ export class LoginComponent  implements OnInit{
         },
         error: (error) => {
           this.loading = false;
-          this.errorMessage = error.error.message || 'An error occurred during login';
-          console.error('Login failed:', error);
+          if(typeof error === "string" && error.includes("unavailable")){
+            this.errorMessage = error.toString();
+          }
+          else{
+            this.errorMessage = error.error.message || 'An error occurred during login';
+            console.error('Login failed:', error);
+          }
 
           if (error !=null && error.error !=null && error.error.message.includes('verify your email')) {
             this.unverifiedEmail = this.loginForm.get('email')?.value;

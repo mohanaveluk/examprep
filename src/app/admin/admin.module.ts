@@ -31,6 +31,11 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { UserGroupModule } from './user-group/usergroup.module';
+import { UserManagementComponent } from './user-management/user-management.component';
+import { UserViewDialogComponent } from './components/user-view-dialog/user-view-dialog.component';
+import { UserEditDialogComponent } from './components/user-edit-dialog/user-edit-dialog.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -39,6 +44,9 @@ import { UserGroupModule } from './user-group/usergroup.module';
     AdminHeaderComponent,
     AdminSidenavComponent,
     AdminFooterComponent,
+    UserManagementComponent,
+    UserViewDialogComponent,
+    UserEditDialogComponent,
     // GroupListComponent,
     // UpdateUserGroupDialogComponent,
 
@@ -46,10 +54,13 @@ import { UserGroupModule } from './user-group/usergroup.module';
   imports: [
     CommonModule,
     RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
     AdminRoutingModule,
     MatFormFieldModule,
     MatSidenavModule,
     MatToolbarModule,
+    MatInputModule,
     MatListModule,
     MatIconModule,
     MatButtonModule,
