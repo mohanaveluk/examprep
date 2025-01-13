@@ -1,0 +1,36 @@
+<h2 mat-dialog-title>User Details</h2>
+
+<mat-dialog-content>
+  <div class="user-details">
+    <div class="detail-row">
+      <span class="label">Name:</span>
+      <span class="value">{{user.first_name}} {{user.last_name}}</span>
+    </div>
+    <div class="detail-row">
+      <span class="label">Email:</span>
+      <span class="value">{{user.email}}</span>
+    </div>
+    <div class="detail-row">
+      <span class="label">Role:</span>
+      <span class="value">{{user.role.name}}</span>
+    </div>
+    <div class="detail-row">
+      <span class="label">Status:</span>
+      <span class="value" [class.active]="user.is_active" [class.inactive]="!user.is_active">
+        {{user.is_active ? 'Active' : 'Inactive'}}
+      </span>
+    </div>
+    <div class="detail-row">
+      <span class="label">Created At:</span>
+      <span class="value">{{user.createdAt | date:'medium'}}</span>
+    </div>
+    <div class="detail-row">
+      <span class="label">Last Login:</span>
+      <span class="value">{{user.lastLogin | date:'medium'}}</span>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="close()">Close</button>
+</mat-dialog-actions>

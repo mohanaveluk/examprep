@@ -1,0 +1,31 @@
+.users-container {
+    padding: 0 20px;
+  
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+    }
+
+    .users-table-container {
+      table {
+        width: 100%;
+      }
+  
+      .mat-column-actions {
+        width: 200px;
+        text-align: center;
+      }
+  
+      .active {
+        color: #4caf50;
+        font-weight: 500;
+      }
+  
+      .inactive {
+        color: #f44336;
+        font-weight: 500;
+      }
+    }
+  }

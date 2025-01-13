@@ -4,6 +4,7 @@ import { AdminComponent } from './admin.component';
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 import { AdminInquiryOverviewComponent } from '../pages/inquiry/components/admin-inquiry-overview/admin-inquiry-overview.component';
 import { AuthGuard } from '../pages/auth/auth.guard';
+import { UserManagementComponent } from './user-management/user-management.component';
 
 const routes: Routes = [
   {
@@ -15,6 +16,12 @@ const routes: Routes = [
       {
         path: 'inquiry-overview',
         component: AdminInquiryOverviewComponent,
+        canActivate: [AuthGuard]
+        // In real app, add additional admin role guard
+      },
+      {
+        path: 'users',
+        component: UserManagementComponent,
         canActivate: [AuthGuard]
         // In real app, add additional admin role guard
       },
