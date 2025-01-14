@@ -1,0 +1,43 @@
+<div class="exam-dialog">
+    <div class="dialog-header">
+        <h2 mat-dialog-title>{{exam.title}}</h2>
+        <button mat-icon-button (click)="onClose()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+
+    <mat-dialog-content>
+        <div class="exam-details">
+            <div class="detail-item">
+                <span class="label">Description:</span>
+                <p>{{exam.description}}</p>
+            </div>
+
+            <div class="detail-item" *ngIf="exam.subject">
+                <span class="label">subject:</span>
+                <p>{{exam.subject}}</p>
+            </div>
+
+            <div class="detail-item">
+                <span class="label">Total Questions:</span>
+                <p>{{exam.totalQuestions}}</p>
+            </div>
+
+            <div class="detail-item">
+                <span class="label">Passing Score:</span>
+                <p>{{exam.passingScore}}%</p>
+            </div>
+
+            <div class="detail-item">
+                <span class="label">Last Updated:</span>
+                <p *ngIf="exam.updatedAt">{{formatDate(exam.updatedAt)}}</p>
+                <p *ngIf="!exam.updatedAt">{{formatDate(exam.createdAt)}}</p>
+            </div>
+        </div>
+
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+        <button mat-button (click)="onClose()">Close</button>
+    </mat-dialog-actions>
+</div>
