@@ -59,4 +59,8 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowClick($event, row)"></tr>
     </table>
+    <app-loading-overlay 
+      [show]="loading" 
+      [message]="loadingMessage">
+    </app-loading-overlay>
   </div>

@@ -26,7 +26,9 @@ export class ExamlistComponent implements OnInit{
   ];
   dataSource: MatTableDataSource<AdminExam>;
   hoveredRow: any = null;
-
+  loading = false;
+  loadingMessage = "Loading...";
+  
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 

@@ -49,7 +49,7 @@ export class LoginComponent  implements OnInit{
       const loginRequest: LoginRequest  = {email: this.loginForm.value.email, password: this.loginForm.value.password};
       this.authService.login(this.loginForm.value).subscribe( {
         next: (response) => {
-          const redirectUrl = this.authService.redirectUrl || '/exam/list'; // Default to home if no redirect URL
+          const redirectUrl = this.authService.redirectUrl || '/'; // Default to home if no redirect URL
           this.router.navigateByUrl(redirectUrl);
           this.authService.redirectUrl = null; // Clear redirectUrl
           this.loading = false;
