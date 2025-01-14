@@ -7,6 +7,7 @@ import { PagesComponent } from './pages/pages.component';
 import { LandingPageComponent } from './pages/landing-page/landing-page.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { FaqComponent } from './shared/components/faq/faq.component';
+import { UnderConstructionComponent } from './shared/components/under-construction/under-construction.component';
 
 
 const routes: Routes = [
@@ -51,6 +52,10 @@ const routes: Routes = [
     path: 'admin',
     loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)
   },
+  { 
+    path: '**', 
+    component: UnderConstructionComponent 
+  }
 ];
 
 @NgModule({

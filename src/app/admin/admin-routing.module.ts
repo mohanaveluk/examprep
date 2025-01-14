@@ -27,10 +27,12 @@ const routes: Routes = [
       },
       {
         path: 'exam',
+        canActivate: [AuthGuard],
         loadChildren: () => import('./exam/examlist.module').then(m => m.ExamListModule)
       },
       {
         path: 'group',
+        canActivate: [AuthGuard],
         loadChildren: () => import('./user-group/usergroup.module').then(m => m.UserGroupModule)
       },
     ]
