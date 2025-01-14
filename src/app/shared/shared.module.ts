@@ -31,6 +31,7 @@ import { LoadingOverlayComponent } from './components/loading-overlay/loading-ov
 import { MatProgressSpinner, MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { FaqComponent } from './components/faq/faq.component';
+import { UnderConstructionComponent } from './components/under-construction/under-construction.component';
 
 
 @NgModule({
@@ -44,7 +45,8 @@ import { FaqComponent } from './components/faq/faq.component';
     TruncatePipe,
     LoadingOverlayComponent,
     ConfirmDialogComponent,
-    FaqComponent
+    FaqComponent,
+    UnderConstructionComponent
   ],
   imports: [
     CommonModule,

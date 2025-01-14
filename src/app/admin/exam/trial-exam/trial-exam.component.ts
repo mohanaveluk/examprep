@@ -6,6 +6,7 @@ import { TrialExamDialogComponent } from './trial-exam-dialog/trial-exam-dialog.
 import { TrialQuestionComponent } from './trial-question/trial-question.component';
 import { ModelExamService } from '../services/trial-exam.service';
 import { HeaderService } from '../../services/header.service';
+import { TrialExamViewDialogComponent } from './trial-exam-view-dialog/trial-exam-view-dialog.component';
 
 @Component({
   selector: 'app-trial-exam',
@@ -15,7 +16,8 @@ import { HeaderService } from '../../services/header.service';
 export class TrialExamComponent implements OnInit {
   exams: any[] = [];
   displayedColumns: string[] = ['number', 'title', 'description', 'totalQuestions', 'passingScore', 'actions'];
-
+  hoveredRow: any = null;
+  
   constructor(
     private examService: ExamService,
     private modelExamService: ModelExamService,
@@ -53,6 +55,16 @@ export class TrialExamComponent implements OnInit {
         this.loadExams();
       }
     });
+  }
+
+  onRowClick(event: MouseEvent, row: any) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.mat-mdc-cell:last-child')) {
+      this.dialog.open(TrialExamViewDialogComponent, {
+        width: '900px',
+        data: row
+      });
+    }
   }
 
   deleteExam(exam: any): void {
