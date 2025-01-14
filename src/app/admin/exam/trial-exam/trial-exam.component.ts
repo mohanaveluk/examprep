@@ -17,7 +17,9 @@ export class TrialExamComponent implements OnInit {
   exams: any[] = [];
   displayedColumns: string[] = ['number', 'title', 'description', 'totalQuestions', 'passingScore', 'actions'];
   hoveredRow: any = null;
-  
+  loading = false;
+  loadingMessage = "Loading...";
+
   constructor(
     private examService: ExamService,
     private modelExamService: ModelExamService,
@@ -32,11 +34,14 @@ export class TrialExamComponent implements OnInit {
   }
 
   loadExams(): void {
+    this.loading = true;
     this.modelExamService.getAvailableExams().subscribe({
       next: (exams:any) => {
         this.exams = exams.data;
+        this.loading = false;
       },
       error: (error) => {
+        this.loading = false;
         console.error('Error loading exams:', error);
         this.snackBar.open('Failed to load exams', 'Close', { duration: 3000 });
       }
@@ -69,10 +74,12 @@ export class TrialExamComponent implements OnInit {
 
   deleteExam(exam: any): void {
     if (confirm(`Are you sure you want to delete "${exam.title}"?`)) {
+      this.loading = true;
       this.modelExamService.deleteExam(exam.id).subscribe(success => {
         if (success) {
           this.loadExams();
         }
+        this.loading = false;
       });
     }
   }

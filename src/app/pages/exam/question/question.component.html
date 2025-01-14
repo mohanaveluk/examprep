@@ -3,22 +3,19 @@
         <h1 class="exam-title">{{ exam.title }}</h1>
         <div class="exam-info">
             <span>Duration: {{ exam.duration }} minutes</span>
-            <span>Total Questions: {{ totalQuestions }}</span>
+            <span class="remaining-time">Time Remaining: {{ formatRemainingTime() }}</span>
             <span>Passing Score: {{ exam.passingScore }}%</span>
             <!-- <span class="remaining-time">Time Remaining: {{ formatRemainingTime() }}</span> -->
         </div>
         <div class="exam-info">
             <div class="exam-status">
-                <h3>Status</h3>
+                <!-- <h3>Status</h3> -->
                 <div class="status-chip" [class.paused]="session?.status === 'paused'" [class.closed]="session?.status === 'completed'">
                   {{ session?.status === 'paused' ? 'PAUSED' : (session?.status ==='active' ? 'IN PROGRESS' : 'CLOSED') }}
                 </div>
               </div>
               <div class="progress-stats" *ngIf="session !== undefined && totalQuestions > 0">
-                <div>Questions Answered: {{ totalAnsweredQuestions || 0 }}/{{ totalQuestions || 0 }}</div>
-              </div>
-              <div class="remaining-time">
-                Time Remaining: {{ formatRemainingTime() }}
+                <div>Answered: {{ totalAnsweredQuestions || 0 }}/{{ totalQuestions || 0 }}</div>
               </div>
               <button mat-raised-button color="warn" *ngIf="session?.status === 'active'" (click)="onPauseClick()">
                 <mat-icon>pause</mat-icon> Pause Test
