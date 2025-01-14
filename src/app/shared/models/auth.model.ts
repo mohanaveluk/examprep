@@ -69,7 +69,7 @@ export interface LoginRequest {
     profileImage: string;
     is_active: number;
     role_id: string;
-    createdAt: string;
+    created_at: string;
     isEmailVerified: boolean;
     isDeleted: boolean;
     lastLogin: Date;
