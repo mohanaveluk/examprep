@@ -13,7 +13,7 @@ export class UserViewDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<UserViewDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public user: User
-  ) {}
+  ) {console.log(user);}
 
   close(): void {
     this.dialogRef.close();
