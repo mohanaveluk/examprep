@@ -86,9 +86,9 @@ export class PricingService {
       id: 'pay1',
       planId: 'standard',
       planName: 'Standard Plan',
-      amount: 199,
+      amount: 0,
       date: new Date('2024-01-01'),
-      validUntil: new Date('2024-07-01'),
+      validUntil: new Date('2025-07-31'),
       status: 'success'
     }
   ];
@@ -96,9 +96,9 @@ export class PricingService {
   private mockAccountInfo: AccountInfo = {
     subscriptionStatus: 'active',
     currentPlan: this.plans[1],
-    validUntil: new Date('2024-07-01'),
-    examCredits: 50,
-    totalExamsTaken: 15
+    validUntil: new Date('2025-07-31'),
+    examCredits: 10,
+    totalExamsTaken: 0
   };
   constructor(private http: HttpClient) {}
 
