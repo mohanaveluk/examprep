@@ -61,6 +61,11 @@
     </form>
   </div>
 
+  <app-loading-overlay 
+      [show]="loading" 
+      [message]="loadingMessage">
+  </app-loading-overlay>
+  
   <mat-card class="thank-you-message" *ngIf="isSubmitted">
     <mat-icon class="thank-you-icon">check_circle</mat-icon>
     <h2>Thank you for contacting us!</h2>
