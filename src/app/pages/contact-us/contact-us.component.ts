@@ -18,6 +18,8 @@ export class ContactUsComponent {
   contactForm: FormGroup;
   public isSubmitting = false;
   isSubmitted = false;
+  loading = false;
+  loadingMessage = "Processing..."
 
   constructor(
     private fb: FormBuilder,
@@ -41,6 +43,7 @@ export class ContactUsComponent {
 
     if (this.contactForm.valid && !this.isSubmitting) {
       this.isSubmitting = true;
+      this.loading = true;
       let phoneNumber = this.contactForm.value.phone.replace('+1', '');
       let formData: ContactForm = this.contactForm.value;
       formData.mobile = `+1${phoneNumber}`;
@@ -48,6 +51,7 @@ export class ContactUsComponent {
 
       this.contactService.submitContactForm(formData).subscribe({
         next: (response) => {
+          this.loading = false;
           this.snackBar.open('Form submitted successfully!', 'Close', {
             duration: 3000,
             horizontalPosition: 'end',
@@ -58,6 +62,7 @@ export class ContactUsComponent {
           this.isSubmitting = false;
         },
         error: (error) => {
+          this.loading = false;
           this.snackBar.open('Error submitting form. Please try again.', 'Close', {
             duration: 3000,
             horizontalPosition: 'end',

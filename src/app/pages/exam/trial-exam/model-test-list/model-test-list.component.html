@@ -2,7 +2,7 @@
     <!-- Hero Section -->
     <section class="hero-section">
       <div class="hero-content">
-        <h1>Practice Medical Entrance Exams</h1>
+        <h1>Practice Model Exams</h1>
         <p>Enhance your preparation with our comprehensive model tests designed by experts</p>
       </div>
     </section>
@@ -28,7 +28,7 @@
   
     <!-- Exams Section -->
     <section class="exams-section">
-      <h2>Available Model Tests</h2>
+      <h2>Model Tests</h2>
       
       <!-- Loading State -->
       <div class="loading-state" *ngIf="loading">
@@ -37,7 +37,7 @@
       </div>
   
       <!-- Error State -->
-      <div class="error-state" *ngIf="error">
+      <div class="error-state" *ngIf="error && !loading">
         <mat-icon color="warn">error</mat-icon>
         <p>{{error}}</p>
         <button mat-raised-button color="primary" (click)="loadExams()">
@@ -45,6 +45,22 @@
         </button>
       </div>
   
+      <div class="empty-state" *ngIf="!exams.length && !loading && !error">
+        <mat-icon class="empty-icon">school</mat-icon>
+        <h2>No Model Tests Available</h2>
+        <p>We're currently preparing more tests for you. Please check back later!</p>
+        <div class="empty-state-actions">
+        <button mat-raised-button color="primary" routerLink="/pricing/plans">
+            <mat-icon>stars</mat-icon>
+            View Premium Plans
+        </button>
+        <button mat-stroked-button color="primary" (click)="loadExams()">
+            <mat-icon>refresh</mat-icon>
+            Refresh
+        </button>
+        </div>
+    </div>
+
       <!-- Exams Grid -->
       <div class="exams-grid" *ngIf="!loading && !error">
         <mat-card *ngFor="let exam of exams" class="exam-card" [class.inactive]="!exam.is_active">

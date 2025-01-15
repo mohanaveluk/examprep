@@ -22,10 +22,6 @@
       }
     }
   
-    .filter-field {
-      width: 100%;
-      margin-bottom: 16px;
-    }
   
     .table-container {
       overflow-x: auto;
@@ -154,4 +150,14 @@
 
 .delete-icon {
   color: red; /* Customize the color as needed */
+}
+
+.filter-field {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+/* Style for the input background */
+:host ::ng-deep .filter-field .mat-mdc-text-field-wrapper {
+  background-color: #ffffff;
 }

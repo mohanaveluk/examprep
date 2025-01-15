@@ -9,6 +9,8 @@ import { AlertService } from '../../../shared/services/alert.service';
 })
 export class ListComponent {
   public exams: any[] = [];
+  public filteredExams: any[] = [];
+  public searchKeyword: string = "";
   public warningMessage: string = ""
   public errorMessage: string = ""
   loading = true;
@@ -34,6 +36,7 @@ export class ListComponent {
         this.loading = false;
         if(exams.success){
           this.exams = exams.data,
+          this.filteredExams = exams.data,
           this.exams.forEach((item: { categoryText: any; category: { name: any; }; }) => {
             item.categoryText = item.category.name;
           });
@@ -48,6 +51,23 @@ export class ListComponent {
         this.loading = false;
         console.error('Failed to load exams:', error);
       }
+    });
+  }
+
+  applyFilter(event: Event) {
+    this.searchKeyword = (event.target as HTMLInputElement).value.toLowerCase();
+    
+    this.filteredExams = this.exams.filter(exam => {
+      return Object.keys(exam).some(key => {
+        const value = exam[key];
+        if (typeof value === 'string') {
+          return value.toLowerCase().includes(this.searchKeyword);
+        }
+        if (typeof value === 'number') {
+          return value.toString().includes(this.searchKeyword);
+        }
+        return false;
+      });
     });
   }
 

@@ -8,7 +8,7 @@
     <!-- Hero Section -->
     <section class="hero-section">
         <div class="hero-content">
-            <h1>Practice Medical Entrance Exams</h1>
+            <h1>Practice Certification Exams</h1>
             <p>Enhance your preparation with our comprehensive model tests designed by experts</p>
         </div>
     </section>
@@ -43,34 +43,39 @@
             {{ warningMessage }}
         </div>
         <!-- Error State -->
-      <div class="error-state" *ngIf="error">
-        <mat-icon color="warn">error</mat-icon>
-        <p>{{error}}</p>
-        <button mat-raised-button color="primary" (click)="loadExams()">
-          Try Again
-        </button>
-      </div>
+        <div class="error-state" *ngIf="error && !loading">
+            <mat-icon color="warn">error</mat-icon>
+            <p>{{error}}</p>
+            <button mat-raised-button color="primary" (click)="loadExams()">
+            Try Again
+            </button>
+        </div>
 
             
-    <div class="empty-state" *ngIf="!exams.length">
-        <mat-icon class="empty-icon">school</mat-icon>
-        <h2>No Tests Available</h2>
-        <p>We're currently preparing more tests for you. Please check back later!</p>
-        <div class="empty-state-actions">
-        <button mat-raised-button color="primary" routerLink="/pricing/plans">
-            <mat-icon>stars</mat-icon>
-            View Premium Plans
-        </button>
-        <button mat-stroked-button color="primary" (click)="loadExams()">
-            <mat-icon>refresh</mat-icon>
-            Refresh
-        </button>
+        <div class="empty-state" *ngIf="!exams.length && !loading && !error">
+            <mat-icon class="empty-icon">school</mat-icon>
+            <h2>No Tests Available</h2>
+            <p>We're currently preparing more tests for you. Please check back later!</p>
+            <div class="empty-state-actions">
+            <button mat-raised-button color="primary" routerLink="/pricing/plans">
+                <mat-icon>stars</mat-icon>
+                View Premium Plans
+            </button>
+            <button mat-stroked-button color="primary" (click)="loadExams()">
+                <mat-icon>refresh</mat-icon>
+                Refresh
+            </button>
+            </div>
         </div>
-    </div>
-    
+
+        <mat-form-field appearance="outline" class="search-field" *ngIf="exams.length > 0 && !loading && !error">
+            <mat-label>Search exams</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Search by title, description..." #input>
+            <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
 
         <div class="exam-grid" *ngIf="!loading && !error">
-            <mat-card *ngFor="let exam of exams" class="exam-card">
+            <mat-card *ngFor="let exam of filteredExams" class="exam-card">
                 <mat-card-header>
                     <mat-card-title>{{exam.title}}</mat-card-title>
                     <mat-card-subtitle>
@@ -110,6 +115,7 @@
                     </div>
                 </mat-card-actions>
             </mat-card>
+            <div *ngIf="filteredExams.length <= 0 && exams.length > 0">No results found for keyword '{{searchKeyword}}'</div>
         </div>
     </section>
 </div>
