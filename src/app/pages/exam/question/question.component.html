@@ -1,129 +1,182 @@
 <div class="exam-container">
-    <div class="exam-header" *ngIf="exam">
-        <h1 class="exam-title">{{ exam.title }}</h1>
-        <div class="exam-info">
-            <span>Duration: {{ exam.duration }} minutes</span>
-            <span class="remaining-time">Time Remaining: {{ formatRemainingTime() }}</span>
-            <span>Passing Score: {{ exam.passingScore }}%</span>
-            <!-- <span class="remaining-time">Time Remaining: {{ formatRemainingTime() }}</span> -->
-        </div>
-        <div class="exam-info">
-            <div class="exam-status">
-                <!-- <h3>Status</h3> -->
-                <div class="status-chip" [class.paused]="session?.status === 'paused'" [class.closed]="session?.status === 'completed'">
-                  {{ session?.status === 'paused' ? 'PAUSED' : (session?.status ==='active' ? 'IN PROGRESS' : 'CLOSED') }}
+    <!-- Question Section with Wrapper -->
+    <div class="question-section-wrapper" [style.width.px]="questionSectionWidth">
+        <div class="question-section">
+    
+    
+            <div class="exam-header" *ngIf="exam">
+                <h1 class="exam-title">{{ exam.title }}</h1>
+                <div class="exam-info" *ngIf="false">
+                    <span>Duration: {{ exam.duration }} minutes</span>
+                    <span class="remaining-time">Time Remaining: {{ formatRemainingTime() }}</span>
+                    <span>Passing Score: {{ exam.passingScore }}%</span>
+                    <!-- <span class="remaining-time">Time Remaining: {{ formatRemainingTime() }}</span> -->
                 </div>
-              </div>
-              <div class="progress-stats" *ngIf="session !== undefined && totalQuestions > 0">
-                <div>Answered: {{ totalAnsweredQuestions || 0 }}/{{ totalQuestions || 0 }}</div>
-              </div>
-              <button mat-raised-button color="warn" *ngIf="session?.status === 'active'" (click)="onPauseClick()">
-                <mat-icon>pause</mat-icon> Pause Test
-            </button>
-            <button mat-raised-button color="primary" *ngIf="session?.status === 'paused'" (click)="resumeExam()">
-                <mat-icon>play_arrow</mat-icon> Resume Test
-            </button>
-        </div>
-        <!-- <div class="exam-progress">
-            <app-exam-progress-chart [session]="session!"></app-exam-progress-chart>
-        </div> -->
-        
-        <!-- <div class="exam-actions">
-            <button mat-raised-button color="warn" *ngIf="session?.status === 'active'" (click)="onPauseClick()">
-                <mat-icon>pause</mat-icon> Pause Exam
-            </button>
-            <button mat-raised-button color="primary" *ngIf="session?.status === 'paused'" (click)="resumeExam()">
-                <mat-icon>play_arrow</mat-icon> Resume Exam
-            </button>
-        </div> -->
-    </div>
-    <div *ngIf="warningMessage" class="warning-message">
-        {{ warningMessage }}
-    </div>
-    <div *ngIf="remainingTimeMessage" class="rt-message">
-        {{ remainingTimeMessage }}
-    </div>
-    <div class="question-header">
-        <h2>Question {{ questionNumber }} of {{ totalQuestions }}</h2>
-        <div class="progress-bar">
-            <mat-progress-bar mode="determinate" [value]="((questionNumber) / totalQuestions) * 100">
-            </mat-progress-bar>
-        </div>
-    </div>
-
-    <mat-card class="question-card" *ngIf="currentQuestion">
-        <mat-card-content class="scrollable-content">
-            <p class="question-text">{{ currentQuestion.question }} - {{currentQuestion.id}}</p>
-            <div class="options-container">
-                <div [ngSwitch]="currentQuestion.type">
-                    <!-- Single Choice -->
-                    <mat-radio-group *ngSwitchCase="'single'" [value]="selectedAnswers[currentIndex]"
-                        (change)="onSingleAnswerChange($event.value)">
-                        <mat-radio-button 
-                            *ngFor="let option of currentQuestion.options" 
-                            [value]="option.id" 
-                            [checked]="selectedAnswers[currentIndex] === option.id"
-                            class="option-radio">
-                            {{ option.text }}
-                        </mat-radio-button>
-                    </mat-radio-group>
-
-                    <!-- Multiple Choice -->
-                    <div *ngSwitchCase="'multiple'" class="multiple-choice">
-                        <mat-checkbox *ngFor="let option of currentQuestion.options" [checked]="isOptionSelected(option.id)"
-                            (change)="onMultipleAnswerChange(option.id, $event.checked)" class="option-checkbox">
-                            {{ option.text }}
-                        </mat-checkbox>
+                <div class="exam-info">
+                    <div class="exam-status">
+                        <!-- <h3>Status</h3> -->
+                        <div class="status-chip" [class.paused]="session?.status === 'paused'"
+                            [class.closed]="session?.status === 'completed'">
+                            {{ session?.status === 'paused' ? 'PAUSED' : (session?.status ==='active' ? 'IN PROGRESS' :
+                            'CLOSED') }}
+                        </div>
                     </div>
-
-                    <!-- True/False -->
-                    <app-true-false-question
-                    *ngSwitchCase="'true-false'"
-                    [question]="currentQuestion"
-                    [selectedAnswer]="+getSelectedAnswer(currentIndex)"
-                    (answerChange)="onSingleAnswerChange($event)">
-                    </app-true-false-question>
-
-                    <!-- Ordering -->
-                    <app-ordering-question
-                        *ngSwitchCase="'ranking'"
-                        [question]="currentQuestion"
-                        [selectedAnswer]="getSelectedAnswerForOrdering(currentIndex)"
-                        (answerChange)="onOrderingAnswerChange($event)">
-                    </app-ordering-question>
-                
+                    <span class="remaining-time"><mat-icon>hourglass_empty</mat-icon>: {{ formatRemainingTime() }}</span>
+                    <button mat-raised-button color="warn" *ngIf="session?.status === 'active'" (click)="onPauseClick()">
+                        <mat-icon>pause</mat-icon> Pause
+                    </button>
+                    <button mat-raised-button color="primary" *ngIf="session?.status === 'paused'" (click)="resumeExam()">
+                        <mat-icon>play_arrow</mat-icon> Resume
+                    </button>
+                </div>
+                <!-- <div class="exam-progress">
+                <app-exam-progress-chart [session]="session!"></app-exam-progress-chart>
+            </div> -->
+    
+                <!-- <div class="exam-actions">
+                <button mat-raised-button color="warn" *ngIf="session?.status === 'active'" (click)="onPauseClick()">
+                    <mat-icon>pause</mat-icon> Pause Exam
+                </button>
+                <button mat-raised-button color="primary" *ngIf="session?.status === 'paused'" (click)="resumeExam()">
+                    <mat-icon>play_arrow</mat-icon> Resume Exam
+                </button>
+            </div> -->
+            </div>
+            <div *ngIf="warningMessage" class="warning-message">
+                {{ warningMessage }}
+            </div>
+            <div *ngIf="remainingTimeMessage" class="rt-message">
+                {{ remainingTimeMessage }}
+            </div>
+            <div class="question-header">
+                <div class="question-header-content">
+                    <h2>Question {{ questionNumber }} of {{ totalQuestions }}</h2>
+                    <div class="progress-stats" *ngIf="session !== undefined && totalQuestions > 0">
+                        <div class="answered">Answered: {{ totalAnsweredQuestions || 0 }}/{{ totalQuestions || 0 }}</div>
+                    </div>
+                </div>
+                <div class="progress-bar">
+                    <mat-progress-bar mode="determinate" [value]="((questionNumber) / totalQuestions) * 100">
+                    </mat-progress-bar>
                 </div>
             </div>
-        </mat-card-content>
-    </mat-card>
-
-
-    <div class="navigation-buttons" *ngIf="session?.status === 'active'">
-        <div>
-            <button mat-raised-button color="primary" (click)="previous()" [disabled]="currentIndex === 0">
-                Previous
-            </button>
-            <button mat-button color="accent" (click)="addToReview()">
-                <mat-icon>bookmark</mat-icon>
-                Review Later
-            </button>
-        </div>
-        <div *ngIf="session?.status === 'active'">
-            <button mat-raised-button color="accent" *ngIf="reviewList.length > 0" (click)="openReviewList()">
-                Review List ({{reviewList.length}})
-            </button>
     
-            <button mat-raised-button color="primary" *ngIf="currentIndex < totalQuestions - 1" (click)="next()"
-            [disabled]="!hasCurrentAnswer()">
-                Next
-            </button>
-        
-            <button mat-raised-button color="accent" *ngIf="currentIndex === totalQuestions - 1" (click)="submit()"
-                [disabled]="!hasCurrentAnswer()">
-                Submit Test
-            </button>
+            <mat-card class="question-card" *ngIf="currentQuestion">
+                <mat-card-content class="scrollable-content">
+                    <p class="question-text">{{ currentQuestion.question }} - {{currentQuestion.id}}</p>
+                    <div class="options-container">
+                        <div [ngSwitch]="currentQuestion.type">
+                            <!-- Single Choice -->
+                            <mat-radio-group *ngSwitchCase="'single'" [value]="selectedAnswers[currentIndex]"
+                                (change)="onSingleAnswerChange($event.value)">
+                                <mat-radio-button *ngFor="let option of currentQuestion.options" [value]="option.id"
+                                    [checked]="selectedAnswers[currentIndex] === option.id" class="option-radio">
+                                    {{ option.text }}
+                                </mat-radio-button>
+                            </mat-radio-group>
+    
+                            <!-- Multiple Choice -->
+                            <div *ngSwitchCase="'multiple'" class="multiple-choice">
+                                <mat-checkbox *ngFor="let option of currentQuestion.options"
+                                    [checked]="isOptionSelected(option.id)"
+                                    (change)="onMultipleAnswerChange(option.id, $event.checked)" class="option-checkbox">
+                                    {{ option.text }}
+                                </mat-checkbox>
+                            </div>
+    
+                            <!-- True/False -->
+                            <app-true-false-question *ngSwitchCase="'true-false'" [question]="currentQuestion"
+                                [selectedAnswer]="+getSelectedAnswer(currentIndex)"
+                                (answerChange)="onSingleAnswerChange($event)">
+                            </app-true-false-question>
+    
+                            <!-- Ordering -->
+                            <app-ordering-question *ngSwitchCase="'ranking'" [question]="currentQuestion"
+                                [selectedAnswer]="getSelectedAnswerForOrdering(currentIndex)"
+                                (answerChange)="onOrderingAnswerChange($event)">
+                            </app-ordering-question>
+    
+                        </div>
+                    </div>
+                </mat-card-content>
+                <mat-card-actions class="card-actions" *ngIf="session?.status === 'active'">
+                    
+                        <div>
+                            <button mat-raised-button color="primary" (click)="previous()" [disabled]="currentIndex === 0">
+                                Previous
+                            </button>
+                            <button mat-button color="accent" (click)="addToReview()">
+                                <mat-icon>bookmark</mat-icon>
+                                Review Later
+                            </button>
+                        </div>
+                        <div *ngIf="session?.status === 'active'">
+                            <button mat-raised-button color="accent" *ngIf="reviewList.length > 0" (click)="openReviewList()">
+                                Review List ({{reviewList.length}})
+                            </button>
+            
+                            <button mat-raised-button color="primary" *ngIf="currentIndex < totalQuestions - 1" (click)="next()"
+                                [disabled]="!hasCurrentAnswer()">
+                                Next
+                            </button>
+            
+                            <button mat-raised-button color="accent" *ngIf="currentIndex === totalQuestions - 1" (click)="submit()"
+                                [disabled]="!hasCurrentAnswer()">
+                                Submit Test
+                            </button>
+                        </div>
+                    
+                </mat-card-actions>
+            </mat-card>
+    
+    
+            <!--<div class="navigation-buttons submit-section" *ngIf="session?.status === 'active'">
+                <div>
+                    <button mat-raised-button color="primary" (click)="previous()" [disabled]="currentIndex === 0">
+                        Previous
+                    </button>
+                    <button mat-button color="accent" (click)="addToReview()">
+                        <mat-icon>bookmark</mat-icon>
+                        Review Later
+                    </button>
+                </div>
+                <div *ngIf="session?.status === 'active'">
+                    <button mat-raised-button color="accent" *ngIf="reviewList.length > 0" (click)="openReviewList()">
+                        Review List ({{reviewList.length}})
+                    </button>
+    
+                    <button mat-raised-button color="primary" *ngIf="currentIndex < totalQuestions - 1" (click)="next()"
+                        [disabled]="!hasCurrentAnswer()">
+                        Next
+                    </button>
+    
+                    <button mat-raised-button color="accent" *ngIf="currentIndex === totalQuestions - 1" (click)="submit()"
+                        [disabled]="!hasCurrentAnswer()">
+                        Submit Test
+                    </button>
+                </div>
+            </div>-->
         </div>
+    </div>
 
+    <!-- Movable Divider -->
+    <div class="divider" [class.dragging]="isDragging" (mousedown)="startDragging($event)">
+    </div>
+
+    <!-- Subject Content Section -->
+    <div class="content-section" *ngIf="true">
+        <div class="subject-content">
+            <h3>{{currentQuestion?.subject}} - Study Material</h3>
+
+            <div class="content-body" [innerHTML]="subjectContent"></div>
+
+            <div class="key-points">
+                <h4>Key Points</h4>
+                <ul>
+                    <li *ngFor="let point of keyPoints">{{point}}</li>
+                </ul>
+            </div>
+        </div>
     </div>
 
 </div>

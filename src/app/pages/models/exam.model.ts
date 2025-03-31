@@ -49,6 +49,7 @@ export interface RandomQuestionResponse {
   totalQuestions: number;
   userAnswers: number[];
   reviewList: number[];
+  subject: string;
 }
 
 export interface OptionResponse {

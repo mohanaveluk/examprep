@@ -9,6 +9,8 @@ import { ResultHistoryComponent } from './components/result-history/result-histo
 import { OverviewComponent } from './overview/overview.component';
 import { ModelQuestionComponent } from './model-question/model-question.component';
 import { ModelTestListComponent } from './trial-exam/model-test-list/model-test-list.component';
+import { ModelQuestionV2Component } from './model-question-v2/model-question-v2.component';
+import { QuestionV2Component } from './question-v2/question-v2.component';
 
 
 const routes: Routes = [
@@ -16,8 +18,10 @@ const routes: Routes = [
   { path: 'take/:id', component: DetailComponent },
   { path: 'trial', component: ModelTestListComponent },
   { path: 'trial/:examId', component: ModelQuestionComponent },
+  { path: 'trialv2/:examId', component: ModelQuestionV2Component },
   { path: 'overview/:id', component: OverviewComponent },
   { path: 'question/:id', component: QuestionComponent },
+  { path: 'questionv2/:id', component: QuestionV2Component },
   { path: 'result-summary/:examId', component: ResultHistoryComponent },
   { path: 'summary/:sessionId/:examId', component: SummaryComponent },
   { path: 'result/:sessionId/:examId', component: ResultComponent }

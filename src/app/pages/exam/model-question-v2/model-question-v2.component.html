@@ -1,0 +1,113 @@
+<div class="model-question-container">
+    <!-- Question Section -->
+    <div class="question-section">
+      <!--Show exam title-->
+      <div class="exam-header" *ngIf="exam">
+        <h1 class="exam-title">Model Test: {{ exam.title }}</h1>
+      </div>
+      <div class="question-header">
+        <h3>Question {{ currentIndex + 1 }} of {{ totalQuestions }}</h3>
+        <div class="progress-bar">
+            <!-- Progress Bar -->
+            <mat-progress-bar
+              mode="determinate"
+              [value]="progressPercentage"
+              class="progress-bar">
+            </mat-progress-bar>
+        </div>
+      </div>
+      
+      <!-- Question Status -->
+      <div *ngIf="isSubmitted" class="result-status"
+           [ngClass]="{'correct-status': questionResult?.isCorrect, 
+                       'incorrect-status': !questionResult?.isCorrect}">
+        <mat-icon>{{questionResult?.isCorrect ? 'check_circle' : 'cancel'}}</mat-icon>
+        <span>{{questionResult?.isCorrect ? 'Correct!' : 'Incorrect'}}</span>
+      </div>
+  
+      <!-- Question Card -->
+      <mat-card class="question-card" *ngIf="currentQuestion">
+        <mat-card-header>
+          <mat-card-title>
+            Question {{currentIndex + 1}} of {{QUESTIONS_PER_TEST}}
+          </mat-card-title>
+          <mat-card-subtitle>
+            Subject: {{currentQuestion.subject}}
+          </mat-card-subtitle>
+        </mat-card-header>
+  
+        <mat-card-content>
+          <p class="question-text">{{currentQuestion.text}}</p>
+  
+          <div class="options-container">
+            <ng-container [ngSwitch]="currentQuestion.type">
+              <!-- Single Choice -->
+              <div *ngSwitchCase="'single'">
+                <mat-radio-group [(ngModel)]="selectedAnswers">
+                  <div *ngFor="let option of currentQuestion.options"
+                       class="option-item"
+                       [class.selected]="isOptionSelected(option.id)"
+                       [class.correct]="isSubmitted && isCorrectAnswer(option.id)"
+                       [class.incorrect]="isSubmitted && isIncorrectAnswer(option.id)">
+                    <mat-radio-button [value]="[option.id]" [disabled]="isSubmitted">
+                      {{option.text}}
+                    </mat-radio-button>
+                  </div>
+                </mat-radio-group>
+              </div>
+  
+              <!-- Multiple Choice -->
+              <div *ngSwitchCase="'multiple'">
+                <div *ngFor="let option of currentQuestion.options"
+                     class="option-item"
+                     [class.selected]="isOptionSelected(option.id)"
+                     [class.correct]="isSubmitted && isCorrectAnswer(option.id)"
+                     [class.incorrect]="isSubmitted && isIncorrectAnswer(option.id)">
+                  <mat-checkbox
+                    [checked]="isOptionSelected(option.id)"
+                    (change)="onOptionSelect(option.id, $event.checked)"
+                    [disabled]="isSubmitted">
+                    {{option.text}}
+                  </mat-checkbox>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+  
+          <!-- Explanation after submission -->
+          <div *ngIf="isSubmitted && questionResult" class="explanation-section">
+            <h3>Explanation</h3>
+            <p>{{questionResult.explanation}}</p>
+          </div>
+        </mat-card-content>
+  
+        <mat-card-actions align="end">
+          <button mat-button *ngIf="!isSubmitted"
+                  (click)="onSubmit()"
+                  [disabled]="selectedAnswers.length === 0">
+            Submit Answer
+          </button>
+          <button mat-button *ngIf="isSubmitted"
+                  (click)="next()">
+            Next Question
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  
+    <!-- Subject Content Section -->
+    <div class="content-section" *ngIf="currentQuestion">
+      <div class="subject-content">
+        <h3>{{currentQuestion.subject}} - Study Material</h3>
+        
+        <div class="content-body" [innerHTML]="subjectContent"></div>
+  
+        <div class="key-points">
+          <h4>Key Points</h4>
+          <ul>
+            <li *ngFor="let point of keyPoints">{{point}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Exam, ExamSession, Question, RandomQuestionResponse } from '../../models/exam.model';
 import { ExamService } from '../exam.service';
@@ -13,7 +13,15 @@ import { ExamResultService } from '../services/exam-result.service';
 import { ActivityTrackerService } from '../../../core/services/activity-tracker.service';
 import { InactivityDialogComponent } from '../inactivity-dialog/inactivity-dialog.component';
 import { ReviewConfirmationDialogComponent } from '../components/review-confirmation-dialog/review-confirmation-dialog.component';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
+interface SubjectContent {
+  [key: string]: {
+    content: string;
+    keyPoints: string[];
+    imageUrl?: string;
+  };
+}
 
 @Component({
   selector: 'app-question',
@@ -46,6 +54,47 @@ export class QuestionComponent  implements OnInit, OnDestroy {
   public errorMessage: string = ""
   private timeText: string = "";
 
+  startTime: number = 0;
+  subjectContent: SafeHtml = '';
+  keyPoints: string[] = [];
+  readonly QUESTIONS_PER_TEST = 10;
+
+  // Divider dragging properties
+  isDragging = false;
+  questionSectionWidth = 600; // Initial width
+  private startX = 0;
+  private startWidth = 0;
+
+     // Mock subject content - In real app, this would come from a service
+     private subjectContents: SubjectContent = {
+      'Anatomy': {
+        content: `
+          <p>Anatomy is the study of the structure of living things. It is a branch of natural science that deals with the structural organization of living things.</p>
+          <img src="https://example.com/anatomy.jpg" alt="Anatomy diagram">
+          <p>Understanding anatomy is crucial for medical professionals as it forms the foundation for understanding how the body works and how different systems interact.</p>
+        `,
+        keyPoints: [
+          'Study of body structure',
+          'Includes organs and systems',
+          'Essential for medical diagnosis',
+          'Basis for surgical procedures'
+        ]
+      },
+      'Physiology': {
+        content: `
+          <p>Physiology is the study of how living systems function. It describes how organs, cells, and systems within an organism work together to maintain life.</p>
+          <img src="https://example.com/physiology.jpg" alt="Physiology diagram">
+          <p>Understanding physiology helps in diagnosing diseases and determining appropriate treatments.</p>
+        `,
+        keyPoints: [
+          'Study of body functions',
+          'Cellular processes',
+          'System interactions',
+          'Homeostasis maintenance'
+        ]
+      }
+    };
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -54,6 +103,7 @@ export class QuestionComponent  implements OnInit, OnDestroy {
     private examSessionService: ExamSessionService,
     private examResultService: ExamResultService,
     private activityTracker: ActivityTrackerService,
+    private sanitizer: DomSanitizer,
     private dialog: MatDialog
   ) {}
 
@@ -78,6 +128,43 @@ export class QuestionComponent  implements OnInit, OnDestroy {
 
   }
 
+ 
+    // Divider dragging methods
+    startDragging(event: MouseEvent) {
+      this.isDragging = true;
+      this.startX = event.clientX;
+      this.startWidth = this.questionSectionWidth;
+      event.preventDefault();
+    }
+  
+    @HostListener('document:mousemove', ['$event'])
+    onMouseMove(event: MouseEvent) {
+      if (!this.isDragging) return;
+  
+      const diff = event.clientX - this.startX;
+      const newWidth = this.startWidth + diff;
+  
+      // Apply min and max constraints
+      if (newWidth >= 400 && newWidth <= 1400) {
+        this.questionSectionWidth = newWidth;
+      }
+    }
+  
+    @HostListener('document:mouseup')
+    stopDragging() {
+      this.isDragging = false;
+    }
+  
+    private loadSubjectContent() {
+      if (this.currentQuestion) {
+        const content = this.subjectContents[this.currentQuestion.subject];
+        if (content) {
+          this.subjectContent = this.sanitizer.bypassSecurityTrustHtml(content.content);
+          this.keyPoints = content.keyPoints;
+        }
+      }
+    }
+    
   private checkExamSession() {
     if (this.session === undefined || this.session === null) {
       this.startNewExam();
@@ -299,6 +386,7 @@ export class QuestionComponent  implements OnInit, OnDestroy {
       next: (session: any) => {
         console.log(`Resume: ${session.data}`);
         this.session = session.data;
+        this.direction = "";
         this.loadQuestion();
         this.startTimer();
       },
@@ -503,6 +591,9 @@ export class QuestionComponent  implements OnInit, OnDestroy {
     if (this.session?.status === 'active'){
       this.pauseExamonDestroy();
     }
+
+    // Clean up any event listeners if needed
+    this.isDragging = false;
   }
 
   /*formatRemainingTime(): string {
