@@ -1,0 +1,29 @@
+<div class="model-question-container">
+    <!-- Question Section with Wrapper -->
+    <div class="question-section-wrapper" [style.width.px]="questionSectionWidth">
+        <div class="question-section">
+            gfgfg
+        </div>
+    </div>
+        <!-- Movable Divider -->
+        <div class="divider" [class.dragging]="isDragging" (mousedown)="startDragging($event)">
+        </div>
+
+        <!-- Subject Content Section -->
+        <div class="content-section" *ngIf="true">
+            <div class="subject-content">
+                <h3>{{currentQuestion?.subject}} - Study Material</h3>
+
+                <div class="content-body" [innerHTML]="subjectContent"></div>
+
+                <div class="key-points">
+                    <h4>Key Points</h4>
+                    <ul>
+                        <li *ngFor="let point of keyPoints">{{point}}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    
+</div>
